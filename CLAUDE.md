@@ -98,7 +98,8 @@
 단, 예외를 적용할 때는 **반드시 그렇게 한다고 밝히고 이유를 말한다.**
 
 - **데이터 주도 설계**: 적이 1종뿐이어도 ScriptableObject로 분리한다.
-  확장성 증명이 목적이다.
+  확장성 증명이 목적이다. **단 Phase 3부터.** Phase 2 수직 슬라이스에서는
+  하드코딩으로 빠르게 뚫는다 (ROADMAP 원칙 1: 넓히기 전에 뚫는다).
 - **최적화**: 지금 성능 문제가 없어도 풀링과 프로파일링을 한다.
   전후 수치가 곧 증거물이다.
 - **테스트**: 순수 로직에는 유닛테스트를 작성한다.
@@ -201,24 +202,36 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 
 ```
 Assets/
-├─ _Project/          ← 내가 만든 것
-│  ├─ Scripts/  { Player, Enemy, Combat, Data, UI, Core }
-│  ├─ Prefabs/
-│  ├─ ScriptableObjects/
-│  ├─ Scenes/
-│  ├─ Art/
-│  └─ Audio/
-└─ ThirdParty/        ← 외부 에셋 (내 코드와 절대 섞지 않는다)
+├─ _Project/                    ← 내가 만든 것
+│  ├─ Scripts/                  [Game.Runtime]  Unity 의존 코드
+│  │  ├─ Logic/                 [Game.Logic]    순수 로직 — 테스트 대상
+│  │  ├─ Editor/                [Game.Editor]   에디터 툴
+│  │  └─ { Player, Enemy, Combat, Data, UI, Core }
+│  ├─ Prefabs/  ScriptableObjects/  Scenes/  Art/  Audio/
+├─ Tests/EditMode/              [Game.Tests.EditMode]  → Logic만 참조
+└─ ThirdParty/                  ← 외부 에셋 (내 코드와 절대 섞지 않는다)
 ```
 
 `_Project`와 `ThirdParty` 분리는 **면접관이 "어디까지가 본인 코드인지"를
 즉시 알 수 있게** 하기 위한 것이다. 이 경계를 흐리는 제안을 하지 않는다.
 
+### 어셈블리 규칙
+
+근거와 대안은 [docs/decisions/asmdef-structure.md](docs/decisions/asmdef-structure.md)에 있다.
+
+- 의존 방향은 한쪽이다. `Logic ← Runtime ← Editor`, `Tests → Logic`.
+  **거꾸로 참조하고 싶어지면 코드가 잘못된 자리에 있다는 신호다.**
+- 테스트할 로직은 `Logic/`에 둔다. MonoBehaviour·씬에 의존하면 Logic이 아니다.
+- **`internal`은 어셈블리 경계를 넘지 못한다.** 테스트 대상 타입은 `public`으로 쓴다.
+- 테스트 어셈블리는 `Runtime`을 참조하지 않는다. 일부러 막아둔 것이다.
+  참조를 열면 MonoBehaviour를 테스트하려 들게 되고 테스트가 느려지고 깨진다.
+
 ### 외부 라이브러리 · 에셋 정책
 
 - **핵심 시스템은 직접 구현한다.** (1번의 사용자 작성 목록 = 외부 사용 금지 목록)
 - 아트 / 사운드 / 폰트, 그리고 DOTween 같은 주변 유틸리티는 허용한다.
-- 사용한 모든 외부 리소스는 **README의 출처 표에 즉시 기록**한다.
+- 사용한 모든 외부 리소스는 **루트 README의 출처 표에 즉시 기록**한다.
+  표는 그 한 곳에서만 관리한다. 다른 문서에 같은 표를 두지 않는다.
   누락은 "직접 만든 척한다"는 최악의 인상을 준다.
 - 새 외부 의존성 도입을 제안할 때는 **직접 구현 대비 이득**을 먼저 말한다.
 
