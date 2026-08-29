@@ -1,7 +1,11 @@
 {
-    "name": "Game.Logic",
-    "rootNamespace": "Game.Logic",
-    "references": [],
+    "name": "JM2D.Runtime",
+    "rootNamespace": "JM2D",
+    "references": [
+        "JM2D.Logic",
+        "Unity.InputSystem",
+        "UnityEngine.UI"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

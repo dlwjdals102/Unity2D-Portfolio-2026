@@ -1,12 +1,13 @@
 {
-    "name": "Game.Runtime",
-    "rootNamespace": "Game",
+    "name": "JM2D.Editor",
+    "rootNamespace": "JM2D.Editor",
     "references": [
-        "Game.Logic",
-        "Unity.InputSystem",
-        "UnityEngine.UI"
+        "JM2D.Runtime",
+        "JM2D.Logic"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
