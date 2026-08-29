@@ -10,14 +10,21 @@ phase: 2
 
 ## 한 줄 요약
 
-**Phase 1 (세팅) 완료.** Unity 프로젝트 생성·컴파일 통과. Phase 2 수직 슬라이스 착수 전.
+**Phase 2 진행 중.** 플레이어 이동 명세와 입력 에셋까지 완료.
+**구현 대기 중 — 사용자 작업.**
 
 ## 지금 하는 일
 
-Phase 2 첫 기능 착수 대기. 순서는 아래를 따른다.
+[플레이어 이동·대시](../specs/player-movement.md) 구현.
 
-1. 플레이어 이동 → 2. 공격 → 3. 적 1종 → 4. 피격·사망 → 5. 씬 흐름
+- [x] 명세 작성
+- [x] 입력 액션 에셋 + 생성 C# 래퍼 (`PlayerControls`)
+- [x] 게임플레이 씬
+- [ ] `PlayerInputReader` — 입력을 읽어 의도만 노출
+- [ ] `PlayerMotor` — 의도를 받아 실제로 움직임
+- [ ] 플레이모드 체크리스트 11개 통과
 
+Phase 2 남은 순서: 공격 → 적 1종 → 피격·사망 → 씬 흐름.
 **각 기능은 착수 전 `docs/specs/`에 명세를 만든다.**
 
 ## 막힌 것 (Blockers)
@@ -37,7 +44,8 @@ Phase 2 첫 기능 착수 대기. 순서는 아래를 따른다.
 | 아트 | 도형 프로토타입 기본, 에셋은 Phase 5 |
 | 협업 | 페어 모드 (CLAUDE.md 1번) |
 | 렌더 파이프라인 | **Built-in** (URP 미도입) |
-| 입력 | Input System 1.18.0 |
+| 입력 | Input System 1.18.0 — **전용** (구 Input Manager 비활성) |
+| 입력 사용법 | `.inputactions` 에셋 + 생성 C# 래퍼 |
 | 게임 제목 | **JM2D** |
 | 어셈블리 | JM2D.Logic / .Runtime / .Editor / .Tests.EditMode |
 
