@@ -1,10 +1,10 @@
 {
-    "name": "Game.Tests.EditMode",
-    "rootNamespace": "Game.Tests",
+    "name": "JM2D.Tests.EditMode",
+    "rootNamespace": "JM2D.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Game.Logic"
+        "JM2D.Logic"
     ],
     "includePlatforms": [
         "Editor"

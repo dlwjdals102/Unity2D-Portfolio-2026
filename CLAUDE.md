@@ -203,12 +203,12 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 ```
 Assets/
 ├─ _Project/                    ← 내가 만든 것
-│  ├─ Scripts/                  [Game.Runtime]  Unity 의존 코드
-│  │  ├─ Logic/                 [Game.Logic]    순수 로직 — 테스트 대상
-│  │  ├─ Editor/                [Game.Editor]   에디터 툴
+│  ├─ Scripts/                  [JM2D.Runtime]  Unity 의존 코드
+│  │  ├─ Logic/                 [JM2D.Logic]    순수 로직 — 테스트 대상
+│  │  ├─ Editor/                [JM2D.Editor]   에디터 툴
 │  │  └─ { Player, Enemy, Combat, Data, UI, Core }
 │  ├─ Prefabs/  ScriptableObjects/  Scenes/  Art/  Audio/
-├─ Tests/EditMode/              [Game.Tests.EditMode]  → Logic만 참조
+├─ Tests/EditMode/              [JM2D.Tests.EditMode]  → Logic만 참조
 └─ ThirdParty/                  ← 외부 에셋 (내 코드와 절대 섞지 않는다)
 ```
 

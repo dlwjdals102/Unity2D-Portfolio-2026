@@ -1,13 +1,8 @@
 {
-    "name": "Game.Editor",
-    "rootNamespace": "Game.Editor",
-    "references": [
-        "Game.Runtime",
-        "Game.Logic"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "name": "JM2D.Logic",
+    "rootNamespace": "JM2D.Logic",
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

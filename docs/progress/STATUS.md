@@ -38,7 +38,8 @@ Phase 2 첫 기능 착수 대기. 순서는 아래를 따른다.
 | 협업 | 페어 모드 (CLAUDE.md 1번) |
 | 렌더 파이프라인 | **Built-in** (URP 미도입) |
 | 입력 | Input System 1.18.0 |
-| 어셈블리 | Logic / Runtime / Editor / Tests 4분할 |
+| 게임 제목 | **JM2D** |
+| 어셈블리 | JM2D.Logic / .Runtime / .Editor / .Tests.EditMode |
 
 ### 설치된 패키지
 
@@ -57,6 +58,4 @@ visualscripting, collab-proxy, multiplayer.center
 - **URP 도입 여부** — Phase 5에서 2D 라이트가 필요하면 그때 판단.
   스프라이트 기반이라 나중 전환 비용이 낮아 지금 결정하지 않았다.
 - 아이템 20종이 데이터 추가만으로 되는지 → **7주차에 점검.** 안 되면 12종으로 축소.
-- 어셈블리 이름 접두사 `Game` — 게임 제목이 정해지면 교체.
-  **코드가 적은 지금이 가장 싸다.**
 - GitHub 저장소 공개 여부 (제출 시점에 공개 필요)
