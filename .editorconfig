@@ -1,0 +1,27 @@
+# 파일 인코딩과 기본 서식 규칙.
+# Visual Studio, Rider, VS Code가 모두 이 파일을 존중한다.
+#
+# 목적: 한글 주석이 CP949(한국어 윈도우 기본 코드페이지)로 저장되는 것을 막는다.
+# CP949로 저장되면 GitHub 웹에서 주석이 전부 깨져 보인다.
+
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C#은 BOM을 붙인다. Visual Studio가 BOM 없는 파일을 다시 열 때
+# 시스템 코드페이지로 잘못 판정하는 경우가 있다.
+[*.cs]
+charset = utf-8-bom
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,asmdef,inputactions}]
+indent_style = space
+indent_size = 4
+
+# 마크다운은 줄 끝 공백 2개가 줄바꿈 문법이므로 지우지 않는다.
+[*.md]
+trim_trailing_whitespace = false
