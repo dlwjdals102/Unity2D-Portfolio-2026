@@ -38,3 +38,20 @@
 | 상수 | PascalCase | `MaxHealth` |
 | 인터페이스 | `I` + PascalCase | `IDamageable` |
 | ScriptableObject 에셋 | `타입_이름` | `EnemyData_Slime` |
+
+## 클래스 안의 선언 순서
+
+**항상 같은 순서로 쓴다.** 어디를 봐야 할지 고민할 일이 없어진다.
+
+1. 인스펙터에 노출되는 값 (`[SerializeField]`) — 관련된 것끼리 `[Header]`로 묶는다
+2. 다른 오브젝트·컴포넌트 참조
+3. 내부 상태 (런타임에만 바뀌는 값)
+4. 프로퍼티
+5. 유니티 생명주기 메서드 — `Awake` → `OnEnable` → `Start` → `Update` → `FixedUpdate` → `OnDisable` → `OnDestroy`
+6. 나머지 메서드
+
+**3번과 4번을 섞지 않는다.** 값(상태)과 계산(프로퍼티)이 뒤섞이면
+무엇이 진짜 데이터인지 흐려진다.
+
+인스펙터 값이 대여섯 개를 넘어가면 `[System.Serializable]` 클래스로 묶는 것을 고려한다.
+Phase 3부터는 ScriptableObject로 빼는 쪽이 우선이다.
