@@ -11,10 +11,10 @@
 - **개발 인원**: 1인
 
 ## 문서
-- [문서 지도](docs/README.md) — 문서 체계와 운영 규칙
-- [기획서 (GDD)](docs/design/GDD.md) — 코어 루프와 스코프
-- [현재 상태](docs/progress/STATUS.md) — 진행 상황
-- [로드맵](docs/progress/ROADMAP.md) — 14주 개발 계획
+- [문서 지도](docs/README.md): 문서 체계와 운영 규칙
+- [기획서 (GDD)](docs/design/GDD.md): 코어 루프와 스코프
+- [현재 상태](docs/progress/STATUS.md): 진행 상황
+- [로드맵](docs/progress/ROADMAP.md): 14주 개발 계획
 
 ## 플레이
 - 실행 빌드: (배포 후 링크)
