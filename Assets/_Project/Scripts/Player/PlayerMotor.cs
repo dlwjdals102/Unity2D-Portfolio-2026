@@ -5,10 +5,7 @@ namespace JM2D.Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMotor : MonoBehaviour
     {
-        private Rigidbody2D _rb;
-
         [Header("이동")]
-        [SerializeField] private PlayerInputReader _input;
         [SerializeField] private float _moveSpeed = 6f;
 
         [Header("대시")]
@@ -17,15 +14,18 @@ namespace JM2D.Player
         [SerializeField] private float _dashCooldown = 0.6f;
         [SerializeField] private float _dashInputBuffer = 0.15f;
 
+        [SerializeField] private PlayerInputReader _input;
+        private Rigidbody2D _rb;
+
         private Vector2 _dashDirection;
         private float _dashTimeLeft;
         private float _cooldownLeft;
         private float _bufferLeft;
-        public bool IsDashing => _dashTimeLeft > 0f;
-        private bool IsDashCooldown => _cooldownLeft > 0f;
-        private bool IsDashBuffer => _bufferLeft > 0f;
-
         private Vector2 _facing = Vector2.down;
+
+        public bool IsDashing => _dashTimeLeft > 0f;
+        private bool IsDashOnCooldown => _cooldownLeft > 0f;
+        private bool HasBufferedDash => _bufferLeft > 0f;
         private bool IsMoving => _input.MoveInput.sqrMagnitude > 0.01f;
 
         private void Awake()
@@ -48,7 +48,7 @@ namespace JM2D.Player
             }
 
             // 2-2. 조건이 맞으면 대시를 시작한다
-            if (IsDashBuffer && !IsDashing && !IsDashCooldown)
+            if (HasBufferedDash && !IsDashing && !IsDashOnCooldown)
             {
                 _dashDirection = IsMoving ? _input.MoveInput.normalized : _facing;
                 _dashTimeLeft = _dashDuration;
