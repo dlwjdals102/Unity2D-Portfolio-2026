@@ -1,6 +1,6 @@
 ---
 name: 플레이어 공격
-status: planned
+status: in-progress
 owner: user
 phase: 2
 related: [player-movement.md]
@@ -88,6 +88,6 @@ CLAUDE.md 5번의 테스트 대상이 아니다.
 투사체 수명과 연사 간격의 초기값은 플레이하면서 정한다.
 적이 없는 상태에서 정한 값이므로 적이 생기면 다시 볼 가능성이 높다.
 
-`Instantiate` 와 `Destroy` 를 쓰는 것은 CLAUDE.md 6번(매 프레임 생성·파괴 금지)에
+`Instantiate` 와 `Destroy` 를 쓰는 것은 `.claude/rules/unity-csharp.md` 의 매 프레임 생성·파괴 금지에
 어긋나 보이지만, **Phase 3에서 풀링으로 교체하는 것을 전제로 한 의도된 선택**이다.
 전후 수치를 비교할 대상이 있어야 최적화가 증거가 된다.
