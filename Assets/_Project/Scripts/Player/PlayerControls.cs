@@ -111,6 +111,24 @@ namespace JM2D.Player
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Value"",
+                    ""id"": ""c467ef2b-d5f4-4f95-b391-da97d8ee1232"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""e23a9dd6-ac40-42cc-8d59-233cdad654d4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -267,6 +285,28 @@ namespace JM2D.Player
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a3008c5-255a-464e-983e-8cf7a0e6791f"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44bc8fb6-4d81-4781-9527-efb0a0eb83ba"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -277,6 +317,8 @@ namespace JM2D.Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+            m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+            m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -359,6 +401,8 @@ namespace JM2D.Player
         private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Dash;
+        private readonly InputAction m_Player_Aim;
+        private readonly InputAction m_Player_Fire;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -378,6 +422,14 @@ namespace JM2D.Player
             /// Provides access to the underlying input action "Player/Dash".
             /// </summary>
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Aim".
+            /// </summary>
+            public InputAction @Aim => m_Wrapper.m_Player_Aim;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Fire".
+            /// </summary>
+            public InputAction @Fire => m_Wrapper.m_Player_Fire;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -410,6 +462,12 @@ namespace JM2D.Player
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
             }
 
             /// <summary>
@@ -427,6 +485,12 @@ namespace JM2D.Player
                 @Dash.started -= instance.OnDash;
                 @Dash.performed -= instance.OnDash;
                 @Dash.canceled -= instance.OnDash;
+                @Aim.started -= instance.OnAim;
+                @Aim.performed -= instance.OnAim;
+                @Aim.canceled -= instance.OnAim;
+                @Fire.started -= instance.OnFire;
+                @Fire.performed -= instance.OnFire;
+                @Fire.canceled -= instance.OnFire;
             }
 
             /// <summary>
@@ -481,6 +545,20 @@ namespace JM2D.Player
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnDash(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnAim(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Fire" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnFire(InputAction.CallbackContext context);
         }
     }
 }
