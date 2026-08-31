@@ -37,7 +37,19 @@
 | public 프로퍼티 | PascalCase | `CurrentHp` |
 | 상수 | PascalCase | `MaxHealth` |
 | 인터페이스 | `I` + PascalCase | `IDamageable` |
+| bool 필드·프로퍼티 | `Is` / `Has` / `Can` + PascalCase | `IsDashing`, `HasBufferedDash` |
 | ScriptableObject 에셋 | `타입_이름` | `EnemyData_Slime` |
+
+`bool`에서 접두사를 빼면 명사처럼 보여 숫자나 객체를 담은 것으로 읽힌다.
+접두사를 붙이되 **뒷부분을 문장으로 읽어 보고 말이 되는지 확인한다.**
+`IsDashCooldown`은 "이것이 대시 쿨다운인가"로 읽혀 어색하다.
+`IsDashOnCooldown`("대시가 쿨다운 중인가")처럼 고친다.
+
+**설정값 필드와 이름이 겹치지 않게 한다.** `float _dashCooldown`이 있는데
+`bool DashCooldown`을 두면 밑줄과 대소문자만 다른 두 이름이 생긴다.
+
+부정이 겹치면 읽기 어려워진다. `!IsDashOnCooldown`이 여러 번 나오면
+`IsDashReady`처럼 의미를 뒤집는 편이 나을 때가 있다.
 
 ## 클래스 안의 선언 순서
 
