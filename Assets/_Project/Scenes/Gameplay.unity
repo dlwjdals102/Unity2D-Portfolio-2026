@@ -725,6 +725,8 @@ GameObject:
   - component: {fileID: 1268753867}
   - component: {fileID: 1268753866}
   - component: {fileID: 1268753872}
+  - component: {fileID: 1268753873}
+  - component: {fileID: 1268753874}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -750,6 +752,7 @@ MonoBehaviour:
   _dashCooldown: 0.6
   _dashInputBuffer: 0.15
   _input: {fileID: 1268753867}
+  _health: {fileID: 1268753873}
 --- !u!114 &1268753867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,6 +929,33 @@ MonoBehaviour:
   _fireInterval: 0.15
   _input: {fileID: 1268753867}
   _motor: {fileID: 1268753866}
+--- !u!114 &1268753873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 873253ab068ee344baf6c8bdbfe75066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Combat.Health
+  _maxHealth: 5
+  _invulnerableTime: 0.5
+  _blinkInterval: 0.08
+--- !u!114 &1268753874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e756f2153dae284fa2b0db79564ad99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerDeath
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
