@@ -55,3 +55,14 @@
 
 인스펙터 값이 대여섯 개를 넘어가면 `[System.Serializable]` 클래스로 묶는 것을 고려한다.
 Phase 3부터는 ScriptableObject로 빼는 쪽이 우선이다.
+
+## 어셈블리 (asmdef)
+
+근거와 버린 대안은 `docs/decisions/asmdef-structure.md` 에 있다.
+
+- 의존 방향은 한쪽이다. `Logic ← Runtime ← Editor`, `Tests → Logic`.
+  **거꾸로 참조하고 싶어지면 코드가 잘못된 자리에 있다는 신호다.**
+- 테스트할 로직은 `Logic/`에 둔다. MonoBehaviour·씬에 의존하면 Logic이 아니다.
+- **`internal`은 어셈블리 경계를 넘지 못한다.** 테스트 대상 타입은 `public`으로 쓴다.
+- 테스트 어셈블리는 `Runtime`을 참조하지 않는다. 일부러 막아둔 것이다.
+  참조를 열면 MonoBehaviour를 테스트하려 들게 되고 테스트가 느려지고 깨진다.
