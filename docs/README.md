@@ -49,16 +49,16 @@
 ## 각 폴더 사용법
 
 ### `docs/design/` — 기획
-- [GDD.md](design/GDD.md) — 코어 루프와 스코프. **A4 1장 유지.**
-- [feature-pool.md](design/feature-pool.md) — 기능 **후보** 풀. 아직 만들기로 정한 게 아니다.
+- [GDD.md](design/GDD.md): 코어 루프와 스코프. **A4 1장 유지.**
+- [feature-pool.md](design/feature-pool.md): 기능 **후보** 풀. 아직 만들기로 정한 게 아니다.
 
 ### `docs/specs/` — 기능 명세
 **실제로 만들기로 확정한 기능만** 파일을 만든다. 후보 단계면 `feature-pool.md`에 둔다.
 착수 직전에 `_TEMPLATE.md`를 복사해서 시작한다.
 
 ### `docs/progress/` — 진행 상황
-- [STATUS.md](progress/STATUS.md) — **지금 상태.** 덮어쓰는 문서. 과거를 남기지 않는다.
-- [ROADMAP.md](progress/ROADMAP.md) — 14주 계획. 큰 단위 체크리스트.
+- [STATUS.md](progress/STATUS.md): **지금 상태.** 덮어쓰는 문서. 과거를 남기지 않는다.
+- [ROADMAP.md](progress/ROADMAP.md): 14주 계획. 큰 단위 체크리스트.
 
 ### `docs/interview/` — 면접 문답
 
@@ -72,6 +72,10 @@ Claude는 답을 검토하고 보완만 한다.
 결정에서 나온 질문은 주제 이름으로 만든다.
 
 ### `docs/decisions/` — 설계 결정
-**추가 전용.** 한번 쓴 결정 파일은 수정하지 않는다.
+**추가 전용.** 한번 쓴 결정 파일의 **판단과 근거는 고쳐 쓰지 않는다.**
+
+단, **오타, 깨진 링크, 잘못된 인용을 바로잡는 것은 허용한다.**
+그러지 않으면 문서가 틀린 채로 남아 거짓말을 하게 된다.
+이 규칙이 막으려는 것은 판단을 나중에 유리하게 고쳐 쓰는 일이다.
 판단이 바뀌었으면 새 파일을 쓰고 옛 파일에 `superseded_by`를 적는다.
 **틀린 결정도 지우지 않는다.** "왜 바꿨는지"가 면접에서 가장 좋은 이야깃거리다.
