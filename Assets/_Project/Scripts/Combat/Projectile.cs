@@ -7,6 +7,7 @@ namespace JM2D.Combat
     {
         [SerializeField] private float _speed = 15f;
         [SerializeField] private float _lifetime = 3f;
+        [SerializeField] private int _damage = 1;
 
         private Rigidbody2D _rb;
 
@@ -24,6 +25,9 @@ namespace JM2D.Combat
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other.TryGetComponent(out IDamageable damageable))
+                damageable.TakeDamage(_damage);
+
             Destroy(gameObject);
         }
     }

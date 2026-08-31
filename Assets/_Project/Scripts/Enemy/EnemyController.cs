@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JM2D.Combat;
+using UnityEngine;
 
 namespace JM2D.Enemy
 {
@@ -18,10 +19,13 @@ namespace JM2D.Enemy
         [SerializeField] private float _attackRange = 1.2f;
         [SerializeField] private float _attackExitRange = 1.6f;
         [SerializeField] private float _attackCooldown = 1f;
+        [SerializeField] private int _attackDamage = 1;
 
         [SerializeField] private Transform _target;
         private Rigidbody2D _rb;
         private SpriteRenderer _renderer;
+        private Health _health;
+        private IDamageable _targetDamageable;
         private State _state = State.Idle;
 
         private float _attackCooldownLeft;
@@ -30,8 +34,20 @@ namespace JM2D.Enemy
         {
             _rb = GetComponent<Rigidbody2D>();
             _renderer = GetComponent<SpriteRenderer>();
+            _health = GetComponent<Health>();
+            _targetDamageable = _target.GetComponent<IDamageable>();
 
             ChangeState(State.Idle);
+        }
+
+        private void OnEnable()
+        {
+            _health.OnDied += OnDied;
+        }
+
+        private void OnDisable()
+        {
+            _health.OnDied -= OnDied;
         }
 
         private void FixedUpdate()
@@ -65,7 +81,7 @@ namespace JM2D.Enemy
                         _attackCooldownLeft -= Time.fixedDeltaTime;
                     else
                     {
-                        Debug.Log("적 공격"); // 지금은 로그만
+                        _targetDamageable.TakeDamage(_attackDamage);
                         _attackCooldownLeft = _attackCooldown;
                     }
 
@@ -86,6 +102,11 @@ namespace JM2D.Enemy
                 State.Attack => Color.green,
                 _ => Color.white
             };
+        }
+
+        private void OnDied()
+        {
+            Destroy(gameObject);
         }
     }
 }
