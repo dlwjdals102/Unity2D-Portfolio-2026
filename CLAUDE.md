@@ -16,9 +16,9 @@
 **"면접에서 방어 가능한 게임"** 이다. 둘이 충돌하면 후자를 택한다.
 
 - 개발자: 1인 (소규모 게임 제작 경험 있음)
-- 엔진: **Unity 6.3 LTS (6000.3.9f1)** / C# — 고정. 변경하지 않는다.
+- 엔진: **Unity 6.3 LTS (6000.3.9f1)** / C#. 고정이며 변경하지 않는다.
 - 기간: 약 3~4개월
-- 문서 체계: **[docs/README.md](docs/README.md)** — 어떤 문서가 어디 있는지는 여기만 본다.
+- 문서 체계: **[docs/README.md](docs/README.md)**: 어떤 문서가 어디 있는지는 여기만 본다.
 - 현재 상태: **[docs/progress/STATUS.md](docs/progress/STATUS.md)**
 
 ---
@@ -198,11 +198,11 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 
 Claude가 지킬 것은 세 가지다.
 
-**작업 시작 전** — `docs/progress/STATUS.md`를 읽는다. 지금 어디까지 왔는지 여기 있다.
+**작업 시작 전**: `docs/progress/STATUS.md`를 읽는다. 지금 어디까지 왔는지 여기 있다.
 
-**기능 착수 전** — `docs/specs/`에 명세를 만든다. `_TEMPLATE.md`를 복사해서 쓴다.
+**기능 착수 전**: `docs/specs/`에 명세를 만든다. `_TEMPLATE.md`를 복사해서 쓴다.
 후보 단계인 기능은 명세를 만들지 않는다. `docs/design/feature-pool.md`에 둔다.
 **만들기로 확정한 것만 파일이 생긴다.**
 
-**작업 종료 후** — `STATUS.md`를 갱신한다. 덮어쓴다. 이력은 git이 갖는다.
+**작업 종료 후**: `STATUS.md`를 갱신한다. 덮어쓴다. 이력은 git이 갖는다.
 설계 판단이 있었으면 `docs/decisions/`에 파일을 추가한다.

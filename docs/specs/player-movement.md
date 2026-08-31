@@ -52,7 +52,7 @@ related: []
 
 ## 검증
 
-**EditMode 테스트** — 해당 없음.
+**EditMode 테스트**: 해당 없음.
 이동은 MonoBehaviour와 물리에 의존하므로 CLAUDE.md 5번의 테스트 대상이 아니다.
 
 **플레이모드 체크리스트**
