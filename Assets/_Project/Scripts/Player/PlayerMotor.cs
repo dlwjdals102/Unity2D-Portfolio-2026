@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JM2D.Combat;
+using UnityEngine;
 
 namespace JM2D.Player
 {
@@ -14,8 +15,9 @@ namespace JM2D.Player
         [SerializeField] private float _dashCooldown = 0.6f;
         [SerializeField] private float _dashInputBuffer = 0.15f;
 
-        [SerializeField] private PlayerInputReader _input;
         private Rigidbody2D _rb;
+        [SerializeField] private PlayerInputReader _input;
+        [SerializeField] private Health _health;
 
         private Vector2 _dashDirection;
         private float _dashTimeLeft;
@@ -66,6 +68,8 @@ namespace JM2D.Player
                 if (IsMoving)
                     _facing = _input.MoveInput.normalized;
             }
+
+            _health.IsExternallyInvulnerable = IsDashing;
         }
     }
 }
