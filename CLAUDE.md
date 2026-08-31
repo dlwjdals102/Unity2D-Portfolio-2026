@@ -138,14 +138,7 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 ```
 
 **작업 전에 성공 기준을 먼저 합의한다.** "동작하게 만들기"는 기준이 아니다.
-
-체크리스트 예시:
-
-```
-- [ ] 적이 플레이어를 감지 범위 안에서만 추적하는가
-- [ ] 감지 범위를 벗어나면 원위치로 복귀하는가
-- [ ] 추적 중 플레이어가 죽으면 Idle로 전이하는가
-```
+체크리스트 항목은 구현 방법이 아니라 **관찰 가능한 동작**으로 쓴다.
 
 **EditMode 유닛테스트를 실제로 작성하는 대상** (MonoBehaviour 의존 없는 순수 로직):
 
@@ -153,52 +146,26 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 - 데이터 파싱 / 검증
 - 절차적 생성 규칙 (연결성, 방 개수 보장 등)
 
-다단계 작업은 착수 전 계획을 밝힌다.
-
-```
-1. [단계] → 검증: [확인 방법]
-2. [단계] → 검증: [확인 방법]
-```
+다단계 작업은 착수 전에 `단계 → 검증 방법` 형태로 계획을 밝힌다.
 
 ---
 
 ## 6. Unity / C# 규칙
 
-금지 목록, 준수 사항, 네이밍 규칙은
 **[.claude/rules/unity-csharp.md](.claude/rules/unity-csharp.md)** 에 있다.
-이 파일과 같은 우선순위로 매 세션 로드된다.
-
-분량 때문에 분리했다. 규칙을 고칠 때는 그쪽 파일만 고친다.
+매 세션 자동으로 로드되므로 여기 옮겨 적지 않는다.
 
 ---
 
-## 7. 프로젝트 구조
+## 7. 코드의 경계와 외부 의존성
 
-```
-Assets/
-├─ _Project/                    ← 내가 만든 것
-│  ├─ Scripts/                  [JM2D.Runtime]  Unity 의존 코드
-│  │  ├─ Logic/                 [JM2D.Logic]    순수 로직 — 테스트 대상
-│  │  ├─ Editor/                [JM2D.Editor]   에디터 툴
-│  │  └─ { Player, Enemy, Combat, Data, UI, Core }
-│  ├─ Prefabs/  ScriptableObjects/  Scenes/  Art/  Audio/
-├─ Tests/EditMode/              [JM2D.Tests.EditMode]  → Logic만 참조
-└─ ThirdParty/                  ← 외부 에셋 (내 코드와 절대 섞지 않는다)
-```
+`Assets/_Project`(내가 만든 것)와 `Assets/ThirdParty`(외부 에셋)를 분리한다.
+**면접관이 "어디까지가 본인 코드인지"를 즉시 알 수 있게** 하기 위한 것이다.
+이 경계를 흐리는 제안을 하지 않는다.
 
-`_Project`와 `ThirdParty` 분리는 **면접관이 "어디까지가 본인 코드인지"를
-즉시 알 수 있게** 하기 위한 것이다. 이 경계를 흐리는 제안을 하지 않는다.
-
-### 어셈블리 규칙
-
-근거와 대안은 [docs/decisions/asmdef-structure.md](docs/decisions/asmdef-structure.md)에 있다.
-
-- 의존 방향은 한쪽이다. `Logic ← Runtime ← Editor`, `Tests → Logic`.
-  **거꾸로 참조하고 싶어지면 코드가 잘못된 자리에 있다는 신호다.**
-- 테스트할 로직은 `Logic/`에 둔다. MonoBehaviour·씬에 의존하면 Logic이 아니다.
-- **`internal`은 어셈블리 경계를 넘지 못한다.** 테스트 대상 타입은 `public`으로 쓴다.
-- 테스트 어셈블리는 `Runtime`을 참조하지 않는다. 일부러 막아둔 것이다.
-  참조를 열면 MonoBehaviour를 테스트하려 들게 되고 테스트가 느려지고 깨진다.
+어셈블리는 `Logic / Runtime / Editor / Tests` 4분할이다. 지켜야 할 규칙은
+`.claude/rules/unity-csharp.md`, 그렇게 정한 근거와 버린 대안은
+[docs/decisions/asmdef-structure.md](docs/decisions/asmdef-structure.md)에 있다.
 
 ### 외부 라이브러리 · 에셋 정책
 
