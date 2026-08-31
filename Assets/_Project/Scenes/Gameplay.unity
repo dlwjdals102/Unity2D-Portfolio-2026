@@ -179,7 +179,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -598,7 +598,8 @@ GameObject:
   - component: {fileID: 1268753868}
   - component: {fileID: 1268753867}
   - component: {fileID: 1268753866}
-  m_Layer: 0
+  - component: {fileID: 1268753872}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -617,8 +618,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04ce5df8ce77ab4db4651f6b0a9f392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerMotor
-  _input: {fileID: 1268753867}
   _moveSpeed: 6
+  _dashSpeed: 20
+  _dashDuration: 0.15
+  _dashCooldown: 0.6
+  _dashInputBuffer: 0.15
+  _input: {fileID: 1268753867}
 --- !u!114 &1268753867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,6 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554bba296897ac0409b04491cdde8529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerInputReader
+  _camera: {fileID: 14800953}
 --- !u!61 &1268753868
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -778,6 +784,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1268753872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8732adff08fd47049a5a343963ccdce6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerAttack
+  _projectilePrefab: {fileID: 7464044306449956177, guid: 1f0aeca24ba6810448452a9097561aae, type: 3}
+  _input: {fileID: 1268753867}
+  _fireInterval: 0.15
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
