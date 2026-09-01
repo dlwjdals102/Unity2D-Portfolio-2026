@@ -10,6 +10,7 @@
 | 진행 | `docs/progress/` | **매 작업** | 지금 어디까지 왔는가 |
 | 결정 | `docs/decisions/` | 추가만 | 왜 그렇게 만들었는가 |
 | 문답 | `docs/interview/` | 기능마다 | 면접에서 어떻게 설명할 것인가 |
+| 측정 | `docs/measurements/` | 최적화마다 | 무엇이 얼마나 좋아졌는가 |
 
 ---
 
