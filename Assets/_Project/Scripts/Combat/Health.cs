@@ -9,6 +9,9 @@ namespace JM2D.Combat
         /// 체력이 0 이하가 되면 한 번 발생한다.
         public event Action OnDied;
 
+        /// 체력이 바뀔 때 발생한다. (현재, 최대)
+        public event Action<int, int> OnHealthChanged;
+
         [SerializeField] private int _maxHealth = 3;
         [SerializeField] private float _invulnerableTime = 0.5f;
         [SerializeField] private float _blinkInterval = 0.08f;
@@ -23,6 +26,8 @@ namespace JM2D.Combat
         /// 대시처럼 밖에서 거는 무적. Health 는 그 이유를 알지 못한다.
         public bool IsExternallyInvulnerable { get; set; }
         public bool IsInvulnerable => _invulnerableLeft > 0f || IsExternallyInvulnerable;
+        public int Current => _current;
+        public int Max => _maxHealth;
 
         private void Awake()
         {
@@ -47,7 +52,7 @@ namespace JM2D.Combat
             if (IsInvulnerable) return;
 
             _current -= amount;
-            Debug.Log($"{name} 체력 {_current}");
+            OnHealthChanged?.Invoke(_current, _maxHealth);
 
             if (IsDead)
                 OnDied?.Invoke();
