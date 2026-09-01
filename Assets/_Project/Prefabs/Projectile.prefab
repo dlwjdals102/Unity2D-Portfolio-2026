@@ -180,3 +180,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Combat.Projectile
   _speed: 15
+  _lifetime: 1
+  _damage: 1
