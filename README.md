@@ -29,6 +29,11 @@
 3.
 
 ## 사용 리소스
-| 종류 | 출처 | 라이선스 |
-|---|---|---|
-| | | |
+
+직접 만들지 않은 것은 전부 여기 적는다. 이 표가 유일한 출처 기록이다.
+
+| 종류 | 이름 | 출처 | 라이선스 |
+|---|---|---|---|
+| 폰트 | Pretendard v1.3.9 (길형진) | [github.com/orioncactus/pretendard](https://github.com/orioncactus/pretendard) | SIL Open Font License 1.1 |
+
+그 외 스프라이트와 사운드는 사용하지 않는다. 도형 프로토타입으로 개발한다.
