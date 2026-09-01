@@ -31,7 +31,6 @@ namespace JM2D.Player
             _attack.enabled = false;
 
             _rb.linearVelocity = Vector2.zero;
-            Debug.Log("플레이어 사망");
         }
     }
 }
