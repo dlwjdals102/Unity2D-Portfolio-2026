@@ -201,7 +201,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 118979874}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1040781992}
+        m_TargetAssemblyTypeName: JM2D.Core.SceneLoader, JM2D.Runtime
+        m_MethodName: LoadGameplay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &118979874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,7 +483,7 @@ MonoBehaviour:
   m_text: JM2D
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
-  m_sharedMaterial: {fileID: -3557403861256192813, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
+  m_sharedMaterial: {fileID: 8697514844509816437, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -755,7 +767,7 @@ MonoBehaviour:
   m_text: "\uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
-  m_sharedMaterial: {fileID: -3557403861256192813, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
+  m_sharedMaterial: {fileID: 8697514844509816437, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
