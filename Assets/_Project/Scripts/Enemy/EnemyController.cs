@@ -35,7 +35,7 @@ namespace JM2D.Enemy
             _health = GetComponent<Health>();
             _targetDamageable = _target.GetComponent<IDamageable>();
 
-            _health.SetMaxHealth(_data.MaxHealth);
+            _health.InitializeMaxHealth(_data.MaxHealth);
 
             _moveSpeed = _data.MoveSpeed;
             _detectRange = _data.DetectRange;

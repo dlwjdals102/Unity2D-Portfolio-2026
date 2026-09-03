@@ -1043,6 +1043,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859195277}
   m_CullTransparentMesh: 1
+--- !u!1 &1018103519
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1018103521}
+  - component: {fileID: 1018103520}
+  m_Layer: 0
+  m_Name: _DebugKeys
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1018103520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018103519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91f28da2d2e410f45be7db4da33e60b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Debugging.StatDebugKeys
+  _stats: {fileID: 1268753875}
+--- !u!4 &1018103521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018103519}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1097592503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1268,6 +1313,7 @@ GameObject:
   - component: {fileID: 1268753872}
   - component: {fileID: 1268753873}
   - component: {fileID: 1268753874}
+  - component: {fileID: 1268753875}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1287,13 +1333,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04ce5df8ce77ab4db4651f6b0a9f392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerMotor
-  _moveSpeed: 6
   _dashSpeed: 20
   _dashDuration: 0.15
   _dashCooldown: 0.6
   _dashInputBuffer: 0.15
   _input: {fileID: 1268753867}
   _health: {fileID: 1268753873}
+  _stats: {fileID: 1268753875}
 --- !u!114 &1268753867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1467,11 +1513,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerAttack
   _projectilePrefab: {fileID: 7464044306449956177, guid: 1f0aeca24ba6810448452a9097561aae, type: 3}
-  _fireInterval: 0.15
-  _attackDamage: 1
   _poolParent: {fileID: 113147923}
   _input: {fileID: 1268753867}
   _motor: {fileID: 1268753866}
+  _stats: {fileID: 1268753875}
 --- !u!114 &1268753873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1499,6 +1544,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e756f2153dae284fa2b0db79564ad99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerDeath
+--- !u!114 &1268753875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91cc57881050ef846802d76907e11b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerStats
+  _maxHealth: 3
+  _moveSpeed: 6
+  _attackDamage: 1
+  _attackSpeed: 6.67
 --- !u!1 &1621787979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,3 +2376,4 @@ SceneRoots:
   - {fileID: 518329596}
   - {fileID: 2062705148}
   - {fileID: 113147923}
+  - {fileID: 1018103521}

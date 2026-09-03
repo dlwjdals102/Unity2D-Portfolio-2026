@@ -60,13 +60,25 @@ namespace JM2D.Combat
                 _invulnerableLeft = _invulnerableTime;
         }
 
-        /// 최대 체력을 밖에서 정한다. 적처럼 데이터에서 값이 오는 경우에 쓴다.
+        /// 초기화 전용. 시작할 때 한 번 부른다. 체력이 최대로 찬다.
         /// 이 메서드를 부르면 인스펙터의 Max Health 는 무시된다.
-        /// 초기화 전용이다. 게임 도중에 부르면 체력이 가득 차고 UI 갱신도 되지 않는다
-        public void SetMaxHealth(int max)
+        public void InitializeMaxHealth(int max)
         {
             _maxHealth = max;
             _current = _maxHealth;
+        }
+
+        /// 런 도중 최대 체력이 바뀔 때 부른다.
+        /// 늘어난 만큼 현재 체력도 같이 찬다.
+        public void ChangeMaxHealth(int newMax)
+        {
+            if (IsDead) return;
+
+            int delta = newMax - _maxHealth;
+            _maxHealth = newMax;
+            _current = Mathf.Max(1, _current + delta);
+
+            OnHealthChanged?.Invoke(_current, _maxHealth);
         }
     }
 }
