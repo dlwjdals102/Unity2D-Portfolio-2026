@@ -6,9 +6,6 @@ namespace JM2D.Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMotor : MonoBehaviour
     {
-        [Header("이동")]
-        [SerializeField] private float _moveSpeed = 6f;
-
         [Header("대시")]
         [SerializeField] private float _dashSpeed = 20f;
         [SerializeField] private float _dashDuration = 0.15f;
@@ -18,6 +15,7 @@ namespace JM2D.Player
         private Rigidbody2D _rb;
         [SerializeField] private PlayerInputReader _input;
         [SerializeField] private Health _health;
+        [SerializeField] private PlayerStats _stats;
 
         private Vector2 _dashDirection;
         private float _dashTimeLeft;
@@ -63,7 +61,7 @@ namespace JM2D.Player
                 _rb.linearVelocity = _dashDirection * _dashSpeed;
             else
             {
-                _rb.linearVelocity = _input.MoveInput * _moveSpeed;
+                _rb.linearVelocity = _input.MoveInput * _stats.MoveSpeed.Value;
 
                 if (IsMoving)
                     _facing = _input.MoveInput.normalized;
