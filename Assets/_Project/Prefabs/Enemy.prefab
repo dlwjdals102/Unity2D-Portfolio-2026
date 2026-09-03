@@ -180,13 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0261862726ffbe46ba40c2b8f1993b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Enemy.EnemyController
-  _moveSpeed: 3
-  _detectRange: 6
-  _giveUpRange: 8
-  _attackRange: 1.2
-  _attackExitRange: 1.6
-  _attackCooldown: 1
-  _attackDamage: 1
+  _data: {fileID: 11400000, guid: 90fd2d51191b5c34daeffa3c504b4ae4, type: 2}
   _target: {fileID: 0}
 --- !u!114 &-299830852263993559
 MonoBehaviour:
