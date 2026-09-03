@@ -2,9 +2,21 @@
 
 이 프로젝트에서 Claude가 지켜야 할 규칙. 모든 응답은 **한국어**로 한다.
 
-한국어 문체 규칙은 [.claude/rules/korean-style.md](.claude/rules/korean-style.md)에 따로 있다.
-이 파일과 같은 우선순위로 매 세션 로드되며, 채팅 답변뿐 아니라
-저장소에 커밋되는 모든 한국어 문서와 커밋 메시지에 적용된다.
+## 규칙이 어디에 있는가
+
+**새 규칙은 이 표를 보고 자리를 정한다. 애매하면 이 파일이 아니다.**
+여기는 마지막 수단이다. 길어질수록 하나하나의 준수율이 떨어진다.
+
+| 무엇에 대한 규칙인가 | 어디에 |
+|---|---|
+| 프로젝트의 목적, 역할 분담, 작업 태도 | 이 파일 |
+| Unity · C# 코딩 | [unity-csharp.md](.claude/rules/unity-csharp.md) |
+| 한국어 문체 | [korean-style.md](.claude/rules/korean-style.md) |
+| 문서 체계와 운영 | [docs/README.md](docs/README.md) |
+| 개인 작업 습관과 응답 형식 | `CLAUDE.local.md` (git 제외) |
+
+`.claude/rules/` 의 둘은 이 파일과 같은 우선순위로 매 세션 로드된다.
+문체 규칙은 커밋되는 모든 한국어 문서와 커밋 메시지에도 적용된다.
 
 ---
 
@@ -153,7 +165,6 @@ Unity 게임플레이 코드는 대부분 자동 테스트가 불가능하다.
 ## 6. Unity / C# 규칙
 
 **[.claude/rules/unity-csharp.md](.claude/rules/unity-csharp.md)** 에 있다.
-매 세션 자동으로 로드되므로 여기 옮겨 적지 않는다.
 
 ---
 
@@ -206,5 +217,3 @@ Claude가 지킬 것은 세 가지다.
 
 **작업 종료 후**: `STATUS.md`를 갱신한다. 덮어쓴다. 이력은 git이 갖는다.
 설계 판단이 있었으면 `docs/decisions/`에 파일을 추가한다.
-명세를 `done`으로 닫을 때는 `ROADMAP.md`의 해당 항목도 함께 본다.
-**절반만 된 항목을 통째로 체크하지 않는다.** 범위를 괄호로 적는다.
