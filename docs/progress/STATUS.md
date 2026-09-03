@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-03
+updated: 2026-09-04
 phase: 3
 ---
 
@@ -10,7 +10,7 @@ phase: 3
 
 ## 한 줄 요약
 
-**Phase 3 진행 중.** ScriptableObject 데이터 분리까지 완료. 다음은 스탯 · 모디파이어 시스템.
+**Phase 3 진행 중.** 스탯 · 모디파이어 시스템까지 완료. 다음은 적 종류 확장과 FSM 재검토.
 
 ## 지금 하는 일
 
@@ -19,7 +19,7 @@ phase: 3
 ```
 [x] 1. 오브젝트 풀링 (+ 프로파일러 전후 측정)
 [x] 2. ScriptableObject 데이터 분리
-[ ] 3. 스탯 · 모디파이어 시스템 (+ EditMode 테스트)
+[x] 3. 스탯 · 모디파이어 시스템 (+ EditMode 테스트 22개)
 [ ] 4. 적 종류 확장하면서 FSM 구조 재검토
 ```
 
@@ -27,11 +27,14 @@ phase: 3
 컴포넌트는 `Awake` 에서 그 값을 자기 필드로 복사한다.
 **그 필드가 곧 버프를 곱할 자리다.** 근거는 [데이터 소유](../decisions/data-ownership.md)에 있다.
 
-플레이어 수치는 일부러 남겨뒀다. 하나뿐인 것을 데이터로 빼는 것은 확장성 증명이
-되지 않는다. **3번이 플레이어 값을 다루게 되므로 그때 정리된다.**
+2번에서 미뤄뒀던 플레이어 수치는 3번에서 `PlayerStats` 로 모였다.
+ScriptableObject 로 빼지는 않았다. 하나뿐인 것을 데이터로 빼는 것은
+확장성 증명이 되지 않기 때문이다.
 
-**3번에서 처음으로 `JM2D.Logic` 어셈블리를 쓴다.** 스탯 계산은 순수 로직이므로
-거기 들어가고, EditMode 테스트가 처음 붙는다. asmdef 를 4분할한 이유가 그때 증명된다.
+**3번에서 `JM2D.Logic` 어셈블리를 처음 썼고 asmdef 4분할이 증명됐다.**
+`Stat`, `StatModifier`, `ModifierType` 이 `System` 과 `System.Collections.Generic`
+만 참조하므로 테스트 22개가 씬도 플레이도 없이 1초 안에 끝난다.
+근거는 [스탯 설계](../decisions/stat-modifier-design.md)에 있다.
 
 4번은 Phase 4 콘텐츠 확장과 겹친다. 미리 나누지 않고 적이 실제로 늘 때 판단한다.
 
@@ -45,11 +48,13 @@ UI 는 전부 이벤트로 돌고, 적은 처음부터 상태 머신으로 만�
 - 폰트 에셋의 `Clear Dynamic Data on Build` 가 꺼져 있다. Phase 6 빌드 전에 켠다.
 - 성능 측정을 에디터에서 했다. `EditorLoop` 이 85%를 차지한다.
   Phase 6 빌드 때 개발 빌드로 다시 잰다.
-- **적을 풀링하면 `Health.SetMaxHealth` 호출이 깨진다.** `EnemyController.Awake` 에서
-  부르고 있어 재사용될 때 다시 돌지 않는다. 투사체에서 `_damage` 를 `Launch` 로
+- **적을 풀링하면 `Health.InitializeMaxHealth` 호출이 깨진다.** `EnemyController.Awake`
+  에서 부르고 있어 재사용될 때 다시 돌지 않는다. 투사체에서 `_damage` 를 `Launch` 로
   옮긴 것과 같은 문제다. **적 풀링을 넣는 Phase 4에서 함께 본다.**
-- `SetMaxHealth` 라는 이름이 초기화 전용이라는 것을 알려주지 않는다.
-  최대 체력 변경을 다루는 **3번 스탯 시스템에서 다시 본다.**
+- **디버그 키(`StatDebugKeys`)를 Phase 4에서 지운다.** 아이템이 생기면 역할이 끝난다.
+  `Gameplay` 씬의 `_DebugKeys` 오브젝트째로 지우면 된다.
+- **수치 스케일이 작아 퍼센트 증가가 묻힌다.** 공격력 1에 +10% 는 반올림해도 1이다.
+  기본 수치를 키워야 풀리므로 **Phase 4 밸런싱에서 다룬다.**
 
 ## 막힌 것 (Blockers)
 
