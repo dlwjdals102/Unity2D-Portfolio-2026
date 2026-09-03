@@ -59,5 +59,14 @@ namespace JM2D.Combat
             else
                 _invulnerableLeft = _invulnerableTime;
         }
+
+        /// 최대 체력을 밖에서 정한다. 적처럼 데이터에서 값이 오는 경우에 쓴다.
+        /// 이 메서드를 부르면 인스펙터의 Max Health 는 무시된다.
+        /// 초기화 전용이다. 게임 도중에 부르면 체력이 가득 차고 UI 갱신도 되지 않는다
+        public void SetMaxHealth(int max)
+        {
+            _maxHealth = max;
+            _current = _maxHealth;
+        }
     }
 }

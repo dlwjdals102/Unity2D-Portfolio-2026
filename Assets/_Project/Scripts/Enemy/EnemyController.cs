@@ -1,4 +1,5 @@
 ﻿using JM2D.Combat;
+using JM2D.Data;
 using UnityEngine;
 
 namespace JM2D.Enemy
@@ -8,26 +9,23 @@ namespace JM2D.Enemy
     {
         private enum State { Idle, Chase, Attack }
 
-        [Header("이동")]
-        [SerializeField] private float _moveSpeed = 3f;
-
-        [Header("감지")]
-        [SerializeField] private float _detectRange = 6f;
-        [SerializeField] private float _giveUpRange = 8f;
-
-        [Header("공격")]
-        [SerializeField] private float _attackRange = 1.2f;
-        [SerializeField] private float _attackExitRange = 1.6f;
-        [SerializeField] private float _attackCooldown = 1f;
-        [SerializeField] private int _attackDamage = 1;
+        [SerializeField] private EnemyData _data;
 
         [SerializeField] private Transform _target;
         private Rigidbody2D _rb;
         private SpriteRenderer _renderer;
         private Health _health;
         private IDamageable _targetDamageable;
-        private State _state = State.Idle;
 
+        private float _moveSpeed;
+        private float _detectRange;
+        private float _giveUpRange;
+        private float _attackRange;
+        private float _attackExitRange;
+        private float _attackCooldown;
+        private int _attackDamage;
+
+        private State _state = State.Idle;
         private float _attackCooldownLeft;
 
         private void Awake()
@@ -37,11 +35,21 @@ namespace JM2D.Enemy
             _health = GetComponent<Health>();
             _targetDamageable = _target.GetComponent<IDamageable>();
 
+            _health.SetMaxHealth(_data.MaxHealth);
+
+            _moveSpeed = _data.MoveSpeed;
+            _detectRange = _data.DetectRange;
+            _giveUpRange = _data.GiveUpRange;
+            _attackRange = _data.AttackRange;
+            _attackExitRange = _data.AttackExitRange;
+            _attackCooldown = _data.AttackCooldown;
+            _attackDamage = _data.AttackDamage;
+
             ChangeState(State.Idle);
         }
 
         private void OnEnable()
-        {
+        {   
             _health.OnDied += OnDied;
         }
 
