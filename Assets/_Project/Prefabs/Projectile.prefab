@@ -179,6 +179,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2337e27f1623d4aaf774b5305d351a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Combat.Projectile
-  _speed: 15
-  _lifetime: 1
-  _damage: 1
+  _data: {fileID: 11400000, guid: 05fae6b6b50c4fc4997aa922c7aef457, type: 2}

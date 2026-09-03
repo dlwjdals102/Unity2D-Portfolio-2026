@@ -9,6 +9,7 @@ namespace JM2D.Player
         [Header("발사")]
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private float _fireInterval = 0.15f;
+        [SerializeField] private int _attackDamage = 1;
         [SerializeField] private Transform _poolParent;
 
         [SerializeField] private PlayerInputReader _input;
@@ -34,7 +35,7 @@ namespace JM2D.Player
                 Projectile p = _pool.Get();
                 p.transform.position = transform.position;
                 p.Bind(_pool);
-                p.Launch(_input.AimDirection);
+                p.Launch(_input.AimDirection, _attackDamage);
 
                 _fireCooldownLeft = _fireInterval;
             }
