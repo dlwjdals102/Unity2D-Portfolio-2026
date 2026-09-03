@@ -62,6 +62,9 @@
 5. 유니티 생명주기 메서드. 순서는 `Awake` → `OnEnable` → `Start` → `Update` → `FixedUpdate` → `OnDisable` → `OnDestroy`
 6. 나머지 메서드
 
+**`[SerializeField]` 가 붙었다고 다 1번이 아니다.** ScriptableObject 데이터
+참조는 값의 자리를 대신하므로 1번이고, 씬 오브젝트 참조는 2번이다.
+
 **3번과 4번을 섞지 않는다.** 값(상태)과 계산(프로퍼티)이 뒤섞이면
 무엇이 진짜 데이터인지 흐려진다.
 
