@@ -1468,6 +1468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerAttack
   _projectilePrefab: {fileID: 7464044306449956177, guid: 1f0aeca24ba6810448452a9097561aae, type: 3}
   _fireInterval: 0.15
+  _attackDamage: 1
   _poolParent: {fileID: 113147923}
   _input: {fileID: 1268753867}
   _motor: {fileID: 1268753866}

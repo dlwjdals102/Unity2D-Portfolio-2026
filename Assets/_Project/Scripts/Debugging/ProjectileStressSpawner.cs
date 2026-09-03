@@ -1,4 +1,4 @@
-using JM2D.Combat;
+﻿using JM2D.Combat;
 using JM2D.Core;
 using UnityEngine;
 
@@ -47,7 +47,8 @@ namespace JM2D.Debugging
             Projectile projectile = _pool.Get();
             projectile.transform.position = transform.position;
             projectile.Bind(_pool);
-            projectile.Launch(direction);
+            // 측정 씬에는 맞을 대상이 없다. 피해량은 결과에 영향을 주지 않는다.
+            projectile.Launch(direction, 1);
         }
     }
 }
