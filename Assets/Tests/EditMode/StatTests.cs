@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using JM2D.Logic;
 
 namespace JM2D.Tests
@@ -270,6 +271,53 @@ namespace JM2D.Tests
             var stat = new Stat(10f);
 
             Assert.DoesNotThrow(() => stat.AddModifier(new StatModifier(ModifierType.Flat, 5f)));
+        }
+
+        // ── 아래 둘은 아이템을 반복 장착·해제할 때의 버그 제보를 재현한다 ──
+
+        /// 부츠를 다섯 번 끼고 다섯 번 뺀 뒤 다시 끼면 정상이어야 한다.
+        [Test]
+        public void 반복_장착과_해제_뒤에도_값이_정확하다()
+        {
+            var stat = new Stat(6f);
+            var 인스턴스 = new List<object>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var 부츠 = new object();
+                인스턴스.Add(부츠);
+                stat.AddModifier(new StatModifier(ModifierType.PercentAdd, 0.2f, 부츠));
+            }
+
+            Assert.AreEqual(12f, stat.Value, Tolerance, "다섯 개를 낀 상태");
+
+            for (int i = 인스턴스.Count - 1; i >= 0; i--)
+                stat.RemoveAllFrom(인스턴스[i]);
+
+            Assert.AreEqual(6f, stat.Value, Tolerance, "전부 뺀 상태");
+
+            var 새부츠 = new object();
+            stat.AddModifier(new StatModifier(ModifierType.PercentAdd, 0.2f, 새부츠));
+
+            Assert.AreEqual(7.2f, stat.Value, Tolerance, "다시 하나를 낀 상태");
+        }
+
+        /// 뺀 순서가 넣은 순서와 달라도 남는 것이 정확해야 한다.
+        [Test]
+        public void 중간_것을_빼도_나머지가_남는다()
+        {
+            var 첫째 = new object();
+            var 둘째 = new object();
+            var 셋째 = new object();
+
+            var stat = new Stat(1f);
+            stat.AddModifier(new StatModifier(ModifierType.Flat, 2f, 첫째));
+            stat.AddModifier(new StatModifier(ModifierType.Flat, 2f, 둘째));
+            stat.AddModifier(new StatModifier(ModifierType.Flat, 2f, 셋째));
+
+            stat.RemoveAllFrom(둘째);
+
+            Assert.AreEqual(5f, stat.Value, Tolerance);
         }
     }
 }
