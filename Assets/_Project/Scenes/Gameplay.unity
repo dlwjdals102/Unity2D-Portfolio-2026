@@ -1072,7 +1072,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f28da2d2e410f45be7db4da33e60b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Debugging.StatDebugKeys
+  _inventory: {fileID: 1268753876}
   _stats: {fileID: 1268753875}
+  _boots: {fileID: 11400000, guid: 6659d9c0a002dec4d807621a3647ab26, type: 2}
+  _sword: {fileID: 11400000, guid: 8bc9cc21b6b1d1f4488a68e7aedf3950, type: 2}
+  _gloves: {fileID: 11400000, guid: f333ea9fa62394f4d975b72fe95863e7, type: 2}
+  _armor: {fileID: 11400000, guid: 8d5c2bbfa0bc5d746be612dfa3702cb2, type: 2}
 --- !u!4 &1018103521
 Transform:
   m_ObjectHideFlags: 0
@@ -1314,6 +1319,7 @@ GameObject:
   - component: {fileID: 1268753873}
   - component: {fileID: 1268753874}
   - component: {fileID: 1268753875}
+  - component: {fileID: 1268753876}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1560,6 +1566,19 @@ MonoBehaviour:
   _moveSpeed: 6
   _attackDamage: 1
   _attackSpeed: 6.67
+--- !u!114 &1268753876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bb993f48090e5f41b37ccc243ab86d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Items.ItemInventory
+  _stats: {fileID: 1268753875}
 --- !u!1 &1621787979
 GameObject:
   m_ObjectHideFlags: 0
