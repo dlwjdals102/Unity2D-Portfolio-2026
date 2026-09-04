@@ -1,5 +1,6 @@
 ﻿using JM2D.Combat;
 using JM2D.Logic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JM2D.Player
@@ -19,20 +20,22 @@ namespace JM2D.Player
         [SerializeField] private float _attackSpeed = 6.67f;
 
         private Health _health;
+        private readonly Dictionary<StatType, Stat> _stats = new Dictionary<StatType, Stat>();
 
-        public Stat MaxHealth { get; private set; }
-        public Stat MoveSpeed { get; private set; }
-        public Stat AttackDamage { get; private set; }
-        public Stat AttackSpeed { get; private set; }
+        public Stat Get(StatType type) => _stats[type];
+        public Stat MaxHealth => _stats[StatType.MaxHealth];
+        public Stat MoveSpeed => _stats[StatType.MoveSpeed];
+        public Stat AttackDamage => _stats[StatType.AttackDamage];
+        public Stat AttackSpeed => _stats[StatType.AttackSpeed];
 
         private void Awake()
         {
             _health = GetComponent<Health>();
 
-            MaxHealth = new Stat(_maxHealth);
-            MoveSpeed = new Stat(_moveSpeed);
-            AttackDamage = new Stat(_attackDamage);
-            AttackSpeed = new Stat(_attackSpeed);
+            _stats.Add(StatType.MaxHealth, new Stat(_maxHealth));
+            _stats.Add(StatType.MoveSpeed, new Stat(_moveSpeed));
+            _stats.Add(StatType.AttackDamage, new Stat(_attackDamage));
+            _stats.Add(StatType.AttackSpeed, new Stat(_attackSpeed));
 
             _health.InitializeMaxHealth(MaxHealth.IntValue);
         }
