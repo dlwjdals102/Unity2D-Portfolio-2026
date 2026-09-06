@@ -29,20 +29,26 @@ namespace JM2D.UI
         [Tooltip("칸 사이 여백. 위치는 그대로 두고 크기만 줄여서 만든다")]
         [SerializeField] private float _padding = 4f;
 
+        [Header("미리보기")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _previewAlpha = 0.6f;
+
         [Header("고를 수 있는 아이템 (숫자 키 순서, 임시)")]
         [SerializeField] private ItemData[] _palette;
 
         private readonly List<Image> _itemViews = new List<Image>();
         private readonly HashSet<IGridItem> _drawn = new HashSet<IGridItem>();
 
-        private ItemData _selected;
+        /// 놓기 전의 아이템. 회전 상태를 들고 있다가 그대로 그리드에 넘어간다.
+        private ItemInstance _preview;
+        private Image _previewView;
 
         private void Awake()
         {
             BuildCells();
-            _panel.SetActive(false);
+            BuildPreview();
 
-            if (_palette.Length > 0) _selected = _palette[0];
+            _panel.SetActive(false);
         }
 
         private void Update()
@@ -50,16 +56,36 @@ namespace JM2D.UI
             if (Keyboard.current == null) return;
 
             if (Keyboard.current.tabKey.wasPressedThisFrame)
-                _panel.SetActive(!_panel.activeSelf);
+                Toggle();
 
             if (!_panel.activeSelf) return;
 
             ReadSelectionKeys();
 
+            if (Keyboard.current.rKey.wasPressedThisFrame && _preview != null)
+                _preview.Rotate();
+
             if (Mouse.current == null) return;
+
+            UpdatePreview();
 
             if (Mouse.current.leftButton.wasPressedThisFrame) TryPlaceAtMouse();
             if (Mouse.current.rightButton.wasPressedThisFrame) TryRemoveAtMouse();
+        }
+
+        /// 닫을 때 고른 것을 비운다.
+        /// 창을 닫는 것은 배치를 마쳤다는 뜻이라, 손에 든 채로 두지 않는다.
+        private void Toggle()
+        {
+            bool opening = !_panel.activeSelf;
+
+            _panel.SetActive(opening);
+
+            if (!opening)
+            {
+                _preview = null;
+                _previewView.gameObject.SetActive(false);
+            }
         }
 
         private void ReadSelectionKeys()
@@ -70,27 +96,58 @@ namespace JM2D.UI
             {
                 if (!Keyboard.current[digits[i]].wasPressedThisFrame) continue;
 
-                _selected = _palette[i];
-                Debug.Log($"[가방] {_selected.DisplayName} 선택 ({_selected.Width}x{_selected.Height})");
+                _preview = new ItemInstance(_palette[i]);
+                Debug.Log($"[가방] {_preview.Data.DisplayName} 선택 ({_preview.Width}x{_preview.Height})");
             }
+        }
+
+        /// 마우스가 가리키는 칸에 놓을 모습을 반투명하게 보여준다.
+        /// 놓을 수 없으면 빨강이라 클릭하기 전에 알 수 있다.
+        private void UpdatePreview()
+        {
+            if (_preview == null || !TryGetCellUnderMouse(out int x, out int y))
+            {
+                _previewView.gameObject.SetActive(false);
+                return;
+            }
+
+            _previewView.gameObject.SetActive(true);
+
+            bool canPlace = _inventory.Grid.CanPlace(_preview, x, y);
+            Color color = canPlace ? _preview.Data.Color : Color.red;
+            color.a = _previewAlpha;
+            _previewView.color = color;
+
+            PlaceAt(_previewView.rectTransform, x, y, _preview.Width, _preview.Height);
         }
 
         private void TryPlaceAtMouse()
         {
-            if (_selected == null) return;
+            if (_preview == null)
+            {
+                Debug.Log("[가방] 놓을 아이템을 먼저 고르세요 (1~4)");
+                return;
+            }
+
             if (!TryGetCellUnderMouse(out int x, out int y)) return;
 
-            var instance = new ItemInstance(_selected);
-
-            if (_inventory.TryPlace(instance, x, y))
-            {
-                Redraw();
-                Debug.Log($"[가방] {_selected.DisplayName} 을 ({x},{y}) 에 놓았다");
-            }
-            else
+            if (!_inventory.TryPlace(_preview, x, y))
             {
                 Debug.Log($"[가방] ({x},{y}) 에는 놓을 수 없다");
+                return;
             }
+
+            Debug.Log($"[가방] {_preview.Data.DisplayName} 을 ({x},{y}) 에 놓았다");
+
+            // 놓은 인스턴스는 그리드 것이 되었으므로 새로 만든다.
+            // 방향은 이어받는다. 같은 아이템을 여러 개 놓을 때 매번 돌리지 않아도 된다.
+            ItemData data = _preview.Data;
+            bool wasRotated = _preview.IsRotated;
+
+            _preview = new ItemInstance(data);
+            if (wasRotated) _preview.Rotate();
+
+            Redraw();
         }
 
         private void TryRemoveAtMouse()
@@ -150,6 +207,14 @@ namespace JM2D.UI
             _cellRoot.sizeDelta = new Vector2(grid.Width * _cellSize, grid.Height * _cellSize);
         }
 
+        private void BuildPreview()
+        {
+            _previewView = Instantiate(_itemPrefab, _cellRoot);
+            _previewView.name = "Preview";
+            _previewView.raycastTarget = false;
+            _previewView.gameObject.SetActive(false);
+        }
+
         /// 놓인 것을 전부 지우고 그리드를 훑어 다시 그린다.
         /// 25칸이라 비용이 없고, 화면과 그리드가 어긋날 수 없다.
         private void Redraw()
@@ -174,6 +239,9 @@ namespace JM2D.UI
                     DrawItem((ItemInstance)item, x, y);
                 }
             }
+
+            // 새로 그린 아이템이 미리보기를 덮지 않게 맨 앞으로 올린다.
+            _previewView.transform.SetAsLastSibling();
         }
 
         private void DrawItem(ItemInstance instance, int x, int y)
