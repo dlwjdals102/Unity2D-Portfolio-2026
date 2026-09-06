@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ItemData_Sword
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
   _displayName: "\uAC80"
+  _width: 2
+  _height: 2
+  _color: {r: 0.22441936, g: 1, b: 0, a: 1}
   _modifiers:
   - Target: 2
     Type: 0

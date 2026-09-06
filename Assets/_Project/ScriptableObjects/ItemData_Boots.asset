@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ItemData_Boots
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
   _displayName: "\uBD80\uCE20"
+  _width: 1
+  _height: 2
+  _color: {r: 1, g: 0.63676953, b: 0, a: 1}
   _modifiers:
   - Target: 1
     Type: 1

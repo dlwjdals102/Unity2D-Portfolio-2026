@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ItemData_Gloves
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
   _displayName: "\uC7A5\uAC11"
+  _width: 2
+  _height: 1
+  _color: {r: 0.96815324, g: 1, b: 0, a: 1}
   _modifiers:
   - Target: 3
     Type: 1
