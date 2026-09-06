@@ -155,5 +155,157 @@ namespace JM2D.Tests
             Assert.IsFalse(grid.TryPlace(new 아이템(1, 3), 0, 3));   // 세로 3 은 안 들어간다
             Assert.IsTrue(grid.TryPlace(new 아이템(3, 1), 0, 3));    // 눕히면 들어간다
         }
+
+        // ── 아래 넷은 놓인 아이템을 위치와 함께 돌려주는 조회를 검사한다 ──
+
+        [Test]
+        public void 빈_그리드에서는_아무것도_안_나온다()
+        {
+            var grid = 새그리드();
+
+            Assert.IsEmpty(grid.GetPlacedItems());
+        }
+
+        [Test]
+        public void 놓은_아이템의_왼쪽_위_좌표가_나온다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 1);
+            Assert.IsTrue(grid.TryPlace(검, 3, 2), "준비: 검 배치");
+
+            var placed = grid.GetPlacedItems();
+
+            Assert.AreEqual(1, placed.Count);
+            Assert.AreSame(검, placed[0].Item);
+            Assert.AreEqual(3, placed[0].X);
+            Assert.AreEqual(2, placed[0].Y);
+        }
+
+        /// 네 칸을 덮어도 한 번만 나와야 한다.
+        [Test]
+        public void 여러_칸을_덮어도_한_번만_나온다()
+        {
+            var grid = 새그리드();
+            Assert.IsTrue(grid.TryPlace(new 아이템(2, 2), 1, 1), "준비: 2x2 배치");
+
+            Assert.AreEqual(1, grid.GetPlacedItems().Count);
+        }
+
+        [Test]
+        public void 뺀_아이템은_나오지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            var 부츠 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 0, 0), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(부츠, 2, 2), "준비: 부츠 배치");
+
+            grid.Remove(검);
+
+            var placed = grid.GetPlacedItems();
+
+            Assert.AreEqual(1, placed.Count);
+            Assert.AreSame(부츠, placed[0].Item);
+        }
+
+        // ── 아래 여덟은 인접 세기를 검사한다 ──
+
+        [Test]
+        public void 혼자_있으면_인접이_없다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+
+            Assert.AreEqual(0, grid.CountAdjacent(검));
+        }
+
+        /// 2x2 는 자기 칸끼리 맞닿아 있다. 자기 자신을 세면 안 된다.
+        [Test]
+        public void 큰_아이템도_혼자면_인접이_없다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 1, 1), "준비: 2x2 배치");
+
+            Assert.AreEqual(0, grid.CountAdjacent(검));
+        }
+
+        [Test]
+        public void 상하좌우로_맞닿으면_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 1, 2), "준비: 왼쪽");
+
+            Assert.AreEqual(1, grid.CountAdjacent(검));
+        }
+
+        /// 대각선을 세면 한가운데에 놓기만 해도 이득이 커진다.
+        [Test]
+        public void 대각선은_세지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 1, 1), "준비: 왼쪽 위 대각선");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 3, 3), "준비: 오른쪽 아래 대각선");
+
+            Assert.AreEqual(0, grid.CountAdjacent(검));
+        }
+
+        [Test]
+        public void 사방을_채우면_넷이다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 1, 2), "준비: 왼쪽");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 3, 2), "준비: 오른쪽");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 1), "준비: 위");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 3), "준비: 아래");
+
+            Assert.AreEqual(4, grid.CountAdjacent(검));
+        }
+
+        /// 2x2 와 1x2 가 두 칸에서 맞닿아도 인접한 아이템은 하나다.
+        /// List 로 세면 여기서 2 가 나오고, 큰 아이템 옆이 무조건 유리해진다.
+        [Test]
+        public void 두_칸에서_맞닿아도_하나로_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 1, 1), "준비: 2x2 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 2), 3, 1), "준비: 오른쪽에 1x2");
+
+            Assert.AreEqual(1, grid.CountAdjacent(검));
+        }
+
+        [Test]
+        public void 모서리에_있어도_격자_밖을_보지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 0, 0), "준비: 왼쪽 위 모서리");
+
+            Assert.DoesNotThrow(() => grid.CountAdjacent(검));
+            Assert.AreEqual(0, grid.CountAdjacent(검));
+        }
+
+        [Test]
+        public void 옆_아이템을_빼면_인접이_줄어든다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            var 부츠 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(부츠, 1, 2), "준비: 부츠 배치");
+            Assert.AreEqual(1, grid.CountAdjacent(검), "준비: 붙어 있는 상태");
+
+            grid.Remove(부츠);
+
+            Assert.AreEqual(0, grid.CountAdjacent(검));
+        }
     }
 }
