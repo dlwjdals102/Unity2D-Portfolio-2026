@@ -24,9 +24,25 @@ namespace JM2D.Data
     public class ItemData : ScriptableObject
     {
         [SerializeField] private string _displayName;
+
+        [Header("가방에서 차지하는 크기")]
+        [Tooltip("각 변은 1 아니면 2 다. 최대 네 칸을 넘지 않는다")]
+        [Range(1, 2)]
+        [SerializeField] private int _width = 1;
+
+        [Range(1, 2)]
+        [SerializeField] private int _height = 1;
+
+        [Tooltip("가방에 그려질 색. 도형 프로토타입이라 모양만으로는 구분되지 않는다")]
+        [SerializeField] private Color _color = Color.white;
+
+        [Header("효과")]
         [SerializeField] private ItemModifier[] _modifiers;
 
         public string DisplayName => _displayName;
+        public int Width => _width;
+        public int Height => _height;
+        public Color Color => _color;
 
         /// 읽기 전용으로 노출한다. 배열을 그대로 주면 밖에서 고쳐 에셋이 오염된다.
         public IReadOnlyList<ItemModifier> Modifiers => _modifiers;

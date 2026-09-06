@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ItemData_Armor
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
   _displayName: "\uAC11\uC637"
+  _width: 1
+  _height: 1
+  _color: {r: 1, g: 0, b: 0, a: 1}
   _modifiers:
   - Target: 0
     Type: 0
