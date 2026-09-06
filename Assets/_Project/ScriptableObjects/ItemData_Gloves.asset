@@ -20,3 +20,7 @@ MonoBehaviour:
   - Target: 3
     Type: 1
     Value: 0.15
+  _adjacencyBonus:
+  - Target: 3
+    Type: 1
+    Value: 0.05

@@ -39,6 +39,10 @@ namespace JM2D.Data
         [Header("효과")]
         [SerializeField] private ItemModifier[] _modifiers;
 
+        [Header("인접 시너지")]
+        [Tooltip("상하좌우로 맞닿은 아이템 1개당 얼마씩 붙는지. 비워두면 시너지가 없다")]
+        [SerializeField] private ItemModifier[] _adjacencyBonus;
+
         public string DisplayName => _displayName;
         public int Width => _width;
         public int Height => _height;
@@ -46,5 +50,8 @@ namespace JM2D.Data
 
         /// 읽기 전용으로 노출한다. 배열을 그대로 주면 밖에서 고쳐 에셋이 오염된다.
         public IReadOnlyList<ItemModifier> Modifiers => _modifiers;
+
+        /// 인접한 아이템 1개당 붙는 양. 비어 있으면 시너지가 없다.
+        public IReadOnlyList<ItemModifier> AdjacencyBonus => _adjacencyBonus;
     }
 }

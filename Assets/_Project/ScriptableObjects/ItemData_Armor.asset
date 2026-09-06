@@ -20,3 +20,4 @@ MonoBehaviour:
   - Target: 0
     Type: 0
     Value: 2
+  _adjacencyBonus: []
