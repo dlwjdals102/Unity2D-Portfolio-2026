@@ -2,6 +2,8 @@
 using JM2D.Data;
 using JM2D.Items;
 using JM2D.Logic;
+using JM2D.Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -23,6 +25,10 @@ namespace JM2D.UI
         [SerializeField] private Image _cellPrefab;
         [SerializeField] private Image _itemPrefab;
 
+        [Tooltip("배치에 따라 스탯이 어떻게 바뀌는지 보여준다. 디버그용이며 Phase 5 에서 정리한다")]
+        [SerializeField] private PlayerStats _stats;
+        [SerializeField] private TMP_Text _statText;
+
         [Header("크기")]
         [SerializeField] private float _cellSize = 64f;
 
@@ -37,7 +43,6 @@ namespace JM2D.UI
         [SerializeField] private ItemData[] _palette;
 
         private readonly List<Image> _itemViews = new List<Image>();
-        private readonly HashSet<IGridItem> _drawn = new HashSet<IGridItem>();
 
         /// 놓기 전의 아이템. 회전 상태를 들고 있다가 그대로 그리드에 넘어간다.
         private ItemInstance _preview;
@@ -47,6 +52,7 @@ namespace JM2D.UI
         {
             BuildCells();
             BuildPreview();
+            UpdateStatText();
 
             _panel.SetActive(false);
         }
@@ -223,25 +229,27 @@ namespace JM2D.UI
                 Destroy(view.gameObject);
 
             _itemViews.Clear();
-            _drawn.Clear();
 
-            BagGrid grid = _inventory.Grid;
-
-            for (int y = 0; y < grid.Height; y++)
-            {
-                for (int x = 0; x < grid.Width; x++)
-                {
-                    IGridItem item = grid.GetAt(x, y);
-
-                    // 여러 칸을 덮는 아이템은 처음 만난 칸이 왼쪽 위다.
-                    if (item == null || !_drawn.Add(item)) continue;
-
-                    DrawItem((ItemInstance)item, x, y);
-                }
-            }
+            // 여러 칸을 덮는 아이템도 왼쪽 위 좌표로 한 번만 나온다.
+            foreach (PlacedItem placed in _inventory.Grid.GetPlacedItems())
+                DrawItem((ItemInstance)placed.Item, placed.X, placed.Y);
 
             // 새로 그린 아이템이 미리보기를 덮지 않게 맨 앞으로 올린다.
             _previewView.transform.SetAsLastSibling();
+
+            UpdateStatText();
+        }
+
+        /// 배치가 바뀔 때마다 갱신한다. 시너지가 반영된 값이 그대로 보인다.
+        private void UpdateStatText()
+        {
+            if (_statText == null || _stats == null) return;
+
+            _statText.text =
+                $"공격력  {_stats.AttackDamage.IntValue}\n" +
+                $"이동    {_stats.MoveSpeed.Value:F2}\n" +
+                $"연사    {_stats.AttackSpeed.Value:F2}\n" +
+                $"최대체력 {_stats.MaxHealth.IntValue}";
         }
 
         private void DrawItem(ItemInstance instance, int x, int y)
