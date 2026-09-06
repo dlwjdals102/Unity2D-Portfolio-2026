@@ -281,6 +281,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &350561608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 350561609}
+  m_Layer: 5
+  m_Name: CellRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &350561609
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350561608}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 628752666}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &474387699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -668,6 +703,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &628752665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 628752666}
+  m_Layer: 5
+  m_Name: BagPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &628752666
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628752665}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 350561609}
+  m_Father: {fileID: 1665572832}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &664596546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1043,56 +1114,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859195277}
   m_CullTransparentMesh: 1
---- !u!1 &1018103519
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1018103521}
-  - component: {fileID: 1018103520}
-  m_Layer: 0
-  m_Name: _DebugKeys
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1018103520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018103519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91f28da2d2e410f45be7db4da33e60b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Debugging.StatDebugKeys
-  _inventory: {fileID: 1268753876}
-  _stats: {fileID: 1268753875}
-  _boots: {fileID: 11400000, guid: 6659d9c0a002dec4d807621a3647ab26, type: 2}
-  _sword: {fileID: 11400000, guid: 8bc9cc21b6b1d1f4488a68e7aedf3950, type: 2}
-  _gloves: {fileID: 11400000, guid: f333ea9fa62394f4d975b72fe95863e7, type: 2}
-  _armor: {fileID: 11400000, guid: 8d5c2bbfa0bc5d746be612dfa3702cb2, type: 2}
---- !u!4 &1018103521
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018103519}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1097592503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,6 +1750,7 @@ GameObject:
   - component: {fileID: 1665572830}
   - component: {fileID: 1665572829}
   - component: {fileID: 1665572833}
+  - component: {fileID: 1665572834}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1813,6 +1835,7 @@ RectTransform:
   m_Children:
   - {fileID: 1682944199}
   - {fileID: 171429673}
+  - {fileID: 628752666}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1836,6 +1859,30 @@ MonoBehaviour:
   _root: {fileID: 171429672}
   _message: {fileID: 1621787980}
   _enemyCounter: {fileID: 2062705147}
+--- !u!114 &1665572834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665572828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa940a194a71f064fa7c5540179b2bcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.UI.BagView
+  _inventory: {fileID: 1268753876}
+  _panel: {fileID: 628752665}
+  _cellRoot: {fileID: 350561609}
+  _cellPrefab: {fileID: 1321134404902858089, guid: fd4903ccbb0b0d2448dc21ac07fb1b9a, type: 3}
+  _itemPrefab: {fileID: 3846340591654891598, guid: 125118ab4ef8d3449a73f334aeffe7d4, type: 3}
+  _cellSize: 64
+  _padding: 4
+  _palette:
+  - {fileID: 11400000, guid: 8d5c2bbfa0bc5d746be612dfa3702cb2, type: 2}
+  - {fileID: 11400000, guid: 6659d9c0a002dec4d807621a3647ab26, type: 2}
+  - {fileID: 11400000, guid: f333ea9fa62394f4d975b72fe95863e7, type: 2}
+  - {fileID: 11400000, guid: 8bc9cc21b6b1d1f4488a68e7aedf3950, type: 2}
 --- !u!1 &1682944198
 GameObject:
   m_ObjectHideFlags: 0
@@ -2395,4 +2442,3 @@ SceneRoots:
   - {fileID: 518329596}
   - {fileID: 2062705148}
   - {fileID: 113147923}
-  - {fileID: 1018103521}
