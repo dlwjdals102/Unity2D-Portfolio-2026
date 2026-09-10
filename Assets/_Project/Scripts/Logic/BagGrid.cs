@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JM2D.Logic
 {
@@ -151,6 +152,20 @@ namespace JM2D.Logic
             if (GetAt(lastX, lastY) == item) count++;  // 오른쪽 아래
 
             return count;
+        }
+
+        /// 조건에 맞는 세는 메서드를 골라 부른다.
+        /// 짝이 뒤바뀌어도 오류가 나지 않으므로 테스트가 지킨다.
+        public int Count(IGridItem item, SynergyCondition condition)
+        {
+            switch (condition)
+            {
+                case SynergyCondition.Adjacent: return CountAdjacent(item);
+                case SynergyCondition.SameRow: return CountInSameRow(item);
+                case SynergyCondition.SameColumn: return CountInSameColumn(item);
+                case SynergyCondition.Corner: return CountCorners(item);
+                default: throw new ArgumentOutOfRangeException(nameof(condition), condition, null);
+            }
         }
 
         /// 놓인 아이템을 왼쪽 위 좌표와 함께 돌려준다.
