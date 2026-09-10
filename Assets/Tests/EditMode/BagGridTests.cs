@@ -307,5 +307,117 @@ namespace JM2D.Tests
 
             Assert.AreEqual(0, grid.CountAdjacent(검));
         }
+
+        // ── 아래 여섯은 같은 행 세기를 검사한다 ──
+
+        [Test]
+        public void 같은_행에_아무도_없으면_0이다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+
+            Assert.AreEqual(0, grid.CountInSameRow(검));
+        }
+
+        /// 인접과 달리 떨어져 있어도 센다.
+        [Test]
+        public void 같은_행의_다른_아이템을_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 0, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 2), "준비: 한 칸 건너");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 4, 2), "준비: 오른쪽 끝");
+
+            Assert.AreEqual(2, grid.CountInSameRow(검));
+        }
+
+        /// 같은 열에 있는 것도, 멀리 있는 것도 세지 않는다.
+        [Test]
+        public void 다른_행에_있는_아이템은_세지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 1), "준비: 바로 위");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 0, 4), "준비: 먼 곳");
+
+            Assert.AreEqual(0, grid.CountInSameRow(검));
+        }
+
+        /// 왼쪽 위 칸의 행만 보면 0 이 나온다.
+        [Test]
+        public void 두_행에_걸친_아이템은_두_행을_모두_본다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 0, 1), "준비: 2x2 를 1~2행에");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 4, 2), "준비: 아래쪽 행에만");
+
+            Assert.AreEqual(1, grid.CountInSameRow(검));
+        }
+
+        /// 부츠를 1행과 2행에서 한 번씩 만난다. List 로 세면 2 가 나온다.
+        [Test]
+        public void 같은_아이템이_두_행에_걸쳐_있어도_한_번만_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 0, 1), "준비: 2x2 를 1~2행에");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 2), 3, 1), "준비: 1x2 를 1~2행에");
+
+            Assert.AreEqual(1, grid.CountInSameRow(검));
+        }
+
+        /// 2x2 는 행을 훑는 동안 자기 칸을 네 번 만난다.
+        [Test]
+        public void 같은_행에서_자기_자신은_세지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 1, 1), "준비: 2x2 배치");
+
+            Assert.AreEqual(0, grid.CountInSameRow(검));
+        }
+
+        // ── 아래 셋은 같은 열 세기를 검사한다. 같은 행과 대칭이다 ──
+
+        [Test]
+        public void 같은_열의_다른_아이템을_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 0), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 2), "준비: 한 칸 건너");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 4), "준비: 아래쪽 끝");
+
+            Assert.AreEqual(2, grid.CountInSameColumn(검));
+        }
+
+        /// 바로 옆에 붙어 있어도 열이 다르면 세지 않는다.
+        [Test]
+        public void 다른_열에_있는_아이템은_세지_않는다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 1, 2), "준비: 바로 왼쪽");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 4, 0), "준비: 먼 곳");
+
+            Assert.AreEqual(0, grid.CountInSameColumn(검));
+        }
+
+        /// 왼쪽 위 칸의 열만 보면 0 이 나온다.
+        [Test]
+        public void 두_열에_걸친_아이템은_두_열을_모두_본다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 1, 0), "준비: 2x2 를 1~2열에");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 2, 4), "준비: 오른쪽 열에만");
+
+            Assert.AreEqual(1, grid.CountInSameColumn(검));
+        }
     }
 }
