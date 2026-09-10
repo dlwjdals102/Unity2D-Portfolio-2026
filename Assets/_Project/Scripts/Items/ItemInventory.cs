@@ -50,13 +50,18 @@ namespace JM2D.Items
             foreach (PlacedItem placed in _grid.GetPlacedItems())
             {
                 var instance = (ItemInstance)placed.Item;
-                int adjacent = _grid.CountAdjacent(instance);
 
-                if (adjacent == 0) continue;
+                foreach (ItemSynergy s in instance.Data.Synergies)
+                {
+                    int count = _grid.Count(instance, s.Condition);
 
-                foreach (ItemModifier m in instance.Data.AdjacencyBonus)
+                    if (count == 0) continue;
+
+                    ItemModifier m = s.Modifier;
+
                     _stats.Get(m.Target).AddModifier(
-                        new StatModifier(m.Type, m.Value * adjacent, _synergySource));
+                        new StatModifier(m.Type, m.Value * count, _synergySource));
+                }
             }
         }
     }

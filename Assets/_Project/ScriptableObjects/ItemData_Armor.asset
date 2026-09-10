@@ -20,4 +20,9 @@ MonoBehaviour:
   - Target: 0
     Type: 0
     Value: 2
-  _adjacencyBonus: []
+  _synergies:
+  - Condition: 0
+    Modifier:
+      Target: 0
+      Type: 0
+      Value: 1
