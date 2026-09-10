@@ -419,5 +419,87 @@ namespace JM2D.Tests
 
             Assert.AreEqual(1, grid.CountInSameColumn(검));
         }
+
+        // ── 아래 다섯은 모서리 세기를 검사한다 ──
+
+        [Test]
+        public void 가운데에_있으면_모서리가_0이다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 2, 2), "준비: 검 배치");
+
+            Assert.AreEqual(0, grid.CountCorners(검));
+        }
+
+        /// 한 그리드에 넷을 함께 놓는다. 남의 귀퉁이를 자기 것으로 세지 않는지도 함께 본다.
+        [Test]
+        public void 네_귀퉁이_각각에서_1이_나온다()
+        {
+            var grid = 새그리드();
+            var 왼쪽위 = new 아이템(1, 1);
+            var 오른쪽위 = new 아이템(1, 1);
+            var 왼쪽아래 = new 아이템(1, 1);
+            var 오른쪽아래 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(왼쪽위, 0, 0), "준비: 왼쪽 위");
+            Assert.IsTrue(grid.TryPlace(오른쪽위, 4, 0), "준비: 오른쪽 위");
+            Assert.IsTrue(grid.TryPlace(왼쪽아래, 0, 4), "준비: 왼쪽 아래");
+            Assert.IsTrue(grid.TryPlace(오른쪽아래, 4, 4), "준비: 오른쪽 아래");
+
+            Assert.AreEqual(1, grid.CountCorners(왼쪽위), "왼쪽 위");
+            Assert.AreEqual(1, grid.CountCorners(오른쪽위), "오른쪽 위");
+            Assert.AreEqual(1, grid.CountCorners(왼쪽아래), "왼쪽 아래");
+            Assert.AreEqual(1, grid.CountCorners(오른쪽아래), "오른쪽 아래");
+        }
+
+        /// 왼쪽 위 좌표 (3,3) 은 귀퉁이가 아니다.
+        /// 아이템의 위치를 보는 구현이면 0 이 나온다. 귀퉁이 칸을 봐야 잡힌다.
+        [Test]
+        public void 큰_아이템이_오른쪽_아래를_덮으면_1이다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(2, 2);
+            Assert.IsTrue(grid.TryPlace(검, 3, 3), "준비: 2x2 를 (3,3) 에");
+
+            Assert.AreEqual(1, grid.CountCorners(검));
+        }
+
+        /// 가장자리에 붙어 있어도 귀퉁이 칸을 덮지 않으면 0 이다.
+        [Test]
+        public void 귀퉁이에_닿지_않으면_크기와_무관하게_0이다()
+        {
+            var grid = 새그리드();
+            var 가운데 = new 아이템(2, 2);
+            var 오른쪽_가장자리 = new 아이템(1, 2);
+            var 아래_가장자리 = new 아이템(3, 1);
+            Assert.IsTrue(grid.TryPlace(가운데, 1, 1), "준비: 2x2 를 가운데에");
+            Assert.IsTrue(grid.TryPlace(오른쪽_가장자리, 4, 1), "준비: 1x2 를 오른쪽 가장자리에");
+            Assert.IsTrue(grid.TryPlace(아래_가장자리, 1, 4), "준비: 3x1 을 아래 가장자리에");
+
+            Assert.AreEqual(0, grid.CountCorners(가운데), "가운데");
+            Assert.AreEqual(0, grid.CountCorners(오른쪽_가장자리), "오른쪽 가장자리");
+            Assert.AreEqual(0, grid.CountCorners(아래_가장자리), "아래 가장자리");
+        }
+
+        /// 정사각형에서는 x 와 y 를 뒤바꿔 적어도 드러나지 않는다.
+        /// 가로세로가 다르면 뒤바뀐 좌표가 격자 밖을 가리켜 예외가 난다.
+        [Test]
+        public void 가로세로가_다른_그리드에서도_귀퉁이를_찾는다()
+        {
+            var grid = new BagGrid(6, 4);
+            var 왼쪽위 = new 아이템(1, 1);
+            var 오른쪽위 = new 아이템(1, 1);
+            var 왼쪽아래 = new 아이템(1, 1);
+            var 오른쪽아래 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(왼쪽위, 0, 0), "준비: 왼쪽 위");
+            Assert.IsTrue(grid.TryPlace(오른쪽위, 5, 0), "준비: 오른쪽 위");
+            Assert.IsTrue(grid.TryPlace(왼쪽아래, 0, 3), "준비: 왼쪽 아래");
+            Assert.IsTrue(grid.TryPlace(오른쪽아래, 5, 3), "준비: 오른쪽 아래");
+
+            Assert.AreEqual(1, grid.CountCorners(왼쪽위), "왼쪽 위");
+            Assert.AreEqual(1, grid.CountCorners(오른쪽위), "오른쪽 위");
+            Assert.AreEqual(1, grid.CountCorners(왼쪽아래), "왼쪽 아래");
+            Assert.AreEqual(1, grid.CountCorners(오른쪽아래), "오른쪽 아래");
+        }
     }
 }
