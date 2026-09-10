@@ -137,6 +137,22 @@ namespace JM2D.Logic
             return false;
         }
 
+        /// 그리드의 네 귀퉁이 칸 중 이 아이템이 차지한 것의 수.
+        public int CountCorners(IGridItem item)
+        {
+            int lastX = Width - 1;
+            int lastY = Height - 1;
+
+            int count = 0;
+
+            if (GetAt(0, 0) == item) count++;           // 왼쪽 위
+            if (GetAt(lastX, 0) == item) count++;       // 오른쪽 위
+            if (GetAt(0, lastY) == item) count++;      // 왼쪽 아래
+            if (GetAt(lastX, lastY) == item) count++;  // 오른쪽 아래
+
+            return count;
+        }
+
         /// 놓인 아이템을 왼쪽 위 좌표와 함께 돌려준다.
         /// 여러 칸을 덮는 아이템도 한 번만 나온다.
         public List<PlacedItem> GetPlacedItems()
