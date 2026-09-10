@@ -20,7 +20,9 @@ MonoBehaviour:
   - Target: 1
     Type: 1
     Value: 0.2
-  _adjacencyBonus:
-  - Target: 1
-    Type: 1
-    Value: 0.05
+  _synergies:
+  - Condition: 1
+    Modifier:
+      Target: 1
+      Type: 1
+      Value: 0.05
