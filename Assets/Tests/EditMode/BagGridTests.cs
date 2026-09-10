@@ -501,5 +501,29 @@ namespace JM2D.Tests
             Assert.AreEqual(1, grid.CountCorners(왼쪽아래), "왼쪽 아래");
             Assert.AreEqual(1, grid.CountCorners(오른쪽아래), "오른쪽 아래");
         }
+
+        // ── 아래 하나는 조건과 세는 메서드의 짝을 검사한다 ──
+
+        /// 한 아이템에게 네 조건이 전부 다른 수를 내도록 놓는다.
+        /// 어느 짝이 뒤바뀌어도 그 조건의 기댓값이 틀린다.
+        [Test]
+        public void 조건마다_짝이_되는_메서드로_센다()
+        {
+            var grid = 새그리드();
+            var 검 = new 아이템(1, 1);
+            Assert.IsTrue(grid.TryPlace(검, 0, 0), "준비: 왼쪽 위 귀퉁이");
+
+            for (int x = 1; x < 5; x++)
+                Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), x, 0), $"준비: 같은 행 ({x},0)");
+
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 0, 1), "준비: 같은 열 (0,1)");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 0, 3), "준비: 같은 열 (0,3)");
+            Assert.IsTrue(grid.TryPlace(new 아이템(1, 1), 0, 4), "준비: 같은 열 (0,4)");
+
+            Assert.AreEqual(4, grid.Count(검, SynergyCondition.SameRow), "같은 행");
+            Assert.AreEqual(3, grid.Count(검, SynergyCondition.SameColumn), "같은 열");
+            Assert.AreEqual(2, grid.Count(검, SynergyCondition.Adjacent), "인접");
+            Assert.AreEqual(1, grid.Count(검, SynergyCondition.Corner), "모서리");
+        }
     }
 }
