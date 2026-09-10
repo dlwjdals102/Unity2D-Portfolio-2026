@@ -49,9 +49,7 @@ namespace JM2D.Logic
                 for (int x = 0; x < Width; x++)
                     if (GetAt(x, y) == item) _cells[x, y] = null;
         }
-
-        /// 놓인 아이템을 왼쪽 위 좌표와 함께 돌려준다.
-        /// 여러 칸을 덮는 아이템도 한 번만 나온다.
+        
         /// 이 아이템과 상하좌우로 맞닿은 다른 아이템의 수.
         /// 두 칸에서 맞닿아도 하나로 센다. 대각선은 세지 않는다.
         public int CountAdjacent(IGridItem item)
@@ -64,10 +62,10 @@ namespace JM2D.Logic
                 {
                     if (_cells[x, y] != item) continue;
 
-                    AddNeighbor(neighbors, item, x - 1, y);
-                    AddNeighbor(neighbors, item, x + 1, y);
-                    AddNeighbor(neighbors, item, x, y - 1);
-                    AddNeighbor(neighbors, item, x, y + 1);
+                    AddOther(neighbors, item, x - 1, y);
+                    AddOther(neighbors, item, x + 1, y);
+                    AddOther(neighbors, item, x, y - 1);
+                    AddOther(neighbors, item, x, y + 1);
                 }
             }
 
@@ -76,17 +74,71 @@ namespace JM2D.Logic
 
         /// 그 칸에 다른 아이템이 있으면 명단에 담는다.
         /// 격자 밖이거나, 비었거나, 자기 자신이면 담지 않는다.
-        private void AddNeighbor(HashSet<IGridItem> set, IGridItem self, int x, int y)
+        private void AddOther(HashSet<IGridItem> set, IGridItem self, int x, int y)
         {
             if (x < 0 || y < 0 || x >= Width || y >= Height) return;
 
-            IGridItem neighbor = _cells[x, y];
+            IGridItem other = _cells[x, y];
 
-            if (neighbor == null || neighbor == self) return;
+            if (other == null || other == self) return;
 
-            set.Add(neighbor);
+            set.Add(other);
         }
 
+        /// 이 아이템이 걸친 행들에 있는 다른 아이템의 수.
+        /// 같은 아이템이 두 행에 걸쳐 있어도 하나로 센다.
+        public int CountInSameRow(IGridItem item)
+        {
+            var found = new HashSet<IGridItem>();
+
+            for (int y = 0; y < Height; y++)
+            {
+                if (!OccupiesRow(item, y)) continue;
+
+                for (int x = 0; x < Width; x++)
+                    AddOther(found, item, x, y);
+            }
+
+            return found.Count;
+        }
+
+        /// 그 행에 이 아이템이 걸쳐 있는가.
+        private bool OccupiesRow(IGridItem item, int y)
+        {
+            for (int x = 0; x < Width; x++)
+                if (GetAt(x, y) == item) return true;
+
+            return false;
+        }
+
+        /// 이 아이템이 걸친 열들에 있는 다른 아이템의 수.
+        /// 같은 행과 대칭이다.
+        public int CountInSameColumn(IGridItem item)
+        {
+            var found = new HashSet<IGridItem>();
+
+            for (int x = 0; x < Width; x++)
+            {
+                if (!OccupiesColumn(item, x)) continue;
+
+                for (int y = 0; y < Height; y++)
+                    AddOther(found, item, x, y);
+            }
+
+            return found.Count;
+        }
+
+        /// 그 열에 이 아이템이 걸쳐 있는가.
+        private bool OccupiesColumn(IGridItem item, int x)
+        {
+            for (int y = 0; y < Height; y++)
+                if (GetAt(x, y) == item) return true;
+
+            return false;
+        }
+
+        /// 놓인 아이템을 왼쪽 위 좌표와 함께 돌려준다.
+        /// 여러 칸을 덮는 아이템도 한 번만 나온다.
         public List<PlacedItem> GetPlacedItems()
         {
             var result = new List<PlacedItem>();
