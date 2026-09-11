@@ -15,7 +15,7 @@ MonoBehaviour:
   _displayName: "\uBD80\uCE20"
   _width: 1
   _height: 2
-  _color: {r: 1, g: 0.63676953, b: 0, a: 1}
+  _color: {r: 0.25, g: 0.5, b: 1, a: 1}
   _modifiers:
   - Target: 1
     Type: 1

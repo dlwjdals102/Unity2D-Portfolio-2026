@@ -15,7 +15,7 @@ MonoBehaviour:
   _displayName: "\uAC11\uC637"
   _width: 1
   _height: 1
-  _color: {r: 1, g: 0, b: 0, a: 1}
+  _color: {r: 0.3, g: 0.75, b: 0.3, a: 1}
   _modifiers:
   - Target: 0
     Type: 0
