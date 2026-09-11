@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8a67730193e9e448195265db1ddf89, type: 3}
-  m_Name: ItemData_Boots
+  m_Name: ItemData_Wings
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
-  _displayName: "\uBD80\uCE20"
-  _width: 1
+  _displayName: "\uB0A0\uAC1C"
+  _width: 2
   _height: 2
-  _color: {r: 0.25, g: 0.5, b: 1, a: 1}
+  _color: {r: 0.6, g: 0.8, b: 1, a: 1}
   _modifiers:
   - Target: 1
-    Type: 1
-    Value: 0.2
+    Type: 2
+    Value: 0.15
   _synergies:
-  - Condition: 1
+  - Condition: 3
     Modifier:
       Target: 1
       Type: 1
-      Value: 0.05
+      Value: 0.15

@@ -10,18 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8a67730193e9e448195265db1ddf89, type: 3}
-  m_Name: ItemData_Boots
+  m_Name: ItemData_Necklace
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.ItemData
-  _displayName: "\uBD80\uCE20"
+  _displayName: "\uBAA9\uAC78\uC774"
   _width: 1
   _height: 2
-  _color: {r: 0.25, g: 0.5, b: 1, a: 1}
+  _color: {r: 0.2, g: 0.75, b: 0.7, a: 1}
   _modifiers:
+  - Target: 0
+    Type: 0
+    Value: 1
   - Target: 1
     Type: 1
-    Value: 0.2
+    Value: 0.1
   _synergies:
-  - Condition: 1
+  - Condition: 2
     Modifier:
       Target: 1
       Type: 1
