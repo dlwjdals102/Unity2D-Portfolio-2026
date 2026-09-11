@@ -38,11 +38,11 @@ namespace JM2D.Data
         [SerializeField] private string _displayName;
 
         [Header("가방에서 차지하는 크기")]
-        [Tooltip("각 변은 1 아니면 2 다. 최대 네 칸을 넘지 않는다")]
-        [Range(1, 2)]
+        [Tooltip("네 칸을 넘지 않는 직사각형. 1x3, 1x4 같은 긴 막대도 된다")]
+        [Range(1, 4)]
         [SerializeField] private int _width = 1;
 
-        [Range(1, 2)]
+        [Range(1, 4)]
         [SerializeField] private int _height = 1;
 
         [Tooltip("가방에 그려질 색. 도형 프로토타입이라 모양만으로는 구분되지 않는다")]
@@ -65,5 +65,13 @@ namespace JM2D.Data
 
         /// 배치 조건과 효과의 목록. 비어 있으면 시너지가 없다.
         public IReadOnlyList<ItemSynergy> Synergies => _synergies;
+
+        /// 변마다 4까지 허용하므로 2x3 같은 크기를 인스펙터가 막지 못한다.
+        /// 고쳐 주지 않고 알리기만 한다. 조용히 값을 바꾸면 무엇이 바뀌었는지 모른다.
+        private void OnValidate()
+        {
+            if (_width * _height > 4)
+                Debug.LogWarning($"{name}: {_width}x{_height} 는 네 칸을 넘는다. 아이템은 1~4칸이다", this);
+        }
     }
 }
