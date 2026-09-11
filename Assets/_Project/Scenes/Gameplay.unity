@@ -2034,11 +2034,24 @@ MonoBehaviour:
   _cellSize: 64
   _padding: 4
   _previewAlpha: 0.6
+  _labelFontSize: 16
+  _labelColor: {r: 0, g: 0, b: 0, a: 1}
   _palette:
   - {fileID: 11400000, guid: 8d5c2bbfa0bc5d746be612dfa3702cb2, type: 2}
   - {fileID: 11400000, guid: 6659d9c0a002dec4d807621a3647ab26, type: 2}
+  - {fileID: 11400000, guid: 1cf0e7b610c748409915d38cc4f3fea5, type: 2}
+  - {fileID: 11400000, guid: 680d0eb0b4c74a92b41e875d78c78835, type: 2}
+  - {fileID: 11400000, guid: 0b58c63a197240a2972c97e29cf96e65, type: 2}
   - {fileID: 11400000, guid: f333ea9fa62394f4d975b72fe95863e7, type: 2}
+  - {fileID: 11400000, guid: dca6ca529cac4292b9dc499b806f1cc0, type: 2}
+  - {fileID: 11400000, guid: adf33abcd78b4e378a5180cf3f03bf2f, type: 2}
+  - {fileID: 11400000, guid: 013947531f7148b387d3a74201cbeffd, type: 2}
+  - {fileID: 11400000, guid: 1b16a7590f804ea59b5ba0a7b595df49, type: 2}
+  - {fileID: 11400000, guid: c626e98c8154427589e857f31da24f99, type: 2}
+  - {fileID: 11400000, guid: 5e5775ff16b7459fb01a3c3a8cf7e2fe, type: 2}
+  - {fileID: 11400000, guid: 3835a3fabd3541b7ae19e41ae30797de, type: 2}
   - {fileID: 11400000, guid: 8bc9cc21b6b1d1f4488a68e7aedf3950, type: 2}
+  - {fileID: 11400000, guid: 00ab3a7076454686b5cc7582aedfdf5b, type: 2}
 --- !u!1 &1682944198
 GameObject:
   m_ObjectHideFlags: 0
