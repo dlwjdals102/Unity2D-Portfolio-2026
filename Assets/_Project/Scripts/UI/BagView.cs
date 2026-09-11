@@ -15,7 +15,7 @@ namespace JM2D.UI
     /// 칸 위치를 코드로 계산한다. Grid Layout Group 을 쓰면 칸 배치는 공짜지만
     /// 여러 칸을 덮는 아이템을 얹을 때 레이아웃과 싸워야 한다.
     ///
-    /// 아이템 고르기(숫자 키)는 임시다. 아이템 획득이 생기면 그쪽으로 옮긴다.
+    /// 아이템 고르기(마우스 휠)는 임시다. 아이템 획득이 생기면 그쪽으로 옮긴다.
     public class BagView : MonoBehaviour
     {
         [Header("구성")]
@@ -39,7 +39,12 @@ namespace JM2D.UI
         [Range(0f, 1f)]
         [SerializeField] private float _previewAlpha = 0.6f;
 
-        [Header("고를 수 있는 아이템 (숫자 키 순서, 임시)")]
+        [Header("이름표")]
+        [Tooltip("아이템 위에 적는 이름. 글꼴은 스탯 표시의 것을 빌려 쓴다")]
+        [SerializeField] private float _labelFontSize = 16f;
+        [SerializeField] private Color _labelColor = Color.black;
+
+        [Header("고를 수 있는 아이템 (휠 순서, 임시)")]
         [SerializeField] private ItemData[] _palette;
 
         private readonly List<Image> _itemViews = new List<Image>();
@@ -47,12 +52,16 @@ namespace JM2D.UI
         /// 놓기 전의 아이템. 회전 상태를 들고 있다가 그대로 그리드에 넘어간다.
         private ItemInstance _preview;
         private Image _previewView;
+        private TMP_Text _previewLabel;
+
+        /// 팔레트에서 몇 번째를 골랐는가. -1 이면 아무것도 고르지 않았다.
+        private int _selectedIndex = -1;
 
         private void Awake()
         {
             BuildCells();
             BuildPreview();
-            UpdateStatText();
+            UpdateInfoText();
 
             _panel.SetActive(false);
         }
@@ -66,13 +75,15 @@ namespace JM2D.UI
 
             if (!_panel.activeSelf) return;
 
-            ReadSelectionKeys();
-
             if (Keyboard.current.rKey.wasPressedThisFrame && _preview != null)
+            {
                 _preview.Rotate();
+                UpdateInfoText();
+            }
 
             if (Mouse.current == null) return;
 
+            ReadSelectionWheel();
             UpdatePreview();
 
             if (Mouse.current.leftButton.wasPressedThisFrame) TryPlaceAtMouse();
@@ -90,21 +101,30 @@ namespace JM2D.UI
             if (!opening)
             {
                 _preview = null;
+                _selectedIndex = -1;
                 _previewView.gameObject.SetActive(false);
+                UpdateInfoText();
             }
         }
 
-        private void ReadSelectionKeys()
+        /// 휠을 굴리면 팔레트를 한 칸씩 넘긴다. 끝에 닿으면 반대쪽 끝으로 돌아간다.
+        /// 휠 값의 크기는 기기마다 달라 방향만 본다. 한 프레임에 여러 칸을 굴려도 한 칸이다.
+        private void ReadSelectionWheel()
         {
-            Key[] digits = { Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4 };
+            float scroll = Mouse.current.scroll.ReadValue().y;
 
-            for (int i = 0; i < digits.Length && i < _palette.Length; i++)
-            {
-                if (!Keyboard.current[digits[i]].wasPressedThisFrame) continue;
+            if (scroll == 0f || _palette.Length == 0) return;
 
-                _preview = new ItemInstance(_palette[i]);
-                Debug.Log($"[가방] {_preview.Data.DisplayName} 선택 ({_preview.Width}x{_preview.Height})");
-            }
+            int step = scroll < 0f ? 1 : -1;    // 아래로 굴리면 다음 아이템
+
+            if (_selectedIndex < 0)
+                _selectedIndex = step > 0 ? 0 : _palette.Length - 1;
+            else
+                _selectedIndex = (_selectedIndex + step + _palette.Length) % _palette.Length;
+
+            _preview = new ItemInstance(_palette[_selectedIndex]);
+            _previewLabel.text = _preview.Data.DisplayName;
+            UpdateInfoText();
         }
 
         /// 마우스가 가리키는 칸에 놓을 모습을 반투명하게 보여준다.
@@ -131,7 +151,7 @@ namespace JM2D.UI
         {
             if (_preview == null)
             {
-                Debug.Log("[가방] 놓을 아이템을 먼저 고르세요 (1~4)");
+                Debug.Log("[가방] 놓을 아이템을 먼저 고르세요 (마우스 휠)");
                 return;
             }
 
@@ -219,6 +239,8 @@ namespace JM2D.UI
             _previewView.name = "Preview";
             _previewView.raycastTarget = false;
             _previewView.gameObject.SetActive(false);
+
+            _previewLabel = CreateLabel(_previewView);
         }
 
         /// 놓인 것을 전부 지우고 그리드를 훑어 다시 그린다.
@@ -237,15 +259,21 @@ namespace JM2D.UI
             // 새로 그린 아이템이 미리보기를 덮지 않게 맨 앞으로 올린다.
             _previewView.transform.SetAsLastSibling();
 
-            UpdateStatText();
+            UpdateInfoText();
         }
 
-        /// 배치가 바뀔 때마다 갱신한다. 시너지가 반영된 값이 그대로 보인다.
-        private void UpdateStatText()
+        /// 고른 아이템과 스탯을 보여준다. 고른 것이나 배치가 바뀔 때마다 갱신한다.
+        /// 스탯에는 시너지가 반영된 값이 그대로 보인다.
+        private void UpdateInfoText()
         {
             if (_statText == null || _stats == null) return;
 
+            string selected = _preview == null
+                ? "없음 (휠로 고른다)"
+                : $"{_preview.Data.DisplayName} ({_preview.Width}x{_preview.Height})";
+
             _statText.text =
+                $"선택    {selected}\n\n" +
                 $"공격력  {_stats.AttackDamage.IntValue}\n" +
                 $"이동    {_stats.MoveSpeed.Value:F2}\n" +
                 $"연사    {_stats.AttackSpeed.Value:F2}\n" +
@@ -259,7 +287,34 @@ namespace JM2D.UI
             view.color = instance.Data.Color;
 
             PlaceAt(view.rectTransform, x, y, instance.Width, instance.Height);
+            CreateLabel(view).text = instance.Data.DisplayName;
             _itemViews.Add(view);
+        }
+
+        /// 아이템 위에 이름을 적는다. 아이템을 가득 채우고 가운데에 쓴다.
+        /// 프리팹을 고치지 않으려고 코드에서 만든다. 아이템과 함께 지워진다.
+        private TMP_Text CreateLabel(Image parent)
+        {
+            var go = new GameObject("Name", typeof(RectTransform));
+            go.transform.SetParent(parent.transform, false);
+
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            var label = go.AddComponent<TextMeshProUGUI>();
+
+            // TMP 기본 글꼴에는 한글이 없다. 스탯 표시가 쓰는 글꼴을 빌린다.
+            if (_statText != null) label.font = _statText.font;
+
+            label.fontSize = _labelFontSize;
+            label.color = _labelColor;
+            label.alignment = TextAlignmentOptions.Center;
+            label.raycastTarget = false;
+
+            return label;
         }
 
         /// 격자 좌표를 UI 좌표로 옮긴다.
