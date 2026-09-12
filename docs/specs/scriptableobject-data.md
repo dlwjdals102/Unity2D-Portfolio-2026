@@ -86,7 +86,7 @@ Phase 4에서 적이 4종, 무기가 3종으로 늘 때 **프리팹을 복제해
 ## 어디에 두는가
 
 `Assets/_Project/Scripts/Data/` 에 클래스를 두고,
-에셋은 `Assets/_Project/ScriptableObjects/` 에 만든다.
+에셋은 `Assets/_Project/ScriptableObjects/` 아래 종류별 폴더(`Items`, `Enemies`, `Projectiles`)에 만든다.
 
 **`JM2D.Logic` 이 아니라 `JM2D.Runtime` 이다.** ScriptableObject 는 UnityEngine 에
 의존하므로 Logic 의 조건을 만족하지 않는다.
