@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6548ec51b4c248acb7bb8d212409752a, type: 3}
+  m_Name: EnemyData_Dash
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.DashEnemyData
+  _maxHealth: 3
+  _moveSpeed: 2.5
+  _detectRange: 7
+  _giveUpRange: 9
+  _dashStartRange: 4
+  _windupTime: 0.6
+  _dashSpeed: 14
+  _dashTime: 0.35
+  _recoverTime: 0.8
+  _dashDamage: 1
+  _contactRadius: 1.2
