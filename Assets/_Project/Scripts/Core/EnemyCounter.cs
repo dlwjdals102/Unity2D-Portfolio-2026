@@ -6,6 +6,7 @@ using UnityEngine;
 namespace JM2D.Core
 {
     /// 씬에 놓인 적이 전부 죽으면 알린다.
+    /// EnemyBase 로 찾으므로 적 종류가 늘어도 고치지 않는다.
     public class EnemyCounter : MonoBehaviour
     {
         public event Action OnAllEnemiesDead;
@@ -14,7 +15,7 @@ namespace JM2D.Core
 
         private void Start()
         {
-            var enemies = FindObjectsByType<EnemyController>(FindObjectsSortMode.None);
+            var enemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
             _alive = enemies.Length;
 
             foreach (var enemy in enemies)
