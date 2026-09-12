@@ -2,10 +2,11 @@
 
 namespace JM2D.Data
 {
-    /// 적 한 종류의 수치를 담는다.
-    /// 행동은 여기 없다. EnemyController 가 이 값을 읽어 움직인다.
-    [CreateAssetMenu(fileName = "EnemyData_", menuName = "JM2D/Enemy Data")]
-    public class EnemyData : ScriptableObject
+    /// 모든 적이 함께 갖는 수치. 대기와 추적에 쓰인다.
+    /// 공격 수치는 적마다 달라 자식 데이터가 더한다. 한 클래스에 다 넣으면
+    /// 적마다 절반이 늘 비어 있는 에셋이 된다.
+    /// 행동은 여기 없다. 적 컨트롤러가 이 값을 읽어 움직인다.
+    public abstract class EnemyData : ScriptableObject
     {
         [Header("체력")]
         [SerializeField] private int _maxHealth = 3;
@@ -15,21 +16,21 @@ namespace JM2D.Data
 
         [Header("감지")]
         [SerializeField] private float _detectRange = 6f;
-        [SerializeField] private float _giveUpRange = 8f;
 
-        [Header("공격")]
-        [SerializeField] private float _attackRange = 1.2f;
-        [SerializeField] private float _attackExitRange = 1.6f;
-        [SerializeField] private float _attackCooldown = 1f;
-        [SerializeField] private int _attackDamage = 1;
+        [Tooltip("이 밖으로 나가면 추적을 멈춘다. 감지 범위보다 넓어야 한다")]
+        [SerializeField] private float _giveUpRange = 8f;
 
         public int MaxHealth => _maxHealth;
         public float MoveSpeed => _moveSpeed;
         public float DetectRange => _detectRange;
         public float GiveUpRange => _giveUpRange;
-        public float AttackRange => _attackRange;
-        public float AttackExitRange => _attackExitRange;
-        public float AttackCooldown => _attackCooldown;
-        public int AttackDamage => _attackDamage;
+
+        /// 들어가는 값과 나오는 값이 뒤바뀌면 오류 없이 상태가 깜빡인다.
+        /// 고쳐 주지 않고 알리기만 한다.
+        protected virtual void OnValidate()
+        {
+            if (_giveUpRange < _detectRange)
+                Debug.LogWarning($"{name}: 추적 포기 범위({_giveUpRange})가 감지 범위({_detectRange})보다 작다", this);
+        }
     }
 }
