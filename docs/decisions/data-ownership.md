@@ -1,7 +1,7 @@
 ---
 date: 2026-09-03
 status: accepted
-superseded_by:
+superseded_by: enemy-data-direct-read.md   # 1번을 적에 대해서만. 2, 3번은 유효
 related: [../specs/scriptableobject-data.md, object-pool-design.md]
 ---
 
