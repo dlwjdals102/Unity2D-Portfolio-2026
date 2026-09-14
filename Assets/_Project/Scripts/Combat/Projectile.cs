@@ -12,16 +12,12 @@ namespace JM2D.Combat
         private Rigidbody2D _rb;
         private Pool<Projectile> _pool;
 
-        private float _speed;
-        private float _lifetime;
         private int _damage;
         private float _lifeLeft;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _speed = _data.Speed;
-            _lifetime = _data.Lifetime;
         }
 
         private void Update()
@@ -45,8 +41,8 @@ namespace JM2D.Combat
         /// 발사한 쪽이 방향과 피해량을 정해서 알려준다.
         public void Launch(Vector2 direction, int damage)
         {
-            _rb.linearVelocity = direction * _speed;
-            _lifeLeft = _lifetime;
+            _rb.linearVelocity = direction * _data.Speed;
+            _lifeLeft = _data.Lifetime;
             _damage = damage;
         }
 
