@@ -16,6 +16,8 @@ MonoBehaviour:
   _moveSpeed: 2.5
   _detectRange: 8
   _giveUpRange: 10
+  _separationRadius: 1.2
+  _separationStrength: 1
   _shootStartRange: 6
   _shootStopRange: 7
   _aimTime: 0.5
