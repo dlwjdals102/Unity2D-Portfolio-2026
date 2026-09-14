@@ -1,7 +1,7 @@
 ---
 date: 2026-09-02
 status: accepted
-superseded_by:
+superseded_by: projectile-pool-in-scene.md   # 2번을 적에 대해서만. 1, 3번은 유효
 related: [../specs/object-pooling.md, ../measurements/pooling-baseline.md]
 ---
 
