@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773d4b7b19aa411c9cb9674c5fae43a7, type: 3}
+  m_Name: EnemyData_Ranged
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.RangedEnemyData
+  _maxHealth: 2
+  _moveSpeed: 2.5
+  _detectRange: 8
+  _giveUpRange: 10
+  _shootStartRange: 6
+  _shootStopRange: 7
+  _aimTime: 0.5
+  _shootCooldown: 1
+  _shotDamage: 1
+  _retreatRange: 3
+  _retreatSpeed: 2
