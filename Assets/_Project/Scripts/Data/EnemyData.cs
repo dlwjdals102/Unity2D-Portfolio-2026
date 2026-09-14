@@ -20,10 +20,19 @@ namespace JM2D.Data
         [Tooltip("이 밖으로 나가면 추적을 멈춘다. 감지 범위보다 넓어야 한다")]
         [SerializeField] private float _giveUpRange = 8f;
 
+        [Header("분리")]
+        [Tooltip("추적 중 이 안에 다른 적의 중심이 들어오면 비켜 간다. 몸 크기의 1.2 배 정도")]
+        [SerializeField] private float _separationRadius = 1.2f;
+
+        [Tooltip("비켜 가는 성분을 대상 쪽 성분에 비해 얼마나 섞을지")]
+        [SerializeField] private float _separationStrength = 1f;
+
         public int MaxHealth => _maxHealth;
         public float MoveSpeed => _moveSpeed;
         public float DetectRange => _detectRange;
         public float GiveUpRange => _giveUpRange;
+        public float SeparationRadius => _separationRadius;
+        public float SeparationStrength => _separationStrength;
 
         /// 들어가는 값과 나오는 값이 뒤바뀌면 오류 없이 상태가 깜빡인다.
         /// 고쳐 주지 않고 알리기만 한다.

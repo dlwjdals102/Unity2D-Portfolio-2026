@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b89b364e59304e5c84f35753bcee5a1c, type: 3}
-  m_Name: EnemyData_Melee
+  m_Name: EnemyData_SmallMelee
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.MeleeEnemyData
-  _maxHealth: 3
-  _moveSpeed: 3
-  _detectRange: 6
-  _giveUpRange: 8
-  _separationRadius: 1.2
+  _maxHealth: 1
+  _moveSpeed: 3.6
+  _detectRange: 9
+  _giveUpRange: 11
+  _separationRadius: 0.72
   _separationStrength: 1
-  _attackStartRange: 1.2
-  _attackStopRange: 1.6
+  _attackStartRange: 1
+  _attackStopRange: 1.4
   _attackCooldown: 1
   _attackDamage: 1
