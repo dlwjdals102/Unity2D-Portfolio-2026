@@ -66,6 +66,21 @@ namespace JM2D.UI
             _panel.SetActive(false);
         }
 
+        /// 스탯이 바뀌면 곧바로 다시 쓴다. 무기, 아이템, 시너지 어느 쪽이 바꿔도 같다.
+        /// 스탯은 PlayerStats.Awake 에서 만들어져, 그보다 먼저 돌 수 있는 Awake 나 OnEnable 이 아니라 여기서 구독한다.
+        /// 구독 전에 바뀐 값(무기는 Start 에서 얹힌다)을 놓치지 않게 끝에서 한 번 쓴다.
+        private void Start()
+        {
+            if (_stats == null) return;
+
+            _stats.AttackDamage.OnChanged += UpdateInfoText;
+            _stats.MoveSpeed.OnChanged += UpdateInfoText;
+            _stats.AttackSpeed.OnChanged += UpdateInfoText;
+            _stats.MaxHealth.OnChanged += UpdateInfoText;
+
+            UpdateInfoText();
+        }
+
         private void Update()
         {
             if (Keyboard.current == null) return;
@@ -88,6 +103,16 @@ namespace JM2D.UI
 
             if (Mouse.current.leftButton.wasPressedThisFrame) TryPlaceAtMouse();
             if (Mouse.current.rightButton.wasPressedThisFrame) TryRemoveAtMouse();
+        }
+
+        private void OnDestroy()
+        {
+            if (_stats == null) return;
+
+            _stats.AttackDamage.OnChanged -= UpdateInfoText;
+            _stats.MoveSpeed.OnChanged -= UpdateInfoText;
+            _stats.AttackSpeed.OnChanged -= UpdateInfoText;
+            _stats.MaxHealth.OnChanged -= UpdateInfoText;
         }
 
         /// 닫을 때 고른 것을 비운다.
