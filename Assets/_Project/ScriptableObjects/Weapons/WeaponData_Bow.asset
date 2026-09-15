@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18f154f6dcf444da71394bf9caa0fd7, type: 3}
+  m_Name: WeaponData_Bow
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.BowWeaponData
+  _attackDamage: 1
+  _attacksPerSecond: 6.67
+  _projectilePrefab: {fileID: 7464044306449956177, guid: 1f0aeca24ba6810448452a9097561aae, type: 3}

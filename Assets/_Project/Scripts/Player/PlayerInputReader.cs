@@ -17,6 +17,10 @@ namespace JM2D.Player
         /// 발사 버튼이 지금 눌려 있는가.
         public bool FireHeld { get; private set; }
 
+        /// 이번 프레임에 누른 무기 칸. 0, 1, 2 이고 누르지 않았으면 -1.
+        /// 확인용이라 입력 에셋이 아니라 키보드를 바로 읽는다. 가방의 Tab 과 같다.
+        public int WeaponSlotPressed { get; private set; }
+
         private void Awake()
         {
             _controls = new PlayerControls();
@@ -46,10 +50,22 @@ namespace JM2D.Player
             AimDirection = ((Vector2)worldPos - (Vector2)transform.position).normalized;
 
             FireHeld = _controls.Player.Fire.IsPressed();
+            WeaponSlotPressed = ReadWeaponSlot();
         }
 
         private void OnDashPerformed(InputAction.CallbackContext ctx) { DashRequested = true; }
         /// PlayerMotor가 대시 요청을 가져갔다고 알린다.
         public void ConsumeDashRequest() { DashRequested = false; }
+
+        private int ReadWeaponSlot()
+        {
+            if (Keyboard.current == null) return -1;
+
+            if (Keyboard.current.digit1Key.wasPressedThisFrame) return 0;
+            if (Keyboard.current.digit2Key.wasPressedThisFrame) return 1;
+            if (Keyboard.current.digit3Key.wasPressedThisFrame) return 2;
+
+            return -1;
+        }
     }
 }
