@@ -22,7 +22,6 @@ namespace JM2D.Enemy
         private Rigidbody2D _rb;
         private SpriteRenderer _renderer;
         private Health _health;
-        private IDamageable _targetDamageable;
 
         private Phase _phase = Phase.Idle;
 
@@ -61,12 +60,6 @@ namespace JM2D.Enemy
             _health.OnDied += OnDied;
         }
 
-        /// 추적 대상은 여기서 쓴다. 런타임에 태어난 적은 Awake 가 끝난 뒤에야 대상을 받기 때문이다.
-        private void Start()
-        {
-            _targetDamageable = _target.GetComponent<IDamageable>();
-        }
-
         private void OnDisable()
         {
             _health.OnDied -= OnDied;
@@ -103,8 +96,7 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 런타임에 태어난 적에게 추적 대상을 넣는다. 만든 직후, Start 전에 부른다.
-        /// Start 가 이 대상에서 피해 받을 곳을 찾으므로 그 뒤에 바꾸면 반영되지 않는다.
+        /// 런타임에 태어난 적에게 추적 대상을 넣는다.
         public void SetTarget(Transform target)
         {
             _target = target;
@@ -170,9 +162,11 @@ namespace JM2D.Enemy
             _rb.linearVelocity = direction * speed;
         }
 
-        protected void HitTarget(int damage)
+        /// 자기 둘레 반경 안에 몸이 걸린 대상에게 피해를 준다. 피해를 준 수를 돌려준다.
+        /// 대상이 있는 레이어를 찾으므로 적은 서로를 때리지 않는다.
+        protected int HitAround(float radius, int damage)
         {
-            _targetDamageable.TakeDamage(damage);
+            return AreaHit.Circle(transform.position, radius, 1 << _target.gameObject.layer, damage);
         }
 
         protected void SetColor(Color color)

@@ -35,11 +35,8 @@ namespace JM2D.Enemy
                 case State.Dash:
                     Move(_dashDirection, _data.DashSpeed);
 
-                    if (!_hasHitThisDash && distance <= _data.ContactRadius)
-                    {
-                        HitTarget(_data.DashDamage);
+                    if (!_hasHitThisDash && HitAround(_data.ContactRadius, _data.DashDamage) > 0)
                         _hasHitThisDash = true;
-                    }
 
                     if (TimeUp()) ChangeState(State.Recover);
                     break;
