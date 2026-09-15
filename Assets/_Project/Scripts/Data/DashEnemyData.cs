@@ -23,8 +23,8 @@ namespace JM2D.Data
 
         [SerializeField] private int _dashDamage = 1;
 
-        [Tooltip("돌진 중 이 거리 안이면 한 번 맞힌다. 1x1 콜라이더 둘이 닿는 거리는 정면 1.0, 대각 1.4 다")]
-        [SerializeField] private float _contactRadius = 1f;
+        [Tooltip("돌진 중 자기 중심에서 이 반경 안에 플레이어의 몸이 걸리면 한 번 맞힌다. 적 반폭 0.5 에 여유 0.2")]
+        [SerializeField] private float _contactRadius = 0.7f;
 
         public float DashStartRange => _dashStartRange;
         public float WindupTime => _windupTime;

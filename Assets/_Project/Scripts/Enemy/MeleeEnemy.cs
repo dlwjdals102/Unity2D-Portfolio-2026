@@ -27,7 +27,7 @@ namespace JM2D.Enemy
                 _attackCooldownLeft -= Time.fixedDeltaTime;
             else
             {
-                HitTarget(_data.AttackDamage);
+                HitAround(_data.AttackStopRange, _data.AttackDamage);
                 _attackCooldownLeft = _data.AttackCooldown;
             }
 

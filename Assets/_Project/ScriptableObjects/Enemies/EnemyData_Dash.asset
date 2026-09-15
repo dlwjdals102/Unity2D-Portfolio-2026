@@ -24,4 +24,4 @@ MonoBehaviour:
   _dashTime: 0.35
   _recoverTime: 0.8
   _dashDamage: 1
-  _contactRadius: 1.2
+  _contactRadius: 0.7
