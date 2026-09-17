@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using JM2D.Logic;
+using JM2D.Logic.Stats;
 
-namespace JM2D.Tests
+namespace JM2D.Tests.Stats
 {
     public class StatTests
     {
@@ -153,7 +153,7 @@ namespace JM2D.Tests
             Assert.AreEqual(10f, stat.Value, Tolerance);
         }
 
-        // ── 아래 셋은 캐싱이 들어온 뒤 캐시 무효화를 검사한다 ──
+        // 아래 셋은 캐싱이 들어온 뒤 캐시 무효화를 검사한다.
         // 먼저 한 번 읽어 캐시를 채운 다음, 바꾸고 다시 읽는다.
 
         [Test]
@@ -193,7 +193,7 @@ namespace JM2D.Tests
             Assert.AreEqual(10f, stat.Value, Tolerance);
         }
 
-        // ── 아래 셋은 정수 스탯의 반올림 규칙을 못 박는다 ──
+        // 아래 셋은 정수 스탯의 반올림 규칙을 못 박는다.
 
         [Test]
         public void 정수값은_반올림된다()
@@ -223,7 +223,7 @@ namespace JM2D.Tests
             Assert.AreEqual(11, stat.IntValue);
         }
 
-        // ── 아래 넷은 변경 알림을 검사한다 ──
+        // 아래 넷은 변경 알림을 검사한다.
 
         [Test]
         public void 추가하면_변경이_알려진다()
@@ -273,7 +273,7 @@ namespace JM2D.Tests
             Assert.DoesNotThrow(() => stat.AddModifier(new StatModifier(ModifierType.Flat, 5f)));
         }
 
-        // ── 아래 둘은 아이템을 반복 장착·해제할 때의 버그 제보를 재현한다 ──
+        // 아래 둘은 아이템을 여러 번 장착하고 해제할 때의 버그 제보를 재현한다.
 
         /// 부츠를 다섯 번 끼고 다섯 번 뺀 뒤 다시 끼면 정상이어야 한다.
         [Test]

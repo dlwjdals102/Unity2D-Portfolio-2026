@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Bag
 {
     /// 그리드에 놓이는 것.
     /// 그리드는 이것이 아이템인지 무엇인지 모른다. 차지하는 크기만 안다.

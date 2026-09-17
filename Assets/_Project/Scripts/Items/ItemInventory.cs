@@ -1,5 +1,6 @@
 ﻿using JM2D.Data;
-using JM2D.Logic;
+using JM2D.Logic.Stats;
+using JM2D.Logic.Bag;
 using JM2D.Player;
 using UnityEngine;
 

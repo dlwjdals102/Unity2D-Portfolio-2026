@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using JM2D.Logic;
+using JM2D.Logic.Bag;
 
-namespace JM2D.Tests
+namespace JM2D.Tests.Bag
 {
     public class BagGridTests
     {
@@ -156,7 +156,7 @@ namespace JM2D.Tests
             Assert.IsTrue(grid.TryPlace(new 아이템(3, 1), 0, 3));    // 눕히면 들어간다
         }
 
-        // ── 아래 넷은 놓인 아이템을 위치와 함께 돌려주는 조회를 검사한다 ──
+        // 아래 넷은 놓인 아이템을 위치와 함께 돌려주는 조회를 검사한다.
 
         [Test]
         public void 빈_그리드에서는_아무것도_안_나온다()
@@ -208,7 +208,7 @@ namespace JM2D.Tests
             Assert.AreSame(부츠, placed[0].Item);
         }
 
-        // ── 아래 여덟은 인접 세기를 검사한다 ──
+        // 아래 여덟은 인접 세기를 검사한다.
 
         [Test]
         public void 혼자_있으면_인접이_없다()
@@ -308,7 +308,7 @@ namespace JM2D.Tests
             Assert.AreEqual(0, grid.CountAdjacent(검));
         }
 
-        // ── 아래 여섯은 같은 행 세기를 검사한다 ──
+        // 아래 여섯은 같은 행 세기를 검사한다.
 
         [Test]
         public void 같은_행에_아무도_없으면_0이다()
@@ -381,7 +381,7 @@ namespace JM2D.Tests
             Assert.AreEqual(0, grid.CountInSameRow(검));
         }
 
-        // ── 아래 셋은 같은 열 세기를 검사한다. 같은 행과 대칭이다 ──
+        // 아래 셋은 같은 열 세기를 검사한다. 같은 행과 대칭이다.
 
         [Test]
         public void 같은_열의_다른_아이템을_센다()
@@ -420,7 +420,7 @@ namespace JM2D.Tests
             Assert.AreEqual(1, grid.CountInSameColumn(검));
         }
 
-        // ── 아래 다섯은 모서리 세기를 검사한다 ──
+        // 아래 다섯은 모서리 세기를 검사한다.
 
         [Test]
         public void 가운데에_있으면_모서리가_0이다()
@@ -502,7 +502,7 @@ namespace JM2D.Tests
             Assert.AreEqual(1, grid.CountCorners(오른쪽아래), "오른쪽 아래");
         }
 
-        // ── 아래 하나는 조건과 세는 메서드의 짝을 검사한다 ──
+        // 아래 하나는 조건과 세는 메서드의 짝을 검사한다.
 
         /// 한 아이템에게 네 조건이 전부 다른 수를 내도록 놓는다.
         /// 어느 짝이 뒤바뀌어도 그 조건의 기댓값이 틀린다.

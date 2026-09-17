@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using JM2D.Logic;
+using JM2D.Logic.Common;
 
-namespace JM2D.Tests
+namespace JM2D.Tests.Common
 {
     /// 들어가는 값과 나오는 값이 다른 거리 판정.
     /// 숫자는 추적 근접 적의 공격 범위(1.2)와 공격 이탈 범위(1.6)다.

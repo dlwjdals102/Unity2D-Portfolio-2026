@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Stats
 {
     /// 스탯에 얹는 값 하나. 만들어진 뒤 바뀌지 않는다.
     public readonly struct StatModifier

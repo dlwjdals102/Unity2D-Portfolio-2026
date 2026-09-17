@@ -1,5 +1,5 @@
 ﻿using JM2D.Data;
-using JM2D.Logic;
+using JM2D.Logic.Bag;
 
 namespace JM2D.Items
 {

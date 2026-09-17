@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Common
 {
     /// 들어가는 값과 나오는 값이 다른 거리 판정.
     /// 두 값 사이에서는 지금 상태를 지킨다. 그래서 경계에서 상태가 깜빡이지 않는다.

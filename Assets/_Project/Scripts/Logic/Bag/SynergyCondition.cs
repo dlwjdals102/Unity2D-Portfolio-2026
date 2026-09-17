@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Bag
 {
     /// 시너지가 무엇을 세는지. 데이터 에셋이 조건을 적을 때 쓴다.
     /// 값 하나가 BagGrid 의 세는 메서드 하나와 짝을 이룬다.

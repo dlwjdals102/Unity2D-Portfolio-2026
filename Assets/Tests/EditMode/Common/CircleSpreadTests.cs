@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using JM2D.Logic;
+using JM2D.Logic.Common;
 
-namespace JM2D.Tests
+namespace JM2D.Tests.Common
 {
     /// 한 점 둘레에 고르게 나눠 놓는 자리.
     /// 분열 적이 갈라질 때 작은 적을 놓는 데 쓴다. 숫자는 그 값(마릿수 3, 반지름 0.5)을 따른다.

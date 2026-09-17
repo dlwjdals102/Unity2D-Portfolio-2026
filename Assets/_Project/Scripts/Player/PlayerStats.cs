@@ -1,5 +1,5 @@
 ﻿using JM2D.Combat;
-using JM2D.Logic;
+using JM2D.Logic.Stats;
 using System.Collections.Generic;
 using UnityEngine;
 

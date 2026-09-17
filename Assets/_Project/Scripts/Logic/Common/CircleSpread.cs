@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JM2D.Logic
+namespace JM2D.Logic.Common
 {
     /// 한 점 둘레에 여러 개를 고르게 나눠 놓을 자리를 계산한다.
     /// UnityEngine 을 모르므로 좌표를 x, y 로 따로 돌려준다.
