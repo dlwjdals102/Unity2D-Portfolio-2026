@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using JM2D.Logic;
+using JM2D.Logic.Stats;
+using JM2D.Logic.Bag;
 using UnityEngine;
 
 namespace JM2D.Data

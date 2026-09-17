@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JM2D.Logic
+namespace JM2D.Logic.Bag
 {
     /// 아이템을 칸에 놓고 겹침과 경계를 판단한다.
     /// 무엇이 놓이는지는 모른다. 크기만 안다.

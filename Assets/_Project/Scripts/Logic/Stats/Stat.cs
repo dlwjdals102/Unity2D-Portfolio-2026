@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JM2D.Logic
+namespace JM2D.Logic.Stats
 {
     /// 기본값에 모디파이어를 얹어 최종값을 낸다.
     /// UnityEngine 에 의존하지 않는다. 씬도 시간도 모른다.

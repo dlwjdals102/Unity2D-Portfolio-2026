@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Stats
 {
     /// 모디파이어가 어떻게 적용되는지. 선언 순서가 곧 계산 순서다.
     public enum ModifierType

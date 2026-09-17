@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JM2D.Data;
 using JM2D.Items;
-using JM2D.Logic;
+using JM2D.Logic.Bag;
 using JM2D.Player;
 using TMPro;
 using UnityEngine;

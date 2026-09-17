@@ -1,4 +1,4 @@
-﻿using JM2D.Logic;
+﻿using JM2D.Logic.Stats;
 using JM2D.Weapons;
 using UnityEngine;
 

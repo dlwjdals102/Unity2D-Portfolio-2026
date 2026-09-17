@@ -1,4 +1,4 @@
-﻿namespace JM2D.Logic
+﻿namespace JM2D.Logic.Bag
 {
     /// 그리드에 놓인 아이템 하나와 그 왼쪽 위 좌표.
     /// 그리드는 위치를 저장하지 않는다. 물어볼 때 찾아서 이 모양으로 돌려준다.
