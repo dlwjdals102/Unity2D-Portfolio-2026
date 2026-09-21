@@ -21,6 +21,13 @@ namespace JM2D.Enemy
         protected override EnemyData Data => _data;
         protected override float EngageRange => _data.ShootStartRange;
 
+        /// 판 도중에 태어난 적에게 투사체 풀을 넣는다. 프리팹은 씬의 풀을 가리킬 수 없다.
+        /// 넣지 않으면 쏘는 순간 터진다. 조용히 안 쏘는 것보다 낫다.
+        public void SetProjectilePool(ProjectilePool pool)
+        {
+            _projectiles = pool;
+        }
+
         protected override void OnEngage()
         {
             ChangeState(State.Aim);
