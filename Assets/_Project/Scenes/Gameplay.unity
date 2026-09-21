@@ -1056,6 +1056,7 @@ GameObject:
   - component: {fileID: 1107003873}
   - component: {fileID: 1107003874}
   - component: {fileID: 1107003875}
+  - component: {fileID: 1107003876}
   m_Layer: 0
   m_Name: LevelBuilder
   m_TagString: Untagged
@@ -1122,6 +1123,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.RoomCameraSwitcher
   _tracker: {fileID: 1107003874}
   _target: {fileID: 1268753871}
+--- !u!114 &1107003876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107003871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa6289c0e7392664dbc0e197c468c91a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.RoomCombat
+  _extraMargin: 1.5
+  _minSpawnDistance: 6
+  _encounters:
+  - {fileID: 11400000, guid: f17774fd2d5043efae38797713cc4325, type: 2}
+  - {fileID: 11400000, guid: 52047da3c19749048ed360003a00239e, type: 2}
+  - {fileID: 11400000, guid: 2f78b07194f94ebcac661a4273bd7825, type: 2}
+  - {fileID: 11400000, guid: b6973f2d9eff4596a0f5e2227ed3d3d3, type: 2}
+  _bossEncounter: {fileID: 11400000, guid: 3f1bc565ac1d43048ed513869763291e, type: 2}
+  _enemyProjectiles: {fileID: 1408271484}
+  _level: {fileID: 1107003873}
+  _tracker: {fileID: 1107003874}
+  _player: {fileID: 1268753868}
+  _enemyCounter: {fileID: 2062705147}
 --- !u!1 &1230367284
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,8 +2071,7 @@ MonoBehaviour:
   _playerHealth: {fileID: 1268753873}
   _root: {fileID: 171429672}
   _message: {fileID: 1621787980}
-  _enemyCounter: {fileID: 2062705147}
-  _roomTracker: {fileID: 1107003874}
+  _roomCombat: {fileID: 1107003876}
 --- !u!114 &1665572834
 MonoBehaviour:
   m_ObjectHideFlags: 0

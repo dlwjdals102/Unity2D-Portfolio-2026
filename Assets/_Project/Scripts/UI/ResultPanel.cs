@@ -1,5 +1,4 @@
 ﻿using JM2D.Combat;
-using JM2D.Core;
 using JM2D.Logic.Rooms;
 using JM2D.Rooms;
 using TMPro;
@@ -12,24 +11,21 @@ namespace JM2D.UI
         [SerializeField] private Health _playerHealth;
         [SerializeField] private GameObject _root;
         [SerializeField] private TMP_Text _message;
-        [SerializeField] private EnemyCounter _enemyCounter;
-        [SerializeField] private RoomTracker _roomTracker;
+        [SerializeField] private RoomCombat _roomCombat;
 
         private void OnEnable()
         {
             _playerHealth.OnDied += ShowGameOver;
-            _enemyCounter.OnAllEnemiesDead += ShowClear;
-            _roomTracker.OnRoomEntered += ShowClearIfBossRoom;
+            _roomCombat.OnRoomCleared += ShowClearIfBossRoom;
         }
 
         private void OnDisable()
         {
             _playerHealth.OnDied -= ShowGameOver;
-            _enemyCounter.OnAllEnemiesDead -= ShowClear;
-            _roomTracker.OnRoomEntered -= ShowClearIfBossRoom;
+            _roomCombat.OnRoomCleared -= ShowClearIfBossRoom;
         }
 
-        /// 임시 클리어 조건. 4-C 에서 웨이브와 보스 전투가 들어오면 지운다.
+        /// 보스 방을 깨면 판이 끝난다. 보스는 Phase 5 라 지금은 보스 방의 마지막 웨이브가 그 자리다.
         private void ShowClearIfBossRoom(Room room)
         {
             if (room.Type == RoomType.Boss) ShowClear();
