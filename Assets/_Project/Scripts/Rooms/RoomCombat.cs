@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using JM2D.Combat;
 using JM2D.Core;
@@ -15,6 +15,9 @@ namespace JM2D.Rooms
     {
         /// 방의 마지막 웨이브를 깼을 때 알린다. 클리어 화면과 4-D 의 보상이 듣는다.
         public event Action<Room> OnRoomCleared;
+
+        /// 방의 첫 웨이브가 나올 때 알린다. 가방 잠금이 듣는다.
+        public event Action<Room> OnCombatStarted;
 
         [Tooltip("몸이 문 밖으로 다 나온 뒤 몇 칸 더 들어서야 전투가 시작되나")]
         [Min(0f)]
@@ -114,6 +117,7 @@ namespace JM2D.Rooms
 
             room.BeginCombat();
             SpawnWave(_waveIndex);
+            OnCombatStarted?.Invoke(room);
         }
 
         /// 보스 방은 전용 조합, 전투 방은 뽑기.

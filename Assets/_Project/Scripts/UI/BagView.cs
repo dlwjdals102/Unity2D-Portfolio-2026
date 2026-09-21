@@ -3,6 +3,7 @@ using JM2D.Data;
 using JM2D.Items;
 using JM2D.Logic.Bag;
 using JM2D.Player;
+using JM2D.Rooms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,7 +16,8 @@ namespace JM2D.UI
     /// 칸 위치를 코드로 계산한다. Grid Layout Group 을 쓰면 칸 배치는 공짜지만
     /// 여러 칸을 덮는 아이템을 얹을 때 레이아웃과 싸워야 한다.
     ///
-    /// 아이템 고르기(마우스 휠)는 임시다. 아이템 획득이 생기면 그쪽으로 옮긴다.
+    /// 놓을 수 있는 것은 손에 든 아이템 하나다. 손은 ItemInventory 가 갖고 방 보상이 채운다.
+    /// 휠 팔레트는 디버그 체크를 켰을 때만 도는 확인용이다.
     public class BagView : MonoBehaviour
     {
         [Header("구성")]
@@ -24,6 +26,9 @@ namespace JM2D.UI
         [SerializeField] private RectTransform _cellRoot;
         [SerializeField] private Image _cellPrefab;
         [SerializeField] private Image _itemPrefab;
+
+        [Tooltip("전투가 시작되면 가방을 닫고 잠근다. 방을 깨면 푼다")]
+        [SerializeField] private RoomCombat _roomCombat;
 
         [Tooltip("배치에 따라 스탯이 어떻게 바뀌는지 보여준다. 디버그용이며 Phase 5 에서 정리한다")]
         [SerializeField] private PlayerStats _stats;
@@ -44,18 +49,23 @@ namespace JM2D.UI
         [SerializeField] private float _labelFontSize = 16f;
         [SerializeField] private Color _labelColor = Color.black;
 
-        [Header("고를 수 있는 아이템 (휠 순서, 임시)")]
+        [Header("디버그")]
+        [Tooltip("켜면 휠로 아무 아이템이나 손에 넣는다. 배치를 만들어 볼 때 쓴다")]
+        [SerializeField] private bool _debugPalette;
+
+        [Tooltip("디버그 팔레트의 휠 순서")]
         [SerializeField] private ItemData[] _palette;
 
         private readonly List<Image> _itemViews = new List<Image>();
 
-        /// 놓기 전의 아이템. 회전 상태를 들고 있다가 그대로 그리드에 넘어간다.
-        private ItemInstance _preview;
         private Image _previewView;
         private TMP_Text _previewLabel;
 
-        /// 팔레트에서 몇 번째를 골랐는가. -1 이면 아무것도 고르지 않았다.
+        /// 디버그 팔레트에서 몇 번째를 골랐는가. -1 이면 아직 고르지 않았다.
         private int _selectedIndex = -1;
+
+        /// 전투 중인가. 잠긴 동안에는 Tab 이 아무 일도 하지 않는다.
+        private bool _isLocked;
 
         private void Awake()
         {
@@ -64,6 +74,12 @@ namespace JM2D.UI
             UpdateInfoText();
 
             _panel.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            _roomCombat.OnCombatStarted += Lock;
+            _roomCombat.OnRoomCleared += Unlock;
         }
 
         /// 스탯이 바뀌면 곧바로 다시 쓴다. 무기, 아이템, 시너지 어느 쪽이 바꿔도 같다.
@@ -85,24 +101,31 @@ namespace JM2D.UI
         {
             if (Keyboard.current == null) return;
 
-            if (Keyboard.current.tabKey.wasPressedThisFrame)
+            if (Keyboard.current.tabKey.wasPressedThisFrame && !_isLocked)
                 Toggle();
 
             if (!_panel.activeSelf) return;
 
-            if (Keyboard.current.rKey.wasPressedThisFrame && _preview != null)
+            if (Keyboard.current.rKey.wasPressedThisFrame && _inventory.Hand != null)
             {
-                _preview.Rotate();
+                _inventory.RotateHand();
                 UpdateInfoText();
             }
 
             if (Mouse.current == null) return;
 
-            ReadSelectionWheel();
+            if (_debugPalette) ReadSelectionWheel();
+
             UpdatePreview();
 
             if (Mouse.current.leftButton.wasPressedThisFrame) TryPlaceAtMouse();
             if (Mouse.current.rightButton.wasPressedThisFrame) TryRemoveAtMouse();
+        }
+
+        private void OnDisable()
+        {
+            _roomCombat.OnCombatStarted -= Lock;
+            _roomCombat.OnRoomCleared -= Unlock;
         }
 
         private void OnDestroy()
@@ -115,8 +138,32 @@ namespace JM2D.UI
             _stats.MaxHealth.OnChanged -= UpdateInfoText;
         }
 
-        /// 닫을 때 고른 것을 비운다.
-        /// 창을 닫는 것은 배치를 마쳤다는 뜻이라, 손에 든 채로 두지 않는다.
+        /// 밖에서 연다. 방 보상을 고르면 곧바로 놓을 수 있게 열어 준다.
+        /// 잠겨 있거나 이미 열려 있으면 아무 일도 하지 않는다.
+        public void Open()
+        {
+            if (_isLocked || _panel.activeSelf) return;
+
+            Toggle();
+        }
+
+        /// 전투가 시작되면 잠그고, 열려 있으면 닫는다.
+        /// 방은 받지만 쓰지 않는다. 짝이 되는 두 이벤트의 모양을 맞춰 둔 것이다.
+        private void Lock(Room room)
+        {
+            _isLocked = true;
+
+            if (_panel.activeSelf) Toggle();
+        }
+
+        /// 방을 깨면 다시 열 수 있다.
+        private void Unlock(Room room)
+        {
+            _isLocked = false;
+        }
+
+        /// 창을 닫아도 손에 든 것은 그대로 남는다. 다음에 열면 여전히 들고 있다.
+        /// 놓을 자리를 못 정한 채로 다음 방에 갈 수 있어야 한다.
         private void Toggle()
         {
             bool opening = !_panel.activeSelf;
@@ -124,15 +171,14 @@ namespace JM2D.UI
             _panel.SetActive(opening);
 
             if (!opening)
-            {
-                _preview = null;
-                _selectedIndex = -1;
                 _previewView.gameObject.SetActive(false);
-                UpdateInfoText();
-            }
+
+            // 열 때도 다시 쓴다. 손은 가방 밖(보상)에서 채워져, 열어 보기 전까지 글이 옛것이다.
+            UpdateInfoText();
         }
 
-        /// 휠을 굴리면 팔레트를 한 칸씩 넘긴다. 끝에 닿으면 반대쪽 끝으로 돌아간다.
+        /// 디버그 전용. 휠을 굴리면 팔레트를 한 칸씩 넘겨 그 아이템을 손에 넣는다.
+        /// 들고 있던 것은 덮어쓴다. 끝에 닿으면 반대쪽 끝으로 돌아간다.
         /// 휠 값의 크기는 기기마다 달라 방향만 본다. 한 프레임에 여러 칸을 굴려도 한 칸이다.
         private void ReadSelectionWheel()
         {
@@ -147,8 +193,7 @@ namespace JM2D.UI
             else
                 _selectedIndex = (_selectedIndex + step + _palette.Length) % _palette.Length;
 
-            _preview = new ItemInstance(_palette[_selectedIndex]);
-            _previewLabel.text = _preview.Data.DisplayName;
+            _inventory.PutInHand(_palette[_selectedIndex]);
             UpdateInfoText();
         }
 
@@ -156,48 +201,45 @@ namespace JM2D.UI
         /// 놓을 수 없으면 빨강이라 클릭하기 전에 알 수 있다.
         private void UpdatePreview()
         {
-            if (_preview == null || !TryGetCellUnderMouse(out int x, out int y))
+            ItemInstance hand = _inventory.Hand;
+
+            if (hand == null || !TryGetCellUnderMouse(out int x, out int y))
             {
                 _previewView.gameObject.SetActive(false);
                 return;
             }
 
             _previewView.gameObject.SetActive(true);
+            _previewLabel.text = hand.Data.DisplayName;
 
-            bool canPlace = _inventory.Grid.CanPlace(_preview, x, y);
-            Color color = canPlace ? _preview.Data.Color : Color.red;
+            bool canPlace = _inventory.Grid.CanPlace(hand, x, y);
+            Color color = canPlace ? hand.Data.Color : Color.red;
             color.a = _previewAlpha;
             _previewView.color = color;
 
-            PlaceAt(_previewView.rectTransform, x, y, _preview.Width, _preview.Height);
+            PlaceAt(_previewView.rectTransform, x, y, hand.Width, hand.Height);
         }
 
         private void TryPlaceAtMouse()
         {
-            if (_preview == null)
-            {
-                Debug.Log("[가방] 놓을 아이템을 먼저 고르세요 (마우스 휠)");
-                return;
-            }
+            ItemInstance hand = _inventory.Hand;
+
+            if (hand == null) return;
 
             if (!TryGetCellUnderMouse(out int x, out int y)) return;
 
-            if (!_inventory.TryPlace(_preview, x, y))
+            // 놓고 나면 손이 비어 이름을 읽을 수 없다. 먼저 담아 둔다.
+            string placed = hand.Data.DisplayName;
+
+            if (!_inventory.TryPlaceHand(x, y))
             {
                 Debug.Log($"[가방] ({x},{y}) 에는 놓을 수 없다");
                 return;
             }
 
-            Debug.Log($"[가방] {_preview.Data.DisplayName} 을 ({x},{y}) 에 놓았다");
+            Debug.Log($"[가방] {placed} 을 ({x},{y}) 에 놓았다");
 
-            // 놓은 인스턴스는 그리드 것이 되었으므로 새로 만든다.
-            // 방향은 이어받는다. 같은 아이템을 여러 개 놓을 때 매번 돌리지 않아도 된다.
-            ItemData data = _preview.Data;
-            bool wasRotated = _preview.IsRotated;
-
-            _preview = new ItemInstance(data);
-            if (wasRotated) _preview.Rotate();
-
+            _previewView.gameObject.SetActive(false);
             Redraw();
         }
 
@@ -287,18 +329,20 @@ namespace JM2D.UI
             UpdateInfoText();
         }
 
-        /// 고른 아이템과 스탯을 보여준다. 고른 것이나 배치가 바뀔 때마다 갱신한다.
+        /// 손에 든 것과 스탯을 보여준다. 손이나 배치가 바뀔 때마다 갱신한다.
         /// 스탯에는 시너지가 반영된 값이 그대로 보인다.
         private void UpdateInfoText()
         {
             if (_statText == null || _stats == null) return;
 
-            string selected = _preview == null
-                ? "없음 (휠로 고른다)"
-                : $"{_preview.Data.DisplayName} ({_preview.Width}x{_preview.Height})";
+            ItemInstance hand = _inventory.Hand;
+
+            string held = hand == null
+                ? "없음"
+                : $"{hand.Data.DisplayName} ({hand.Width}x{hand.Height})";
 
             _statText.text =
-                $"선택    {selected}\n\n" +
+                $"손      {held}\n\n" +
                 $"공격력  {_stats.AttackDamage.IntValue}\n" +
                 $"이동    {_stats.MoveSpeed.Value:F2}\n" +
                 $"연사    {_stats.AttackSpeed.Value:F2}\n" +
