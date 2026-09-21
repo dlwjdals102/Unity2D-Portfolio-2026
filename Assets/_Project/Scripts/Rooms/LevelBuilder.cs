@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JM2D.Logic.Rooms;
 using UnityEngine;
 
@@ -25,6 +25,7 @@ namespace JM2D.Rooms
 
         public RoomLayout Layout => _layout;
         public Vector2Int RoomSize => _roomSize;
+        public int CurrentSeed => _currentSeed;
 
         private void Awake()
         {
@@ -42,11 +43,11 @@ namespace JM2D.Rooms
                 RoomSpace.ToWorld(cell, _roomSize.x, _roomSize.y, out float x, out float y);
                 Room room = Instantiate(_roomPrefab, new Vector2(x, y), Quaternion.identity, transform);
                 room.name = $"Room {i} {cell}";
-                room.SetType(_layout.GetRoomType(cell));
+                room.Setup(cell, _layout.GetRoomType(cell));
 
                 // 옆방과 이어진 변의 문만 연다. 나머지는 닫힌 채 벽이 된다.
                 foreach (DoorSide side in Sides)
-                    room.SetDoorOpen(side, _layout.HasDoor(cell, side));
+                    room.SetConnected(side, _layout.HasDoor(cell, side));
 
                 _rooms.Add(room);
             }
