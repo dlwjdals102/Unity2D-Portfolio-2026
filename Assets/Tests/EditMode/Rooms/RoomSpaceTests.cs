@@ -60,5 +60,26 @@ namespace JM2D.Tests.Rooms
 
             Assert.AreEqual(cell, RoomSpace.ToCell(x, y, Width, Height));
         }
+
+        /// 여유 거리 3 이면 1번 방(가운데 x 32)의 안쪽은 x 19 ~ 45, y -6 ~ 6 이다.
+        /// 칸 (0, 0) 만 쓰면 방 가운데가 원점이라 가운데를 빼지 않아도 통과한다. 그래서 1번 방과 -1번 방으로 시험한다.
+        [TestCase(1, 0, 32f, 0f, true)]
+        [TestCase(1, 0, 16.5f, 0f, false)]
+        [TestCase(1, 0, 18.9f, 0f, false)]
+        [TestCase(1, 0, 19f, 0f, true)]
+        [TestCase(1, 0, 45f, 0f, true)]
+        [TestCase(1, 0, 45.1f, 0f, false)]
+        [TestCase(1, 0, 32f, 6f, true)]
+        [TestCase(1, 0, 32f, 6.1f, false)]
+        [TestCase(1, 0, 0f, 0f, false)]
+        [TestCase(-1, 0, -32f, 0f, true)]
+        [TestCase(-1, 0, -19f, 0f, true)]
+        [TestCase(-1, 0, -18.9f, 0f, false)]
+        public void 방_안으로_여유_거리만큼_들어왔는지_본다(int cellX, int cellY, float x, float y, bool expected)
+        {
+            const float margin = 3f;
+
+            Assert.AreEqual(expected, RoomSpace.IsInside(new RoomCell(cellX, cellY), x, y, Width, Height, margin));
+        }
     }
 }
