@@ -18,7 +18,12 @@ namespace JM2D.Items
         /// 아이템이 붙인 것과 구분되어야 시너지만 지울 수 있다.
         private readonly object _synergySource = new object();
 
+        /// 아직 가방에 놓지 않은 아이템. 없으면 null.
+        /// 방 보상으로 들어오고, 그리드에 놓이면 빈다. 판이 끝날 때까지 남는다.
+        private ItemInstance _hand;
+
         public BagGrid Grid => _grid;
+        public ItemInstance Hand => _hand;
 
         public bool TryPlace(ItemInstance instance, int x, int y)
         {
@@ -29,6 +34,31 @@ namespace JM2D.Items
 
             RecalculateSynergy();
 
+            return true;
+        }
+        
+        /// 보상이나 디버그가 손을 채운다. 이미 들고 있으면 덮어쓴다.
+        public void PutInHand(ItemData data)
+        {
+            _hand = new ItemInstance(data);
+        }
+
+        /// 놓기 전에 돌린다. 손이 비어 있으면 아무 일도 하지 않는다.
+        public void RotateHand()
+        {
+            if (_hand == null) return;
+
+            _hand.Rotate();
+        }
+
+        /// 손에 든 것을 그리드에 놓는다. 성공하면 손이 빈다.
+        public bool TryPlaceHand(int x, int y)
+        {
+            if (_hand == null) return false;
+
+            if (!TryPlace(_hand, x, y)) return false;
+
+            _hand = null;
             return true;
         }
 
