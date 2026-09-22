@@ -1119,6 +1119,8 @@ GameObject:
   - component: {fileID: 1107003874}
   - component: {fileID: 1107003875}
   - component: {fileID: 1107003876}
+  - component: {fileID: 1107003877}
+  - component: {fileID: 1107003878}
   m_Layer: 0
   m_Name: LevelBuilder
   m_TagString: Untagged
@@ -1210,6 +1212,41 @@ MonoBehaviour:
   _tracker: {fileID: 1107003874}
   _player: {fileID: 1268753868}
   _enemyCounter: {fileID: 2062705147}
+  _flowField: {fileID: 1107003877}
+--- !u!114 &1107003877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107003871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4631ebb2146d49e4aa81a64622495173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.RoomFlowField
+  _blocking:
+    serializedVersion: 2
+    m_Bits: 1
+  _tracker: {fileID: 1107003874}
+  _player: {fileID: 1268753871}
+--- !u!114 &1107003878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107003871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15118fe58daad9f48ba88ab9ff5045b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.FlowFieldGizmo
+  _flowField: {fileID: 1107003877}
+  _draw: 1
+  _showNumbers: 0
+  _color: {r: 1, g: 0.85, b: 0.2, a: 1}
+  _alpha: 0.35
 --- !u!1 &1144486537
 GameObject:
   m_ObjectHideFlags: 0
