@@ -41,6 +41,9 @@ namespace JM2D.Rooms
         [SerializeField] private Collider2D _player;
         [SerializeField] private EnemyCounter _enemyCounter;
 
+        [Tooltip("적이 장애물을 돌아가게 한다. 씬의 RoomFlowField")]
+        [SerializeField] private RoomFlowField _flowField;
+
         /// 들어섰지만 아직 전투가 시작되지 않은 방. 없으면 null.
         private Room _waiting;
 
@@ -162,6 +165,7 @@ namespace JM2D.Rooms
                     Transform point = _points[(_startIndex + spawned) % _points.Count];
                     EnemyBase enemy = Instantiate(entry.Prefab, point.position, Quaternion.identity);
                     enemy.SetTarget(_player.transform);
+                    enemy.SetPathField(_flowField);
 
                     // 쏘는 적은 씬의 풀이 필요하다. 프리팹이 씬을 가리킬 수 없어 여기서 넣는다.
                     if (enemy is RangedEnemy ranged)

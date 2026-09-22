@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8421745939817180688}
   - component: {fileID: 1181257364344796216}
   - component: {fileID: 174239334797782835}
-  - component: {fileID: 5588603579673033957}
   - component: {fileID: -299830852263993559}
   - component: {fileID: -3784767327353793145}
+  - component: {fileID: -7735052800560660692}
   m_Layer: 8
   m_Name: DashEnemy
   m_TagString: Untagged
@@ -122,8 +122,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &5588603579673033957
-BoxCollider2D:
+--- !u!114 &-299830852263993559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 873253ab068ee344baf6c8bdbfe75066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Combat.Health
+  _maxHealth: 3
+  _invulnerableTime: 0
+  _blinkInterval: 0.08
+--- !u!114 &-3784767327353793145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a526e1c0818bf8243839e2be54a6787d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Enemy.DashEnemy
+  _target: {fileID: 0}
+  _data: {fileID: 11400000, guid: eb8b493378b347cf884a95bf43bbbbf9, type: 2}
+--- !u!58 &-7735052800560660692
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -157,43 +186,4 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &-299830852263993559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5701730272740260398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 873253ab068ee344baf6c8bdbfe75066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Combat.Health
-  _maxHealth: 3
-  _invulnerableTime: 0
-  _blinkInterval: 0.08
---- !u!114 &-3784767327353793145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5701730272740260398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a526e1c0818bf8243839e2be54a6787d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Enemy.DashEnemy
-  _target: {fileID: 0}
-  _data: {fileID: 11400000, guid: eb8b493378b347cf884a95bf43bbbbf9, type: 2}
+  m_Radius: 0.45
