@@ -36,6 +36,9 @@ namespace JM2D.Rooms
             Debug.Assert(_roomSize.x % 2 == 0 && _roomSize.y % 2 == 0,
                 "방 크기가 짝수가 아니다. Walls 의 Compress Tilemap Bounds 를 확인한다.");
 
+            // 장애물 자리를 뽑는 난수. 배치와 조합을 뽑는 난수와 별개이고 시드만 같다.
+            var obstacleRandom = new System.Random(_currentSeed);
+
             for (int i = 0; i < _layout.Rooms.Count; i++)
             {
                 RoomCell cell = _layout.Rooms[i];
@@ -48,6 +51,9 @@ namespace JM2D.Rooms
                 // 옆방과 이어진 변의 문만 연다. 나머지는 닫힌 채 벽이 된다.
                 foreach (DoorSide side in Sides)
                     room.SetConnected(side, _layout.HasDoor(cell, side));
+
+                if (room.Type != RoomType.Start)
+                    room.GetComponent<RoomObstacles>().Build(obstacleRandom);
 
                 _rooms.Add(room);
             }
