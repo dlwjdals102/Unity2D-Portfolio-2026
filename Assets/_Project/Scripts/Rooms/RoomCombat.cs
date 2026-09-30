@@ -5,6 +5,7 @@ using JM2D.Core;
 using JM2D.Data;
 using JM2D.Enemy;
 using JM2D.Logic.Rooms;
+using JM2D.UI;
 using UnityEngine;
 
 namespace JM2D.Rooms
@@ -43,6 +44,9 @@ namespace JM2D.Rooms
 
         [Tooltip("적이 장애물을 돌아가게 한다. 씬의 RoomFlowField")]
         [SerializeField] private RoomFlowField _flowField;
+
+        [Tooltip("보스가 나올 때 붙인다. 씬의 BossHealthBar")]
+        [SerializeField] private BossHealthBar _bossBar;
 
         /// 들어섰지만 아직 전투가 시작되지 않은 방. 없으면 null.
         private Room _waiting;
@@ -162,18 +166,36 @@ namespace JM2D.Rooms
             {
                 for (int i = 0; i < entry.Count; i++)
                 {
-                    Transform point = _points[(_startIndex + spawned) % _points.Count];
-                    EnemyBase enemy = Instantiate(entry.Prefab, point.position, Quaternion.identity);
+                    Vector2 position = SpawnPosition(entry.Prefab, spawned);
+                    EnemyBase enemy = Instantiate(entry.Prefab, position, Quaternion.identity);
                     enemy.SetTarget(_player.transform);
                     enemy.SetPathField(_flowField);
 
                     // 쏘는 적은 씬의 풀이 필요하다. 프리팹이 씬을 가리킬 수 없어 여기서 넣는다.
-                    if (enemy is RangedEnemy ranged)
-                        ranged.SetProjectilePool(_enemyProjectiles);
+                    if (enemy is IProjectileShooter shooter)
+                        shooter.SetProjectilePool(_enemyProjectiles);
+
+                    // 체력 바도 씬에 있다. 보스가 태어날 때 붙여 준다.
+                    if (enemy is Boss boss)
+                        _bossBar.Bind(boss);
 
                     spawned++;
                 }
             }
+        }
+
+        /// 보스는 방 가운데에서 나온다. 구석에서 나오면 등장이 우연처럼 보인다.
+        /// 나머지는 출현 지점을 순서대로 돌려 쓴다.
+        private Vector2 SpawnPosition(EnemyBase prefab, int spawned)
+        {
+            if (prefab is Boss)
+            {
+                Vector2Int size = _level.RoomSize;
+                RoomSpace.ToWorld(_fighting.Cell, size.x, size.y, out float x, out float y);
+                return new Vector2(x, y);
+            }
+
+            return _points[(_startIndex + spawned) % _points.Count].position;
         }
 
         /// 이번 웨이브에 쓸 지점을 고른다. 플레이어와 가까운 곳은 건너뛴다.
