@@ -1,4 +1,5 @@
 ﻿using JM2D.Combat;
+using JM2D.Core;
 using JM2D.Data;
 using JM2D.Logic.Common;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace JM2D.Enemy
 {
     /// 원거리 적. 가까워지면 멈춰서 조준하고, 조준이 끝나는 순간의 플레이어 쪽으로 한 발 쏜다.
     /// 플레이어가 너무 가까우면 물러나면서 쏜다.
-    public class RangedEnemy : EnemyBase
+    public class RangedEnemy : EnemyBase, IProjectileShooter
     {
         private enum State { Aim, Cooldown }
 
