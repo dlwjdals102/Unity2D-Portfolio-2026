@@ -14,5 +14,9 @@ namespace JM2D.Core
         /// '대상이 보이면 곧장 간다' 는 두 번 시도했다가 뺐다. 기둥 그늘의 경계에서 직선과 우회가
         /// 번갈아 골라져 적이 그 경계 위를 맴돌았다. 기준 사이에 틈을 둬도 경계 자체는 남는다.
         bool TryGetNextPoint(Vector2 from, out Vector2 point);
+
+        /// 이 자리에 설 수 있는가. 벽이나 장애물 안이거나 방 밖이면 거짓이다.
+        /// 길을 묻는 쪽이 아니라 무언가를 놓는 쪽이 쓴다. 보스의 잡몹 소환이 그렇다.
+        bool CanStand(Vector2 point);
     }
 }
