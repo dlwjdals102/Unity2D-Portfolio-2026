@@ -56,6 +56,9 @@ namespace JM2D.Enemy
         public Transform Target => _target;
         public IPathField PathField => _pathField;
 
+        /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
+        protected Health Health => _health;
+
         /// 자식이 Awake 를 쓰려면 override 하고 base.Awake() 를 먼저 부른다.
         protected virtual void Awake()
         {
