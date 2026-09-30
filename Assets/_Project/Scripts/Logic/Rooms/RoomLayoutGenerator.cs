@@ -14,13 +14,13 @@ namespace JM2D.Logic.Rooms
         private static readonly DoorSide[] Sides =
             { DoorSide.North, DoorSide.East, DoorSide.South, DoorSide.West };
 
-        public static RoomLayout Generate(int seed)
+        public static RoomLayout Generate(int seed, int roomCount = RoomCount)
         {
             var random = new Random(seed);
             var rooms = new List<RoomCell> { new RoomCell(0, 0) };
             var candidates = new List<RoomCell>(Sides.Length);
 
-            while (rooms.Count < RoomCount)
+            while (rooms.Count < roomCount)
             {
                 // 지금 서 있는 칸은 방금 놓은 방이다.
                 RoomCell current = rooms[rooms.Count - 1];

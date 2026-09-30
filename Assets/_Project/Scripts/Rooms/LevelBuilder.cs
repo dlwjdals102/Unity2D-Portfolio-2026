@@ -16,6 +16,11 @@ namespace JM2D.Rooms
 
         [SerializeField] private Room _roomPrefab;
 
+        [Header("디버그")]
+        [Tooltip("확인용으로 방 수를 줄인다. 2 보다 작으면 기본값을 쓴다. 늘리는 데는 쓰지 않는다")]
+        [Min(0)]
+        [SerializeField] private int _debugRoomCount;
+
         private static readonly DoorSide[] Sides =
             { DoorSide.North, DoorSide.East, DoorSide.South, DoorSide.West };
 
@@ -30,7 +35,10 @@ namespace JM2D.Rooms
         private void Awake()
         {
             _currentSeed = _useFixedSeed ? _fixedSeed : Random.Range(0, int.MaxValue);
-            _layout = RoomLayoutGenerator.Generate(_currentSeed);
+
+            // 방이 하나뿐이면 그 방이 시작 방이라 보스가 없다. 둘이 최소다.
+            int roomCount = _debugRoomCount >= 2 ? _debugRoomCount : RoomLayoutGenerator.RoomCount;
+            _layout = RoomLayoutGenerator.Generate(_currentSeed, roomCount);
 
             _roomSize = _roomPrefab.Size;
             Debug.Assert(_roomSize.x % 2 == 0 && _roomSize.y % 2 == 0,
