@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3b2ba2da1d35243a02ab78412ff418, type: 3}
+  m_Name: EnemyData_Boss
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.BossData
+  _maxHealth: 40
+  _moveSpeed: 2.2
+  _detectRange: 50
+  _giveUpRange: 60
+  _separationRadius: 1.5
+  _separationStrength: 0
+  _entryDelay: 1
+  _phaseChangeAt: 0.5
+  _phaseChangeTime: 1
+  _phase1:
+    BodyColor: {r: 0.45, g: 0.12, b: 0.55, a: 1}
+    Sweep:
+      Steps:
+        WindupTime: 0.5
+        ActTime: 0.15
+        RecoverTime: 1
+        WindupColor: {r: 1, g: 0.92157, b: 0.01569, a: 1}
+        ActColor: {r: 1, g: 1, b: 1, a: 1}
+      Range: 2.5
+      HitRadius: 2.5
+      Damage: 1
+    Dash:
+      Steps:
+        WindupTime: 0.6
+        ActTime: 0.5
+        RecoverTime: 1.2
+        WindupColor: {r: 1, g: 0.55, b: 0, a: 1}
+        ActColor: {r: 1, g: 0, b: 1, a: 1}
+      MinRange: 2
+      MaxRange: 10
+      Speed: 12
+      ContactRadius: 1.2
+      Damage: 1
+    Fan:
+      Steps:
+        WindupTime: 0.7
+        ActTime: 0.15
+        RecoverTime: 1
+        WindupColor: {r: 0, g: 1, b: 1, a: 1}
+        ActColor: {r: 0.6, g: 0.9, b: 1, a: 1}
+      MinRange: 6
+      ShotCount: 3
+      SpreadDegrees: 30
+      Damage: 1
+    Summon:
+      Steps:
+        WindupTime: 0.6
+        ActTime: 0.15
+        RecoverTime: 1
+        WindupColor: {r: 0.2, g: 0.9, b: 0.3, a: 1}
+        ActColor: {r: 0.6, g: 1, b: 0.6, a: 1}
+      Prefab: {fileID: 0}
+      Count: 3
+      SpreadRadius: 1.5
+      MaxAlive: 4
+  _phase2:
+    BodyColor: {r: 0.75, g: 0.1, b: 0.35, a: 1}
+    Sweep:
+      Steps:
+        WindupTime: 0.4
+        ActTime: 0.15
+        RecoverTime: 0.8
+        WindupColor: {r: 1, g: 0.92157, b: 0.01569, a: 1}
+        ActColor: {r: 1, g: 1, b: 1, a: 1}
+      Range: 3
+      HitRadius: 3.5
+      Damage: 1
+    Dash:
+      Steps:
+        WindupTime: 0.35
+        ActTime: 0.5
+        RecoverTime: 0.9
+        WindupColor: {r: 1, g: 0.55, b: 0, a: 1}
+        ActColor: {r: 1, g: 0, b: 1, a: 1}
+      MinRange: 2
+      MaxRange: 10
+      Speed: 14
+      ContactRadius: 1.2
+      Damage: 1
+    Fan:
+      Steps:
+        WindupTime: 0.6
+        ActTime: 0.15
+        RecoverTime: 0.8
+        WindupColor: {r: 0, g: 1, b: 1, a: 1}
+        ActColor: {r: 0.6, g: 0.9, b: 1, a: 1}
+      MinRange: 6
+      ShotCount: 5
+      SpreadDegrees: 45
+      Damage: 1
+    Summon:
+      Steps:
+        WindupTime: 0.6
+        ActTime: 0.15
+        RecoverTime: 1
+        WindupColor: {r: 0.2, g: 0.9, b: 0.3, a: 1}
+        ActColor: {r: 0.6, g: 1, b: 0.6, a: 1}
+      Prefab: {fileID: 7568731826336737540, guid: 191cf866a14b5044b94cc989efbfd8a4, type: 3}
+      Count: 3
+      SpreadRadius: 1.5
+      MaxAlive: 4
