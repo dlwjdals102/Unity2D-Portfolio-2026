@@ -92,13 +92,17 @@ namespace JM2D.Rooms
             return cells;
         }
 
-        /// 방 프리팹의 출현 지점을 칸 좌표로 바꾼다.
+        /// 방 프리팹의 출현 지점과 보스 자리를 칸 좌표로 바꾼다.
         private List<RoomCell> SpawnCells()
         {
             var cells = new List<RoomCell>();
 
             foreach (Transform point in _room.SpawnPoints)
                 cells.Add(ToGridCell(_walls.WorldToCell(point.position)));
+
+            // 보스는 출현 지점이 아니라 방 가운데에서 나온다.
+            // 여기 넣으면 둘레 비우기와 길 검증을 출현 지점과 똑같이 받는다.
+            cells.Add(ToGridCell(transform.position));
 
             return cells;
         }
