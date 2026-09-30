@@ -80,5 +80,16 @@ namespace JM2D.Combat
 
             OnHealthChanged?.Invoke(_current, _maxHealth);
         }
+
+        /// 피해와 상관없이 즉시 죽인다. 무적도 무시한다.
+        /// 규칙이 아니라 진행이 죽이는 경우에 쓴다. 보스가 죽을 때 소환물을 함께 치우는 것이 그렇다.
+        public void Kill()
+        {
+            if (IsDead) return;
+
+            _current = 0;
+            OnHealthChanged?.Invoke(_current, _maxHealth);
+            OnDied?.Invoke();
+        }
     }
 }
