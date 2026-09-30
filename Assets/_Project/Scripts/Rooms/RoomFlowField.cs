@@ -69,6 +69,17 @@ namespace JM2D.Rooms
             _field.Rebuild(_room.Grid, playerCell.X, playerCell.Y);
         }
 
+        /// 이 자리에 설 수 있는가. RoomGrid 는 격자 밖도 지나갈 수 없다고 답하므로 방 밖도 함께 걸러진다.
+        public bool CanStand(Vector2 point)
+        {
+            // 격자가 없는 방(시작 방)에서는 막을 근거가 없다.
+            if (_room == null) return true;
+
+            RoomCell cell = _room.ToGridCell(point);
+
+            return _room.Grid.IsPassable(cell.X, cell.Y);
+        }
+
         /// 그 자리에서 플레이어 쪽으로 한 발 옮길 자리(이웃 칸의 가운데). 거리표가 없으면 거짓이다.
         public bool TryGetNextPoint(Vector2 from, out Vector2 point)
         {
