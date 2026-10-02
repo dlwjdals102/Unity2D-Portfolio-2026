@@ -73,6 +73,31 @@ namespace JM2D.Data
         {
             if (_width * _height > 4)
                 Debug.LogWarning($"{name}: {_width}x{_height} 는 네 칸을 넘는다. 아이템은 1~4칸이다", this);
+
+            if (_modifiers != null)
+                foreach (ItemModifier modifier in _modifiers)
+                    WarnIfPercentOnIntegerStat(modifier, "효과");
+
+            // 시너지의 효과도 같은 스탯에 같은 방식으로 얹힌다. 여기만 빠뜨리기 쉽다.
+            if (_synergies != null)
+                foreach (ItemSynergy synergy in _synergies)
+                    WarnIfPercentOnIntegerStat(synergy.Modifier, "시너지");
+        }
+
+        /// 정수로 읽는 스탯에 퍼센트를 얹으면 반올림에 묻힌다.
+        /// 공격력과 최대 체력은 플레이어가 Stat.IntValue 로 읽고 기본값이 1과 3이라,
+        /// +10% 는 어떤 반올림 방식으로도 사라진다. 그래서 퍼센트는 이동 속도와 연사에만 쓴다.
+        ///
+        /// 이 규칙은 아이템 15종을 채울 때 정했는데 글로만 있었다.
+        /// 지키는지 사람이 눈으로 보고 있었고, 어기면 경고 없이 효과가 사라진다.
+        private void WarnIfPercentOnIntegerStat(ItemModifier modifier, string where)
+        {
+            if (modifier.Type == ModifierType.Flat) return;
+            if (modifier.Target != StatType.MaxHealth && modifier.Target != StatType.AttackDamage) return;
+
+            Debug.LogWarning(
+                $"{name}: {where} 의 {modifier.Target} 는 정수로 읽히는 스탯이라 퍼센트가 반올림에 묻힌다. " +
+                "가산(Flat)으로 적거나, 퍼센트가 필요하면 이동 속도와 연사에 쓴다", this);
         }
     }
 }
