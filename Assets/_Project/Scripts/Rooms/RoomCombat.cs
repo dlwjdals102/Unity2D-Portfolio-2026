@@ -4,6 +4,7 @@ using JM2D.Combat;
 using JM2D.Core;
 using JM2D.Data;
 using JM2D.Enemy;
+using JM2D.Feedback;
 using JM2D.Logic.Rooms;
 using JM2D.UI;
 using UnityEngine;
@@ -47,6 +48,9 @@ namespace JM2D.Rooms
 
         [Tooltip("보스가 나올 때 붙인다. 씬의 BossHealthBar")]
         [SerializeField] private BossHealthBar _bossBar;
+
+        [Tooltip("판 도중에 태어난 적에게 넣어 준다. 씬의 HitStop")]
+        [SerializeField] private HitStop _hitStop;
 
         /// 들어섰지만 아직 전투가 시작되지 않은 방. 없으면 null.
         private Room _waiting;
@@ -170,6 +174,9 @@ namespace JM2D.Rooms
                     EnemyBase enemy = Instantiate(entry.Prefab, position, Quaternion.identity);
                     enemy.SetTarget(_player.transform);
                     enemy.SetPathField(_flowField);
+
+                    // 맞는 반응도 씬의 HitStop 이 필요하다. 쏘는 적의 풀과 같은 이유다.
+                    enemy.SetHitStop(_hitStop);
 
                     // 쏘는 적은 씬의 풀이 필요하다. 프리팹이 씬을 가리킬 수 없어 여기서 넣는다.
                     if (enemy is IProjectileShooter shooter)

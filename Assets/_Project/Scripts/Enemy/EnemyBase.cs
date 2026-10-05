@@ -1,6 +1,7 @@
 ﻿using System;
 using JM2D.Combat;
 using JM2D.Data;
+using JM2D.Feedback;
 using JM2D.Logic.Common;
 using UnityEngine;
 using JM2D.Core;
@@ -21,8 +22,8 @@ namespace JM2D.Enemy
         [SerializeField] private Transform _target;
 
         private Rigidbody2D _rb;
-        private SpriteRenderer _renderer;
         private Health _health;
+        private HitReaction _reaction;
 
         private Phase _phase = Phase.Idle;
 
@@ -38,6 +39,9 @@ namespace JM2D.Enemy
 
         /// 길 안내. 없으면 플레이어 쪽으로 곧장 간다.
         private IPathField _pathField;
+
+        /// 씬의 히트스톱. 여기서 쓰지는 않고, 받아서 반응에 넘기고 갈라진 적에게 물려준다.
+        private HitStop _hitStop;
 
         /// 지금 향하고 있는 자리. 닿을 때까지 바꾸지 않는다.
         private Vector2 _waypoint;
@@ -55,6 +59,7 @@ namespace JM2D.Enemy
         /// 갈라지는 부품이 작은 적에게 대상을 물려줄 때 읽는다.
         public Transform Target => _target;
         public IPathField PathField => _pathField;
+        public HitStop HitStop => _hitStop;
 
         /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
         protected Health Health => _health;
@@ -63,8 +68,8 @@ namespace JM2D.Enemy
         protected virtual void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _renderer = GetComponent<SpriteRenderer>();
             _health = GetComponent<Health>();
+            _reaction = GetComponent<HitReaction>();
 
             _health.InitializeMaxHealth(Data.MaxHealth);
 
@@ -127,6 +132,14 @@ namespace JM2D.Enemy
         public void SetPathField(IPathField field)
         {
             _pathField = field;
+        }
+
+        /// 판 도중에 태어난 적에게 씬의 히트스톱을 넣는다.
+        /// 보관하는 이유는 갈라진 적과 소환물에게 그대로 물려주기 때문이다.
+        public void SetHitStop(HitStop hitStop)
+        {
+            _hitStop = hitStop;
+            _reaction.SetHitStop(hitStop);
         }
 
         /// 교전이 시작될 때 한 번 불린다.
@@ -231,9 +244,10 @@ namespace JM2D.Enemy
             return AreaHit.Circle(transform.position, radius, 1 << _target.gameObject.layer, damage);
         }
 
+        /// 색은 HitReaction 이 소유한다. 번쩍임이 돌 때 상태 색이 그것을 덮지 않게 하려는 것이다.
         protected void SetColor(Color color)
         {
-            _renderer.color = color;
+            _reaction.SetBaseColor(color);
         }
 
         private void ChangePhase(Phase next)
