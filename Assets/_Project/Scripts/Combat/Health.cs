@@ -12,6 +12,9 @@ namespace JM2D.Combat
         /// 체력이 바뀔 때 발생한다. (현재, 최대)
         public event Action<int, int> OnHealthChanged;
 
+        /// 피해를 실제로 받았을 때 발생한다. 무적으로 막혔으면 발생하지 않는다.
+        public event Action OnDamaged;
+
         [SerializeField] private int _maxHealth = 3;
         [SerializeField] private float _invulnerableTime = 0.5f;
         [SerializeField] private float _blinkInterval = 0.08f;
@@ -52,6 +55,7 @@ namespace JM2D.Combat
             if (IsInvulnerable) return;
 
             _current -= amount;
+            OnDamaged?.Invoke();
             OnHealthChanged?.Invoke(_current, _maxHealth);
 
             if (IsDead)
