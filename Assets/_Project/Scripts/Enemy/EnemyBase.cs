@@ -3,6 +3,7 @@ using JM2D.Combat;
 using JM2D.Data;
 using JM2D.Feedback;
 using JM2D.Logic.Common;
+using JM2D.View;
 using UnityEngine;
 using JM2D.Core;
 
@@ -21,9 +22,13 @@ namespace JM2D.Enemy
 
         [SerializeField] private Transform _target;
 
+        [Tooltip("머리 위 예고 표식. 자식의 SpriteRenderer. 예고가 있는 적만 채운다")]
+        [SerializeField] private SpriteRenderer _warning;
+
         private Rigidbody2D _rb;
         private Health _health;
         private HitReaction _reaction;
+        private SpriteFacing _facing;
 
         private Phase _phase = Phase.Idle;
 
@@ -70,6 +75,7 @@ namespace JM2D.Enemy
             _rb = GetComponent<Rigidbody2D>();
             _health = GetComponent<Health>();
             _reaction = GetComponent<HitReaction>();
+            _facing = GetComponent<SpriteFacing>();
 
             _health.InitializeMaxHealth(Data.MaxHealth);
 
@@ -234,6 +240,9 @@ namespace JM2D.Enemy
         /// 정해 둔 방향으로 움직인다. 돌진처럼 도중에 방향을 바꾸지 않을 때 쓴다.
         protected void Move(Vector2 direction, float speed)
         {
+            // 방향이 있는 이동이 전부 여기를 지난다. 추적, 돌진, 후퇴가 한 줄로 해결된다.
+            _facing.Face(direction.x);
+
             _rb.linearVelocity = direction * speed;
         }
 
@@ -244,18 +253,16 @@ namespace JM2D.Enemy
             return AreaHit.Circle(transform.position, radius, 1 << _target.gameObject.layer, damage);
         }
 
-        /// 색은 HitReaction 이 소유한다. 번쩍임이 돌 때 상태 색이 그것을 덮지 않게 하려는 것이다.
-        protected void SetColor(Color color)
+        /// 공격을 예고하는 동안 머리 위에 표식을 띄운다.
+        /// 켜고 끄는 시점은 자식이 정한다. 예고가 있는 적만 쓴다.
+        protected void ShowWarning(bool show)
         {
-            _reaction.SetBaseColor(color);
+            _warning.enabled = show;
         }
 
         private void ChangePhase(Phase next)
         {
             _phase = next;
-
-            if (next == Phase.Idle) SetColor(Color.red);
-            else if (next == Phase.Chase) SetColor(Color.blue);
         }
 
         private void OnDied()

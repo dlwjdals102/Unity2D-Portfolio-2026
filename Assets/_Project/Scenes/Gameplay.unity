@@ -1627,6 +1627,7 @@ GameObject:
   - component: {fileID: 1268753876}
   - component: {fileID: 1268753877}
   - component: {fileID: 1268753878}
+  - component: {fileID: 1268753879}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1789,7 +1790,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.2141664, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.89932394, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1960,6 +1961,18 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &1268753879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing
 --- !u!1 &1283961777
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -5909022766968504036}
   - component: {fileID: -8680590567441404671}
   - component: {fileID: 475057948498607942}
+  - component: {fileID: 248903800871995125}
   m_Layer: 8
   m_Name: SplitMeleeEnemy
   m_TagString: Untagged
@@ -89,7 +90,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.031644605, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.39215687, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -138,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Enemy.EnemyController
   _target: {fileID: 0}
+  _warning: {fileID: 0}
   _data: {fileID: 11400000, guid: ee896b1c6c934695aa4b2b5da4c4e362, type: 2}
 --- !u!114 &-299830852263993559
 MonoBehaviour:
@@ -275,3 +277,15 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &248903800871995125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing

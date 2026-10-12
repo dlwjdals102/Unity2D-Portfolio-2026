@@ -14,9 +14,9 @@ namespace JM2D.Enemy
         protected override EnemyData Data => _data;
         protected override float EngageRange => _data.AttackStartRange;
 
+        /// 교전에 들어갈 때 할 일이 없다. 붙어서 때리는 것은 TickEngaged 가 한다.
         protected override void OnEngage()
         {
-            SetColor(Color.green);
         }
 
         protected override void TickEngaged(float distance)
