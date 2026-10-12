@@ -46,7 +46,10 @@ namespace JM2D.Data
         [Range(1, 4)]
         [SerializeField] private int _height = 1;
 
-        [Tooltip("가방에 그려질 색. 도형 프로토타입이라 모양만으로는 구분되지 않는다")]
+        [Tooltip("가방과 보상 창에 그려질 아이콘. 비워 두면 아래 색으로 칠한 사각형이 나온다")]
+        [SerializeField] private Sprite _icon;
+
+        [Tooltip("아이콘이 없을 때 그려질 색. 도형 프로토타입이라 모양만으로는 구분되지 않는다")]
         [SerializeField] private Color _color = Color.white;
 
         [Header("효과")]
@@ -59,7 +62,11 @@ namespace JM2D.Data
         public string DisplayName => _displayName;
         public int Width => _width;
         public int Height => _height;
-        public Color Color => _color;
+        public Sprite Icon => _icon;
+
+        /// 아이콘에 곱할 색. 아이콘이 없으면 아이템 색이 그대로 사각형이 되고,
+        /// 있으면 흰색을 곱해 아이콘의 원색이 나온다. sprite 와 짝으로 써야 한다.
+        public Color IconTint => _icon == null ? _color : Color.white;
 
         /// 읽기 전용으로 노출한다. 배열을 그대로 주면 밖에서 고쳐 에셋이 오염된다.
         public IReadOnlyList<ItemModifier> Modifiers => _modifiers;
