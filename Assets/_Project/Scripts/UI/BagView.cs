@@ -213,8 +213,11 @@ namespace JM2D.UI
             _previewLabel.text = hand.Data.DisplayName;
 
             bool canPlace = _inventory.Grid.CanPlace(hand, x, y);
-            Color color = canPlace ? hand.Data.Color : Color.red;
+            // 못 놓을 때의 빨강은 아이콘에도 곱해져 그대로 신호가 된다.
+            Color color = canPlace ? hand.Data.IconTint : Color.red;
             color.a = _previewAlpha;
+
+            _previewView.sprite = hand.Data.Icon;
             _previewView.color = color;
 
             PlaceAt(_previewView.rectTransform, x, y, hand.Width, hand.Height);
@@ -353,7 +356,8 @@ namespace JM2D.UI
         {
             Image view = Instantiate(_itemPrefab, _cellRoot);
             view.name = $"Item {instance.Data.DisplayName} ({x},{y})";
-            view.color = instance.Data.Color;
+            view.sprite = instance.Data.Icon;
+            view.color = instance.Data.IconTint;
 
             PlaceAt(view.rectTransform, x, y, instance.Width, instance.Height);
             CreateLabel(view).text = instance.Data.DisplayName;

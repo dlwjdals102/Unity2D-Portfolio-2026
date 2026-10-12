@@ -154,7 +154,9 @@ namespace JM2D.UI
             var swatch = new GameObject("Swatch", typeof(RectTransform));
             swatch.transform.SetParent(rect, false);
             TopCenter((RectTransform)swatch.transform, y, _swatchSize, _swatchSize);
-            swatch.AddComponent<Image>().color = data.Color;
+            var swatchImage = swatch.AddComponent<Image>();
+            swatchImage.sprite = data.Icon;
+            swatchImage.color = data.IconTint;
             y += _swatchSize + Margin;
 
             float textWidth = _cardSize.x - Margin * 2f;
