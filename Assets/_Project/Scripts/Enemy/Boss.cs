@@ -90,8 +90,6 @@ namespace JM2D.Enemy
 
         protected override void OnEngage()
         {
-            SetColor(_current.BodyColor);
-
             // 첫 박자는 쫓기로 시작한다. _steps 가 아직 없지만 회복은 그것을 쓰지 않는다.
             _step = Step.Recover;
             _stepTimeLeft = _data.EntryDelay;
@@ -165,7 +163,7 @@ namespace JM2D.Enemy
             ChangeStep(Step.Windup);
         }
 
-        /// 단계가 바뀔 때 한 번만 할 일. 타이머를 채우고 색을 바꾼다.
+        /// 단계가 바뀔 때 한 번만 할 일. 타이머를 채우고 예고 표식을 켜고 끈다.
         private void ChangeStep(Step next)
         {
             _step = next;
@@ -174,19 +172,18 @@ namespace JM2D.Enemy
             {
                 case Step.Windup:
                     _stepTimeLeft = _steps.WindupTime;
-                    SetColor(_steps.WindupColor);
+                    ShowWarning(true);
                     BeginWindup();
                     break;
 
                 case Step.Act:
                     _stepTimeLeft = _steps.ActTime;
-                    SetColor(_steps.ActColor);
+                    ShowWarning(false);
                     BeginAct();
                     break;
 
                 case Step.Recover:
                     _stepTimeLeft = _steps.RecoverTime;
-                    SetColor(_current.BodyColor);
                     break;
             }
         }
@@ -265,7 +262,9 @@ namespace JM2D.Enemy
             _changeTimeLeft = _data.PhaseChangeTime;
 
             Stop();
-            SetColor(_current.BodyColor);
+
+            // 예고 중에 체력이 떨어지면 ChangeStep 이 더 이상 불리지 않아 표식을 끌 기회가 없다.
+            ShowWarning(false);
             Health.IsExternallyInvulnerable = true;
         }
 

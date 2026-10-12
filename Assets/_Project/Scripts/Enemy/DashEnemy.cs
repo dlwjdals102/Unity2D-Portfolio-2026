@@ -55,7 +55,7 @@ namespace JM2D.Enemy
             return _stateTimeLeft <= 0f;
         }
 
-        /// 상태가 바뀔 때 한 번만 할 일. 타이머를 채우고 색을 바꾼다.
+        /// 상태가 바뀔 때 한 번만 할 일. 타이머를 채우고 예고 표식을 켜고 끈다.
         private void ChangeState(State next)
         {
             _state = next;
@@ -65,18 +65,17 @@ namespace JM2D.Enemy
                 case State.Windup:
                     _stateTimeLeft = _data.WindupTime;
                     _dashDirection = DirectionToTarget();
-                    SetColor(Color.yellow);
+                    ShowWarning(true);
                     break;
 
                 case State.Dash:
                     _stateTimeLeft = _data.DashTime;
                     _hasHitThisDash = false;
-                    SetColor(Color.magenta);
+                    ShowWarning(false);
                     break;
 
                 case State.Recover:
                     _stateTimeLeft = _data.RecoverTime;
-                    SetColor(Color.gray);
                     break;
             }
         }

@@ -11,17 +11,12 @@ namespace JM2D.Data
         [Tooltip("멈춰서 예고하는 시간")]
         public float WindupTime = 0.5f;
 
-        [Tooltip("발동이 이어지는 시간. 한 번에 끝나는 패턴은 색이 보일 만큼만 준다")]
+        [Tooltip("발동이 이어지는 시간. 한 번에 끝나는 패턴은 무엇이 일어났는지 보일 만큼만 준다")]
         public float ActTime = 0.15f;
 
         [Tooltip("발동 뒤 쉬는 시간. 이 동안 플레이어를 쫓는다")]
         public float RecoverTime = 1f;
 
-        [Tooltip("예고 중의 몸 색. 패턴마다 달라야 무엇이 오는지 읽힌다")]
-        public Color WindupColor = Color.yellow;
-
-        [Tooltip("발동 중의 몸 색")]
-        public Color ActColor = Color.white;
     }
 
     /// 휩쓸기. 몸에 붙은 플레이어를 벌하는 패턴이다.
@@ -99,15 +94,12 @@ namespace JM2D.Data
         public int MaxAlive = 4;
     }
 
-    /// 페이즈 하나가 쓰는 패턴 전부와 몸 색.
+    /// 페이즈 하나가 쓰는 패턴 전부.
     /// 페이즈가 바뀌면 이 묶음을 통째로 갈아 끼운다.
     /// 그래서 보스 코드에 '지금 몇 페이즈인가' 를 묻는 곳이 한 군데도 없다.
     [System.Serializable]
     public class PhasePatterns
     {
-        [Tooltip("패턴을 쓰지 않을 때의 몸 색")]
-        public Color BodyColor = new Color(0.45f, 0.12f, 0.55f);
-
         public SweepPattern Sweep = new SweepPattern();
         public DashPattern Dash = new DashPattern();
         public FanPattern Fan = new FanPattern();

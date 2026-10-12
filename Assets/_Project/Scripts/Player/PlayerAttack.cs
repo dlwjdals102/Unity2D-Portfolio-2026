@@ -1,4 +1,5 @@
 ﻿using JM2D.Logic.Stats;
+using JM2D.View;
 using JM2D.Weapons;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace JM2D.Player
         [SerializeField] private PlayerStats _stats;
 
         private Weapon _current;
+        private SpriteFacing _facing;
         private float _fireCooldownLeft;
 
         private bool CanFire => _fireCooldownLeft <= 0f && !_motor.IsDashing;
@@ -23,11 +25,15 @@ namespace JM2D.Player
         /// PlayerStats 가 Awake 에서 스탯을 만든 뒤라야 모디파이어를 붙일 수 있어 Start 에서 든다.
         private void Start()
         {
+            _facing = GetComponent<SpriteFacing>();
             Equip(0);
         }
 
         private void Update()
         {
+            // 조준한 쪽을 본다. 공격하지 않을 때도 돌아야 해서 맨 앞에 둔다.
+            _facing.Face(_input.AimDirection.x);
+
             int slot = _input.WeaponSlotPressed;
             if (slot >= 0 && slot < _weapons.Length)
                 Equip(slot);
