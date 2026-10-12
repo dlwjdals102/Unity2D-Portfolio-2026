@@ -145,7 +145,7 @@ static 싱글턴도 버렸다.
 - [x] 동작 정의를 전부 만족
 - [x] 플레이모드 체크리스트 통과
 - [x] 수치를 데이터로 빼고 **한 번 정하고 덮었다**
-- [ ] 면접 문답을 `docs/interview/hit-feedback.md` 에 쓴다 (CLAUDE.md 9번)
+- [x] 면접 문답을 `docs/interview/hit-feedback.md` 에 쓴다 (CLAUDE.md 9번). 8문항
 
 ## 계단
 
