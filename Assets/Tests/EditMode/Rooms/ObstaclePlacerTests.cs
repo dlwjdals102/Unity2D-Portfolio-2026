@@ -6,7 +6,9 @@ using JM2D.Logic.Rooms;
 namespace JM2D.Tests.Rooms
 {
     /// 방 안에 장애물을 놓을 칸을 정한다. 놓은 뒤에도 문과 출현 지점에 닿아야 한다.
-    /// 크기는 방 프리팹과 같은 32 x 18 이고, 벽 한 줄과 네 변 가운데의 문 구멍(폭 4)을 그린다.
+    /// 벽 한 줄과 네 변 가운데의 문 구멍(폭 4)을 그린다.
+    /// 크기 32 x 18 은 배치가 격자에서 읽어 가는 값이라 방 프리팹과 같을 필요가 없다.
+    /// 가로와 세로가 달라야 둘을 바꿔 쓰는 실수가 드러난다.
     public class ObstaclePlacerTests
     {
         private const int Width = 32;
@@ -63,7 +65,9 @@ namespace JM2D.Tests.Rooms
             };
         }
 
-        /// 비워 둘 칸. 문 앞 세 칸과 출현 지점 둘레 한 칸이다.
+        /// 비워 둘 칸. 문 앞 세 칸과 출현 지점 그 칸이다.
+        /// 출현 지점 둘레를 비우지 않는 것은 방 프리팹의 Spawn Clearance 가 0 이기 때문이다.
+        /// CanPlace 가 덩어리 둘레 한 칸을 이미 보므로 장애물은 여기서도 두 칸 떨어진다.
         private static List<RoomCell> 비워_둘_칸들()
         {
             var cells = new List<RoomCell>();
@@ -78,9 +82,7 @@ namespace JM2D.Tests.Rooms
                 }
 
             foreach (RoomCell spawn in 출현_지점들())
-                for (int dy = -1; dy <= 1; dy++)
-                    for (int dx = -1; dx <= 1; dx++)
-                        cells.Add(new RoomCell(spawn.X + dx, spawn.Y + dy));
+                cells.Add(spawn);
 
             return cells;
         }
@@ -175,14 +177,20 @@ namespace JM2D.Tests.Rooms
 
             Assert.AreEqual(0, cells.Count);
         }
-        /// 방 안쪽을 가로 3, 세로 2 로 나눈 구역마다 덩어리를 하나씩 놓는다.
+        /// 구역마다 덩어리를 하나씩 놓는다.
         /// 한 덩어리는 많아야 네 칸(2x2)이므로, 한 구역에 다섯 칸 이상이면 둘이 놓인 것이다.
+        ///
+        /// 구역 수를 여기 적지 않고 ObstaclePlacer 에게 묻는다. 방 크기에서 나오는 값이라
+        /// 적어 두면 방 크기를 바꿀 때마다 이 테스트가 엉뚱한 묶음을 세게 된다.
         [Test]
         public void 한_구역에_덩어리_하나만_놓는다()
         {
             const int firstX = 2, lastX = Width - 3, firstY = 2, lastY = Height - 3;
-            const int columnWidth = (lastX - firstX + 1) / 3;
-            const int rowHeight = (lastY - firstY + 1) / 2;
+
+            ObstaclePlacer.GetRegionCounts(벽과_문만_있는_방(), out int columns, out int rows);
+
+            int columnWidth = (lastX - firstX + 1) / columns;
+            int rowHeight = (lastY - firstY + 1) / rows;
 
             for (int seed = 0; seed < 50; seed++)
             {
@@ -190,9 +198,9 @@ namespace JM2D.Tests.Rooms
 
                 foreach (RoomCell cell in 놓아_본다(seed))
                 {
-                    int column = Math.Min((cell.X - firstX) / columnWidth, 2);
-                    int row = Math.Min((cell.Y - firstY) / rowHeight, 1);
-                    int region = row * 3 + column;
+                    int column = Math.Min((cell.X - firstX) / columnWidth, columns - 1);
+                    int row = Math.Min((cell.Y - firstY) / rowHeight, rows - 1);
+                    int region = row * columns + column;
 
                     perRegion.TryGetValue(region, out int count);
                     perRegion[region] = count + 1;

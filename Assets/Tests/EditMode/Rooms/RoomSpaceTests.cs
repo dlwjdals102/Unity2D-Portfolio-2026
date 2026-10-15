@@ -3,8 +3,8 @@ using JM2D.Logic.Rooms;
 
 namespace JM2D.Tests.Rooms
 {
-    /// 칸 좌표와 월드 위치 사이의 변환. 방 크기는 지금 방 프리팹과 같은 32 x 18 이다.
-    /// 가로와 세로가 달라야 둘을 바꿔 쓰는 실수가 드러난다.
+    /// 칸 좌표와 월드 위치 사이의 변환. 방 크기 32 x 18 은 변환에 넘기는 입력이라
+    /// 방 프리팹과 같을 필요가 없다. 가로와 세로가 달라야 둘을 바꿔 쓰는 실수가 드러난다.
     public class RoomSpaceTests
     {
         private const int Width = 32;

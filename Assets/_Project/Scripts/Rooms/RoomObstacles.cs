@@ -8,7 +8,7 @@ namespace JM2D.Rooms
     /// 방 하나의 장애물. 판이 시작될 때 시드로 자리를 정해 타일을 칠한다.
     /// 어디에 놓을지는 Logic 의 ObstaclePlacer 가 정한다. 여기서는 격자를 만들어 넘기고, 돌려받은 칸을 칠한다.
     ///
-    /// 격자 칸은 0 부터 세고(0 ~ 31, 0 ~ 17) 타일 칸은 방 가운데가 0 이다(-16 ~ 15, -9 ~ 8).
+    /// 격자 칸은 0 부터 세고 타일 칸은 방 가운데가 0 이다. 두 범위는 벽 Tilemap 이 칠한 넓이에서 나온다.
     /// 둘 사이를 옮기는 곳은 ToTilemapCell 과 ToGridCell 두 곳뿐이다.
     [RequireComponent(typeof(Room))]
     public class RoomObstacles : MonoBehaviour
