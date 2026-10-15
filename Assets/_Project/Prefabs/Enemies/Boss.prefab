@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -2122837972990275081, guid: 794c72410b7fbb9409c166fab174da41, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -180,8 +180,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0, b: 1, a: 1}
+  m_Sprite: {fileID: 5312428451507328441, guid: 95a950112b7464a4f87ced4e34a7fe2c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Feedback.HitReaction
   _hitStopTime: 0.01
   _shakeForce: 0.2
-  _flashColor: {r: 1, g: 1, b: 1, a: 1}
+  _flashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   _flashTime: 0.1
   _hitStop: {fileID: 0}
 --- !u!114 &475057948498607942
