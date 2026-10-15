@@ -21,7 +21,9 @@ namespace JM2D.Rooms
         [SerializeField] private Color _bossColor = new Color(0.3f, 0.14f, 0.14f);
 
         [SerializeField] private Tilemap _walls;
-        [SerializeField] private SpriteRenderer _floor;
+
+        [Tooltip("바닥 타일맵. 모서리와 가장자리와 가운데가 다른 타일이라 한 장으로 늘릴 수 없다")]
+        [SerializeField] private Tilemap _floor;
 
         [Header("문")]
         [SerializeField] private GameObject _doorNorth;
