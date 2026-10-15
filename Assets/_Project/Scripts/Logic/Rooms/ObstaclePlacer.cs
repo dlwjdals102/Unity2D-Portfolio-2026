@@ -7,17 +7,20 @@ namespace JM2D.Logic.Rooms
     /// 방 안에 장애물을 놓을 칸을 정한다. 실제로 칠하는 일은 하지 않는다.
     /// 놓은 뒤에도 문과 출현 지점에 닿는지 BFS 로 확인하고, 막히면 버리고 다시 놓는다.
     ///
-    /// 방 안쪽을 구역 여섯으로 나누고 구역마다 덩어리를 하나씩 놓는다.
+    /// 방 안쪽을 구역으로 나누고 구역마다 덩어리를 하나씩 놓는다.
     /// 자리를 순전히 난수에 맡기면 한쪽 구석에 몰려 다른 쪽이 텅 빈다.
+    ///
+    /// 구역 수는 방 크기에서 센다. 고정해 두면 방을 줄였을 때 구역이 덩어리보다 작아져
+    /// 아무것도 놓지 못한다. 방을 32x18 에서 20x12 로 줄였을 때 실제로 그랬다.
     public static class ObstaclePlacer
     {
         /// 덩어리 모양. 가로 세로 칸 수다.
         private static readonly (int Width, int Height)[] Shapes =
             { (1, 1), (2, 2), (1, 3), (3, 1) };
 
-        /// 방 안쪽을 이만큼으로 나눈다. 구역 하나에 덩어리 하나다.
-        private const int RegionColumns = 3;
-        private const int RegionRows = 2;
+        /// 구역 하나가 적어도 이만큼은 돼야 한다. 구역 하나에 덩어리 하나다.
+        /// 가장 큰 모양이 3칸인데 CanPlace 가 둘레 한 칸을 더 보므로 4 다.
+        private const int MinRegionSize = 4;
 
         private const int MinClusters = 4;
         private const int MaxClusters = 6;
@@ -32,10 +35,6 @@ namespace JM2D.Logic.Rooms
         /// 덩어리끼리 이만큼은 떨어뜨린다. 구역이 달라도 경계에 붙으면 한 덩어리처럼 보인다.
         private const int ClusterSpacing = 4;
 
-        /// 구역 테두리를 이만큼 비운다. 구역 경계에 붙는 자리를 아예 고르지 않게 한다.
-        /// 간격을 올리는 것보다 싸다. 뽑아 놓고 버리는 대신 애초에 붙을 수 없는 자리에서만 고른다.
-        private const int RegionInset = 1;
-
         /// 막을 칸 목록을 돌려준다. 열 번을 시도해도 길이 막히면 빈 목록이다.
         public static List<RoomCell> Place(RoomGrid walls, IReadOnlyList<RoomCell> keepClear,
             IReadOnlyList<RoomCell> mustReach, Random random)
@@ -49,7 +48,9 @@ namespace JM2D.Logic.Rooms
                 var grid = new RoomGrid(walls);
                 placed.Clear();
 
-                int regionCount = RegionColumns * RegionRows;
+                GetRegionCounts(walls, out int columns, out int rows);
+
+                int regionCount = columns * rows;
                 int clusters = Math.Min(random.Next(MinClusters, MaxClusters + 1), regionCount);
 
                 // 구역 고르기는 보상 후보를 뽑는 것과 같은 계산이다. 서로 다른 구역이 나온다.
@@ -110,6 +111,21 @@ namespace JM2D.Logic.Rooms
             return true;
         }
 
+        /// 방 안쪽을 몇 구역으로 나눌지 방 크기에서 센다.
+        /// 여기서 세는 범위는 GetRegion 이 실제로 나누는 범위와 같아야 한다.
+        /// 방 전체로 세면 구역 수가 많아져 구역 하나가 덩어리보다 작아진다.
+        ///
+        /// 테스트가 같은 계산을 다시 적지 않도록 열어 둔다. 적어 두면 여기를 고칠 때 조용히 어긋난다.
+        public static void GetRegionCounts(RoomGrid grid, out int columns, out int rows)
+        {
+            int innerWidth = grid.Width - 2 * EdgeMargin - 2;
+            int innerHeight = grid.Height - 2 * EdgeMargin - 2;
+
+            // 나누기가 0 이 되면 구역이 하나도 없어 아무것도 놓지 못한다.
+            columns = Math.Max(1, innerWidth / MinRegionSize);
+            rows = Math.Max(1, innerHeight / MinRegionSize);
+        }
+
         /// 구역 하나가 덮는 칸 범위. 방 안쪽(벽에서 EdgeMargin 만큼 뗀 곳)을 고르게 나눈다.
         /// 나누어떨어지지 않는 나머지는 마지막 구역이 가져간다.
         private static void GetRegion(RoomGrid grid, int index,
@@ -120,21 +136,18 @@ namespace JM2D.Logic.Rooms
             int firstY = EdgeMargin + 1;
             int lastY = grid.Height - EdgeMargin - 2;
 
-            int columnWidth = (lastX - firstX + 1) / RegionColumns;
-            int rowHeight = (lastY - firstY + 1) / RegionRows;
+            GetRegionCounts(grid, out int columns, out int rows);
 
-            int column = index % RegionColumns;
-            int row = index / RegionColumns;
+            int columnWidth = (lastX - firstX + 1) / columns;
+            int rowHeight = (lastY - firstY + 1) / rows;
+
+            int column = index % columns;
+            int row = index / columns;
 
             minX = firstX + column * columnWidth;
             minY = firstY + row * rowHeight;
-            maxX = column == RegionColumns - 1 ? lastX : minX + columnWidth - 1;
-            maxY = row == RegionRows - 1 ? lastY : minY + rowHeight - 1;
-
-            minX += RegionInset;
-            minY += RegionInset;
-            maxX -= RegionInset;
-            maxY -= RegionInset;
+            maxX = column == columns - 1 ? lastX : minX + columnWidth - 1;
+            maxY = row == rows - 1 ? lastY : minY + rowHeight - 1;
         }
 
         /// 덩어리가 놓일 칸과 그 둘레 한 칸이 모두 비어 있어야 한다.
