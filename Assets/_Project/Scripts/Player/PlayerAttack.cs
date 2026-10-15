@@ -31,8 +31,7 @@ namespace JM2D.Player
 
         private void Update()
         {
-            // 조준한 쪽을 본다. 공격하지 않을 때도 돌아야 해서 맨 앞에 둔다.
-            _facing.Face(_input.AimDirection.x);
+            FacePlayer();
 
             int slot = _input.WeaponSlotPressed;
             if (slot >= 0 && slot < _weapons.Length)
@@ -46,6 +45,16 @@ namespace JM2D.Player
                 _current.Attack(transform.position, _input.AimDirection, _stats.AttackDamage.IntValue);
                 _fireCooldownLeft = 1f / _stats.AttackSpeed.Value;
             }
+        }
+
+        /// 쏘는 동안에는 조준한 쪽, 아니면 가는 쪽을 본다.
+        /// 조준 방향만 쓰면 쏘지 않을 때도 마우스를 흔들 때마다 몸이 깜빡인다.
+        /// 이동 방향만 쓰면 쏘는 쪽이 읽히지 않는데, 조준은 RangeView 와 투사체가 이미 알린다.
+        /// 공격하는 순간만 돌리는 안은 버렸다. 공격이 한 프레임이라 눈에 보이지 않는다.
+        private void FacePlayer()
+        {
+            float x = _input.FireHeld ? _input.AimDirection.x : _input.MoveInput.x;
+            _facing.Face(x);
         }
 
         /// 무기를 든다. 옛 무기가 얹은 값만 떼고 새 무기의 값을 얹는다. 아이템이 얹은 값은 건드리지 않는다.
