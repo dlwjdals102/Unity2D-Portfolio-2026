@@ -1,6 +1,6 @@
 ---
 name: 이동 애니메이션과 무기 휘두르기
-status: planned
+status: in-progress
 owner: user
 phase: 5
 related:
@@ -196,10 +196,11 @@ char_attack_right  32x48   6프레임     무기를 휘두르는 범위까지 �
 ## 계단
 
 ```
-1.  플레이어 idle 과 run         속도로 가르는 규칙을 여기서 만든다
-2-A 플레이어 attack 동작          간격에 맞춘 재생 속도와 피벗. 판정은 아직 그대로다
-2-B 판정을 frame 2 로            애니메이션 이벤트와 '시작할 때 묶기'
-3.  적 여섯의 idle 과 run        1에서 만든 것을 그대로 쓴다
+1.  플레이어 idle 과 run         완료
+2-A 플레이어 attack 동작          완료
+2-B 판정을 frame 2 로            완료
+3-A 공통 Controller 와 적 하나    완료
+3-B 나머지 넷                    완료
 4.  공격 동작이 따로 있는 적       Bomberplant 하나다. 나머지는 run_attack 으로 합쳐져 있다
 5.  보스                        idle 과 run 만. 패턴별 동작은 경계 밖이다
 ```
@@ -226,6 +227,27 @@ char_attack_right  32x48   6프레임     무기를 휘두르는 범위까지 �
 
 **STATUS 에 적어 둔 계획이 그대로 간다.** '공격 애니메이션이 붙으면 애니메이션 이벤트로
 칼이 지나가는 프레임에 맞춘다' 는 줄이 4-D 메모에 있고, 2-B 가 그것이다.
+
+**계단 3을 3-A 와 3-B 로 쪼갰다.** 적이 다섯이라 한 번에 하면 틀렸을 때 어디가 문제인지 가려진다.
+3-A 에서 `Pinkbat.controller` 하나로 구조를 굳히고, 3-B 에서 그것을 복제해 클립만 갈아 끼웠다.
+
+**`Animator Override Controller` 를 검토했다가 버렸다.** 전환 구조를 공유해 한 번만 고치자는 것이었는데,
+Override 는 **상태를 추가할 수 없어** 계단 4에서 Bomberplant 에 공격 상태를 붙일 때 막힌다.
+전환이 둘뿐이고 한 번 만들면 고칠 일이 없어 공유할 이득도 작았다. 복제가 더 단순하다.
+
+**Animator 를 건드리는 코드를 `CharacterAnimator` 한 파일로 모았다.** 처음에는 공격을 `PlayerAttack` 이
+직접 넣었는데, 같은 Animator 를 두 파일이 건드리고 파라미터 해시가 흩어졌다.
+Bomberplant 가 계단 4에서 `PlayAttack` 을 쓰므로 '적 대부분이 안 쓴다' 는 이유도 서지 않았다.
+
+**애니메이션 이벤트 이름이 접근 제한자에 기대고 있었다.** `PlayerAttack` 쪽 핸들러 이름이
+`OnAttackFrame` 으로 같아서 `private` 이라 안 불린다고 보고 넘어갔다. 에디터의 Duplicated Functions
+목록에 `private` 메서드가 올라오는 것을 보고 `FirePendingAttack` 으로 바꿨다.
+**Unity 는 접근 제한자와 무관하게 이름을 센다.**
+
+**방을 줄인 것이 스폰 겹침을 깨웠다.** `_minSpawnDistance` 가 `6` 으로 남아 출현 지점이 한 번에
+여럿 걸러졌고, 바닥 180칸 중 16칸에서 4마리 웨이브가 같은 자리에 겹쳤다. `5` 로 내려 풀었다.
+애니메이션과 무관한 일인데 이 계단에서 드러났다. **방 크기에 묶인 상수를 찾은 두 번째 사례다**
+(첫째는 `ObstaclePlacer` 의 구역 수).
 
 **팩에 들어 있지만 쓰지 않는 것들.** `climbing`, `pushing`, `falling`, `shielded`,
 그리고 `hit` 과 `death` 다. 이 게임에 그런 동작이 없다.
