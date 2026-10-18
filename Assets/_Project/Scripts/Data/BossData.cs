@@ -61,7 +61,7 @@ namespace JM2D.Data
         public PatternSteps Steps = new PatternSteps();
 
         [Tooltip("플레이어가 이 거리 밖이어야 이 패턴을 쓴다. 최대는 두지 않는다")]
-        public float MinRange = 6f;
+        public float MinRange = 4f;
 
         [Tooltip("한 번에 나가는 탄 수")]
         [Min(1)]
