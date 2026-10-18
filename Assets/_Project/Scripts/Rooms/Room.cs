@@ -3,11 +3,12 @@ using JM2D.Logic.Rooms;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace JM2D.Rooms
 {
-    /// 방 하나. 네 변의 문을 열고 닫고, 방 종류에 따라 바닥 색을 바꾸고, 방의 카메라를 켜고 끈다.
+    /// 방 하나. 네 변의 문을 열고 닫고, 방 종류에 따라 바닥 색과 카메라 크기를 정하고, 방의 카메라를 켜고 끈다.
     /// 제 칸과 전투 상태를 알고, 어느 변이 옆방과 이어졌는지 기억한다.
     /// 문 오브젝트가 켜져 있으면 닫힌 문이고 벽처럼 길을 막는다.
     ///
@@ -36,6 +37,10 @@ namespace JM2D.Rooms
         [Tooltip("카메라가 비출 수 있는 범위. 모양만 읽히도록 꺼 둔다. 켜면 투사체가 닿아 사라진다.")]
         [SerializeField] private BoxCollider2D _cameraBounds;
 
+        [Tooltip("보스 방에서 전투가 시작될 때 시야가 방 전체로 넓어지는 데 걸리는 시간")]
+        [Min(0.01f)]
+        [SerializeField] private float _bossZoomTime = 0.5f;
+
         [Header("적 출현 지점")]
         [Tooltip("방 안에 흩어 둔다. 플레이어와 가까운 지점은 건너뛴다")]
         [SerializeField] private Transform[] _spawnPoints;
@@ -43,6 +48,9 @@ namespace JM2D.Rooms
         private RoomType _type;
         private RoomCell _cell;
         private RoomState _state;
+
+        /// 평소 시야. 보스 방을 깨면 여기로 돌아온다. 인스펙터 값이라 코드가 숫자를 들고 있지 않는다.
+        private float _normalCameraSize;
 
         /// 옆방과 이어진 변. DoorSide 의 순서(북, 동, 남, 서)로 들어 있다.
         private readonly bool[] _isConnected = new bool[4];
@@ -65,6 +73,8 @@ namespace JM2D.Rooms
         {
             // 카메라 경계를 벽 범위에 맞춘다. 방 크기를 두 곳에 적지 않기 위해서다.
             _cameraBounds.size = Size;
+
+            _normalCameraSize = _camera.Lens.OrthographicSize;
         }
 
         /// 방을 놓은 직후 한 번 부른다. 칸, 종류, 처음 상태를 정한다.
@@ -91,6 +101,40 @@ namespace JM2D.Rooms
 
             for (int i = 0; i < _isConnected.Length; i++)
                 SetDoorOpen((DoorSide)i, false);
+
+            // 보스가 태어나는 것과 같은 프레임이다. 둘이 함께 가면 한 연출로 읽힌다.
+            // 세로만 재면 되는 것은 방이 화면보다 가로로 길지 않기 때문이다.
+            // 20 나누기 12 는 1.67 이고 16 대 9 는 1.78 이라 가로가 남는다.
+            // 방을 화면보다 납작하게 만들면 이 줄도 가로를 함께 봐야 한다.
+            if (_type == RoomType.Boss)
+                StartZoom(Size.y / 2f);
+        }
+
+        /// 넓어지던 중에 전투가 끝나면 앞의 것을 멈춘다. 이 클래스의 코루틴은 이것뿐이다.
+        private void StartZoom(float to)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ZoomCamera(to));
+        }
+
+        /// 시야를 to 로 옮긴다. 보스가 화면 밖에서 쏘던 것이 이것으로 풀린다.
+        ///
+        /// Brain 의 블렌드는 카메라가 바뀔 때만 돌아, 같은 카메라의 크기를 바꾸는 것은
+        /// 블렌드 대상이 아니다. 그래서 여기서 직접 보간한다.
+        private IEnumerator ZoomCamera(float to)
+        {
+            float from = _camera.Lens.OrthographicSize;
+            float left = _bossZoomTime;
+
+            while (left > 0f)
+            {
+                left -= Time.deltaTime;
+                _camera.Lens.OrthographicSize = Mathf.Lerp(to, from, Mathf.Clamp01(left / _bossZoomTime));
+
+                yield return null;
+            }
+
+            _camera.Lens.OrthographicSize = to;
         }
 
         /// 마지막 웨이브까지 잡으면 부른다. 이어진 변의 문만 다시 연다.
@@ -100,6 +144,10 @@ namespace JM2D.Rooms
 
             for (int i = 0; i < _isConnected.Length; i++)
                 SetDoorOpen((DoorSide)i, _isConnected[i]);
+
+            // 보스를 잡으면 시야가 평소로 돌아온다. 넓은 채로 두면 클리어 화면까지 어색하다.
+            if (_type == RoomType.Boss)
+                StartZoom(_normalCameraSize);
         }
 
         /// 이 방의 카메라를 켜고 대상을 따라가게 한다.
@@ -114,6 +162,12 @@ namespace JM2D.Rooms
         public void HideCamera()
         {
             _camera.enabled = false;
+        }
+
+        /// 코루틴은 시작한 쪽이 치운다. 넓어지던 중에 씬이 바뀌어도 남지 않는다.
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
 
         /// 연 문은 오브젝트를 끄고, 닫은 문은 켠다.

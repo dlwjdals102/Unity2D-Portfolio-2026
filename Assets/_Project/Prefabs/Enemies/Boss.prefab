@@ -108,6 +108,9 @@ GameObject:
   - component: {fileID: 7856013167835314606}
   - component: {fileID: 475057948498607942}
   - component: {fileID: 9117259419314471735}
+  - component: {fileID: 6982543862488981343}
+  - component: {fileID: 5068006608313338469}
+  - component: {fileID: 8597950785921777618}
   m_Layer: 8
   m_Name: Boss
   m_TagString: Untagged
@@ -365,3 +368,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing
+--- !u!95 &6982543862488981343
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e8cb97d575a8de64f87f0f860dba8072, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5068006608313338469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39af93ed43d6bfb4f8bc3822f7073f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.CharacterAnimator
+--- !u!114 &8597950785921777618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d31f93ba44ccc124889f1c9629bb6f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpawnScale
+  _growTime: 0.4
+  _disableWhileGrowing: {fileID: -6773631172498660906}
