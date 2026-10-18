@@ -18,14 +18,32 @@ namespace JM2D.Player
 
         private Weapon _current;
         private SpriteFacing _facing;
+        private CharacterAnimator _characterAnimator;
         private float _fireCooldownLeft;
 
+        /// 공격을 시작할 때 묶어 둔다. 판정이 칼 나가는 프레임까지 밀리므로,
+        /// 그 사이에 무기를 바꾸거나 마우스를 돌려도 시작할 때의 것으로 나간다.
+        private Weapon _pendingWeapon;
+        private Vector2 _pendingDirection;
+        private int _pendingDamage;
+
         private bool CanFire => _fireCooldownLeft <= 0f && !_motor.IsDashing;
+
+        /// 구독이 OnEnable 에 있어 참조를 Awake 에서 잡는다. OnEnable 은 Start 보다 먼저 돈다.
+        private void Awake()
+        {
+            _facing = GetComponent<SpriteFacing>();
+            _characterAnimator = GetComponent<CharacterAnimator>();
+        }
+
+        private void OnEnable()
+        {
+            _characterAnimator.AttackFrameReached += FirePendingAttack;
+        }
 
         /// PlayerStats 가 Awake 에서 스탯을 만든 뒤라야 모디파이어를 붙일 수 있어 Start 에서 든다.
         private void Start()
         {
-            _facing = GetComponent<SpriteFacing>();
             Equip(0);
         }
 
@@ -42,9 +60,27 @@ namespace JM2D.Player
 
             if (_input.FireHeld && CanFire)
             {
-                _current.Attack(transform.position, _input.AimDirection, _stats.AttackDamage.IntValue);
+                _pendingWeapon = _current;
+                _pendingDirection = _input.AimDirection;
+                _pendingDamage = _stats.AttackDamage.IntValue;
+
                 _fireCooldownLeft = 1f / _stats.AttackSpeed.Value;
+
+                // 간격을 계산할 때와 같은 값을 넘긴다. 둘이 다른 곳에서 오면 아이템이 붙을 때 갈라진다.
+                _characterAnimator.PlayAttack(_stats.AttackSpeed.Value);
             }
+        }
+
+        private void OnDisable()
+        {
+            _characterAnimator.AttackFrameReached -= FirePendingAttack;
+        }
+
+        /// 칼이 뻗는 프레임에 불린다. 판정과 범위 표시가 여기서 함께 일어난다.
+        /// 위치만 지금 것을 쓴다. 휘두르는 동안 걸어갔으면 그림도 거기 있다.
+        private void FirePendingAttack()
+        {
+            _pendingWeapon.Attack(transform.position, _pendingDirection, _pendingDamage);
         }
 
         /// 쏘는 동안에는 조준한 쪽, 아니면 가는 쪽을 본다.

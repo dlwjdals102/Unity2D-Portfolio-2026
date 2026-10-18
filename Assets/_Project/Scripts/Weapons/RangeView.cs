@@ -3,7 +3,10 @@
 namespace JM2D.Weapons
 {
     /// 근접 무기가 공격한 범위를 잠깐 보인다. 판정에는 관여하지 않는다.
-    /// 1x1 네모 스프라이트를 크기와 회전만 바꿔 쓴다. 공격 애니메이션이 붙는 Phase 5 에 다시 본다.
+    /// 1x1 네모 스프라이트를 크기와 회전만 바꿔 쓴다.
+    ///
+    /// 공격 애니메이션이 붙을 때 다시 봤고 고칠 것이 없었다.
+    /// MeleeWeapon.Attack 안에서 판정과 나란히 불려, 판정이 칼 뻗는 프레임으로 밀릴 때 함께 밀렸다.
     [RequireComponent(typeof(SpriteRenderer))]
     public class RangeView : MonoBehaviour
     {
