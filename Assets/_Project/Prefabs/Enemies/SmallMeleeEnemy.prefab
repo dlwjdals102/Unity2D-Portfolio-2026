@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 48189804677490617}
   - component: {fileID: 475057948498607942}
   - component: {fileID: -2614568905519544626}
+  - component: {fileID: -3580117805343790747}
+  - component: {fileID: -8836543324368118980}
   m_Layer: 8
   m_Name: SmallMeleeEnemy
   m_TagString: Untagged
@@ -273,3 +275,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing
+--- !u!95 &-3580117805343790747
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6b72345f11d42dc47affde9a90a8c753, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8836543324368118980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39af93ed43d6bfb4f8bc3822f7073f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.CharacterAnimator
