@@ -27,7 +27,7 @@ namespace JM2D.Rooms
 
         [Tooltip("플레이어에게서 이보다 가까운 출현 지점은 건너뛴다")]
         [Min(0f)]
-        [SerializeField] private float _minSpawnDistance = 6f;
+        [SerializeField] private float _minSpawnDistance = 5f;
 
         [Tooltip("전투 방은 이 중에서 시드로 하나 고른다")]
         [SerializeField] private EncounterData[] _encounters;
