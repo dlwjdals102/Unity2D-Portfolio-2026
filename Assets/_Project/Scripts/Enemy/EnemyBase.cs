@@ -29,6 +29,7 @@ namespace JM2D.Enemy
         private Health _health;
         private HitReaction _reaction;
         private SpriteFacing _facing;
+        private CharacterAnimator _characterAnimator;
 
         private Phase _phase = Phase.Idle;
 
@@ -69,6 +70,9 @@ namespace JM2D.Enemy
         /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
         protected Health Health => _health;
 
+        /// 자식이 공격 동작을 돌리거나 그 프레임을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
+        protected CharacterAnimator CharacterAnimator => _characterAnimator;
+
         /// 자식이 Awake 를 쓰려면 override 하고 base.Awake() 를 먼저 부른다.
         protected virtual void Awake()
         {
@@ -76,6 +80,7 @@ namespace JM2D.Enemy
             _health = GetComponent<Health>();
             _reaction = GetComponent<HitReaction>();
             _facing = GetComponent<SpriteFacing>();
+            _characterAnimator = GetComponent<CharacterAnimator>();
 
             _health.InitializeMaxHealth(Data.MaxHealth);
 
