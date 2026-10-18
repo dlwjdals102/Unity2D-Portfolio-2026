@@ -1155,8 +1155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcffa5156d177c4fa9383125a95f8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.LevelBuilder
-  _useFixedSeed: 0
-  _fixedSeed: 17
+  _useFixedSeed: 1
+  _fixedSeed: 50
   _currentSeed: 0
   _roomPrefab: {fileID: 2335482721221929077, guid: 8fc4927b357d2ae4fabb07ede4826db3, type: 3}
   _debugRoomCount: 3
@@ -1201,7 +1201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Rooms.RoomCombat
   _extraMargin: 1.5
-  _minSpawnDistance: 6
+  _minSpawnDistance: 5
   _encounters:
   - {fileID: 11400000, guid: f17774fd2d5043efae38797713cc4325, type: 2}
   - {fileID: 11400000, guid: 52047da3c19749048ed360003a00239e, type: 2}
@@ -1628,6 +1628,8 @@ GameObject:
   - component: {fileID: 1268753877}
   - component: {fileID: 1268753878}
   - component: {fileID: 1268753879}
+  - component: {fileID: 1268753880}
+  - component: {fileID: 1268753881}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1973,6 +1975,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing
+--- !u!95 &1268753880
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d06e51fb6cbb5004aa72708cd21e4a06, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1268753881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268753865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39af93ed43d6bfb4f8bc3822f7073f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.MotionAnimator
 --- !u!1 &1283961777
 GameObject:
   m_ObjectHideFlags: 0
