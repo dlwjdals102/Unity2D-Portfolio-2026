@@ -1,11 +1,12 @@
 ---
 name: 이동 애니메이션과 무기 휘두르기
-status: in-progress
+status: done
 owner: user
 phase: 5
 related:
   - docs/specs/cc0-assets.md
   - docs/decisions/polish-scope.md
+  - docs/decisions/attack-hits-on-animation-frame.md
 ---
 
 # 이동 애니메이션과 무기 휘두르기
@@ -187,11 +188,11 @@ char_attack_right  32x48   6프레임     무기를 휘두르는 범위까지 �
 
 ## 완료 조건
 
-- [ ] 동작 정의를 전부 만족
-- [ ] 플레이모드 체크리스트 통과
-- [ ] `Animator.StringToHash` 로 파라미터 이름을 캐싱했다 (`unity-csharp.md`)
-- [ ] 공격 판정 시점이 바뀐 것을 `docs/decisions/` 에 적었다 (전투 체감이 바뀌는 변경이다)
-- [ ] 면접 문답을 `docs/interview/animation.md` 에 쓴다 (CLAUDE.md 9번)
+- [x] 동작 정의를 전부 만족
+- [x] 플레이모드 체크리스트 통과
+- [x] `Animator.StringToHash` 로 파라미터 이름을 캐싱했다 (`unity-csharp.md`)
+- [x] 공격 판정 시점이 바뀐 것을 [결정 문서](../decisions/attack-hits-on-animation-frame.md)에 적었다
+- [x] 면접 문답을 `docs/interview/animation.md` 에 썼다 (8문항)
 
 ## 계단
 
@@ -201,8 +202,8 @@ char_attack_right  32x48   6프레임     무기를 휘두르는 범위까지 �
 2-B 판정을 frame 2 로            완료
 3-A 공통 Controller 와 적 하나    완료
 3-B 나머지 넷                    완료
-4.  공격 동작이 따로 있는 적       Bomberplant 하나다. 나머지는 run_attack 으로 합쳐져 있다
-5.  보스                        idle 과 run 만. 패턴별 동작은 경계 밖이다
+4.  Bomberplant 공격 동작        완료
+5.  보스와 등장 연출              완료
 ```
 
 1을 먼저 하는 이유는 **속도로 상태를 가르는 규칙이 여기서 정해지고 나머지가 그것을 쓰기 때문**이다.
@@ -248,6 +249,22 @@ Bomberplant 가 계단 4에서 `PlayAttack` 을 쓰므로 '적 대부분이 안 
 여럿 걸러졌고, 바닥 180칸 중 16칸에서 4마리 웨이브가 같은 자리에 겹쳤다. `5` 로 내려 풀었다.
 애니메이션과 무관한 일인데 이 계단에서 드러났다. **방 크기에 묶인 상수를 찾은 두 번째 사례다**
 (첫째는 `ObstaclePlacer` 의 구역 수).
+
+**보스 등장 연출을 뺐다가 되돌렸다.** 경계에서 '파티클, 사운드, 화면 흔들림' 과 함께 뺐던 것인데,
+보스 방만 시야를 넓히면서 **그 전환이 툭 튀어** 다시 필요해졌다. 내가 만든 어색함이었다.
+비용은 `SpawnScale` 30줄과 `Room` 의 코루틴 하나였고 전투 로직은 그대로다.
+
+**카메라 줌의 자리를 두 번 옮겼다.** 처음에는 `Room.Setup` 에서 보스 방 카메라 크기를 못 박았는데,
+그러면 방에 들어서는 순간 이미 넓어 연출이 되지 않았다. `BeginCombat` 으로 옮기니 바로 다음 줄에서
+`RoomCombat` 이 보스를 만들어 둘이 같은 프레임에 간다.
+
+**Brain 의 블렌드에 맡기려다 틀렸다.** 카메라 전환에는 블렌드가 돌지만 **같은 카메라의 렌즈는
+블렌드 대상이 아니다.** `Room` 이 코루틴으로 직접 보간한다.
+
+**등장 중에 멈추는 것은 `Behaviour` 를 꺼서 했다.** 타입을 `Boss` 로 받으면 `View` 에 있는 컴포넌트가
+적을 알게 된다. 부작용으로 `EnemyBase.OnEnable` 이 0.4초 늦게 불려 `OnDied` 구독이 밀리는데,
+그동안 `localScale` 이 작아 콜라이더도 작아 죽을 수 없다.
+**연출 때문에 전투 로직의 타이밍이 밀린 것**이라 적어 둔다.
 
 **팩에 들어 있지만 쓰지 않는 것들.** `climbing`, `pushing`, `falling`, `shielded`,
 그리고 `hit` 과 `death` 다. 이 게임에 그런 동작이 없다.
