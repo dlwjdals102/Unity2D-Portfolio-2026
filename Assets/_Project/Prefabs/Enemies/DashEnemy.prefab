@@ -108,6 +108,9 @@ GameObject:
   - component: {fileID: -5887967950355498934}
   - component: {fileID: 475057948498607942}
   - component: {fileID: -3263937068716304926}
+  - component: {fileID: 9043355977530329114}
+  - component: {fileID: 6097596138332936850}
+  - component: {fileID: 3869025042379983359}
   m_Layer: 8
   m_Name: DashEnemy
   m_TagString: Untagged
@@ -365,3 +368,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae344e1336b77754aa2872aec6b4a7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.SpriteFacing
+--- !u!95 &9043355977530329114
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1f0e26ecf7c22e9438bf13ba3f6f2b25, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6097596138332936850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39af93ed43d6bfb4f8bc3822f7073f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.CharacterAnimator
+--- !u!114 &3869025042379983359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5701730272740260398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39af93ed43d6bfb4f8bc3822f7073f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.View.CharacterAnimator
