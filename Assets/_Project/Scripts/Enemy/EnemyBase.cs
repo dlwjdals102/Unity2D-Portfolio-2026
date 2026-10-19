@@ -46,8 +46,8 @@ namespace JM2D.Enemy
         /// 길 안내. 없으면 플레이어 쪽으로 곧장 간다.
         private IPathField _pathField;
 
-        /// 씬의 히트스톱. 여기서 쓰지는 않고, 받아서 반응에 넘기고 갈라진 적에게 물려준다.
-        private HitStop _hitStop;
+        /// 씬의 타격 피드백. 여기서 쓰지는 않고, 받아서 반응에 넘기고 갈라진 적에게 물려준다.
+        private HitFeedback _hitFeedback;
 
         /// 지금 향하고 있는 자리. 닿을 때까지 바꾸지 않는다.
         private Vector2 _waypoint;
@@ -65,7 +65,7 @@ namespace JM2D.Enemy
         /// 갈라지는 부품이 작은 적에게 대상을 물려줄 때 읽는다.
         public Transform Target => _target;
         public IPathField PathField => _pathField;
-        public HitStop HitStop => _hitStop;
+        public HitFeedback HitFeedback => _hitFeedback;
 
         /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
         protected Health Health => _health;
@@ -145,12 +145,12 @@ namespace JM2D.Enemy
             _pathField = field;
         }
 
-        /// 판 도중에 태어난 적에게 씬의 히트스톱을 넣는다.
+        /// 판 도중에 태어난 적에게 씬의 타격 피드백을 넣는다.
         /// 보관하는 이유는 갈라진 적과 소환물에게 그대로 물려주기 때문이다.
-        public void SetHitStop(HitStop hitStop)
+        public void SetHitFeedback(HitFeedback hitFeedback)
         {
-            _hitStop = hitStop;
-            _reaction.SetHitStop(hitStop);
+            _hitFeedback = hitFeedback;
+            _reaction.SetHitFeedback(hitFeedback);
         }
 
         /// 교전이 시작될 때 한 번 불린다.

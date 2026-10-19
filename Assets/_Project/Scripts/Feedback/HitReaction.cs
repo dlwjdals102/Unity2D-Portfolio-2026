@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 using JM2D.Combat;
 
 namespace JM2D.Feedback
@@ -20,7 +21,9 @@ namespace JM2D.Feedback
         [SerializeField] private Color _flashColor = Color.white;
         [SerializeField] private float _flashTime = 0.1f;
 
-        [SerializeField] private HitStop _hitStop;
+        /// 이름을 바꾸기 전에 씬이 _hitStop 으로 저장해 두었다. 떼면 참조가 조용히 비어진다.
+        [FormerlySerializedAs("_hitStop")]
+        [SerializeField] private HitFeedback _hitFeedback;
 
         private Health _health;
         private CinemachineImpulseSource _impulse;
@@ -63,18 +66,18 @@ namespace JM2D.Feedback
 
         private void OnDamaged()
         {
-            _hitStop.Stop(_hitStopTime);
+            _hitFeedback.Hit(_hitStopTime);
             _impulse.GenerateImpulseWithForce(_shakeForce);
 
             _flashLeft = _flashTime;
             _renderer.color = _flashColor;
         }
 
-        /// 판 도중에 태어나는 적은 프리팹이 씬의 HitStop 을 가리킬 수 없다. 만드는 쪽이 넣어 준다.
+        /// 판 도중에 태어나는 적은 프리팹이 씬의 HitFeedback 을 가리킬 수 없다. 만드는 쪽이 넣어 준다.
         /// 적은 EnemyBase 가 받아서 넘겨 주고, 플레이어는 씬에 있어 인스펙터로 잇는다.
-        public void SetHitStop(HitStop hitStop)
+        public void SetHitFeedback(HitFeedback hitFeedback)
         {
-            _hitStop = hitStop;
+            _hitFeedback = hitFeedback;
         }
     }
 }

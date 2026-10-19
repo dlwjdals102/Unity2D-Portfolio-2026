@@ -48,7 +48,7 @@ namespace JM2D.Enemy
                 EnemyBase child = Instantiate(_childPrefab, position, Quaternion.identity);
                 child.SetTarget(_self.Target);
                 child.SetPathField(_self.PathField);
-                child.SetHitStop(_self.HitStop);
+                child.SetHitFeedback(_self.HitFeedback);
             }
         }
     }

@@ -37,6 +37,9 @@
 | 폰트 | Pretendard v1.3.9 (길형진) | [github.com/orioncactus/pretendard](https://github.com/orioncactus/pretendard) | SIL Open Font License 1.1 |
 | 스프라이트 | TOP-DOWN Adventure Pack v1.0 (o_lobster) | [o-lobster.itch.io/adventure-pack](https://o-lobster.itch.io/adventure-pack) | CC BY 4.0 |
 | 스프라이트 | Ninja Adventure Asset Pack (pixel-boy) 중 예고 표식 1점 | [pixel-boy.itch.io/ninja-adventure-asset-pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack) | CC0 1.0 |
+| 효과음 | Impact Sounds (Kenney) 중 `footstep_carpet_000.ogg` 1점 | [kenney.nl/assets/impact-sounds](https://kenney.nl/assets/impact-sounds) | CC0 1.0 |
+| 효과음 | RPG Audio (Kenney) 중 `drawKnife1.ogg` 1점 | [kenney.nl/assets/rpg-audio](https://kenney.nl/assets/rpg-audio) | CC0 1.0 |
+| 음악 | Chiptune Adventure Music Pack (PPEAK / Preston Peak) 중 `secret base` 1곡 | [ppeak.itch.io/chip-free](https://ppeak.itch.io/chip-free) | CC BY 4.0 |
 
 **스프라이트와 사운드는 Phase 5 에서 들여온다.** GDD 아트 방침이 도형 프로토타입을
 기본값으로 두고 Phase 5 에서 CC0 에셋을 입히는 것으로 정해 두었다. 방침을 바꾸는 것이 아니라
