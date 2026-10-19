@@ -1,6 +1,6 @@
 ---
 name: CC0 에셋 도입과 받을 자리 만들기
-status: in-progress
+status: done
 owner: user
 phase: 5
 related: [../decisions/polish-scope.md, hit-feedback.md, ../progress/ROADMAP.md]
@@ -250,12 +250,12 @@ Assets/ThirdParty/
 
 ## 완료 조건
 
-- [ ] 동작 정의를 전부 만족
-- [ ] 플레이모드 체크리스트 통과
-- [ ] 받은 에셋이 전부 `Assets/ThirdParty/` 아래에 있다
-- [ ] **적 프리팹의 임시 색을 흰색으로 돌렸다.** 안 돌리면 스프라이트에 색이 곱해진다
-- [ ] **루트 README 출처 표에 적었다.** 누락은 직접 만든 척하는 인상을 준다 (CLAUDE.md 7번)
-- [ ] 면접 문답을 `docs/interview/cc0-assets.md` 에 쓴다 (CLAUDE.md 9번)
+- [x] 동작 정의를 전부 만족
+- [x] 플레이모드 체크리스트 통과
+- [x] 받은 에셋이 전부 `Assets/ThirdParty/` 아래에 있다
+- [x] **적 프리팹의 임시 색을 흰색으로 돌렸다.** 여섯 전부 `(1,1,1,1)` 인 것을 파일에서 확인했다
+- [x] **루트 README 출처 표에 적었다.** 스프라이트 둘과 폰트 하나다
+- [x] 면접 문답을 `docs/interview/cc0-assets.md` 에 썼다 (8문항)
 
 ## 계단
 
