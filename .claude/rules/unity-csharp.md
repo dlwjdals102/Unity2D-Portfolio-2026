@@ -4,10 +4,10 @@
 
 - `Update()` 안에서 `GetComponent`, `Find`, `Camera.main` 호출
   → `Awake`에서 캐싱
-- `GameObject.Find` / `FindObjectOfType` 상시 사용
-  → `[SerializeField]` 인스펙터 참조 우선, 초기화 1회만 예외 허용
-- **`FindObjectOfType` / `FindObjectsOfType` 자체가 Unity 6에서 폐기됨**
-  → 꼭 써야 하면 `FindFirstObjectByType` / `FindAnyObjectByType`을 쓴다.
+- `GameObject.Find` 로 씬을 훑어 찾기
+  → `[SerializeField]` 인스펙터 참조 우선, 초기화 1회만 예외 허용.
+    **`FindObjectOfType` / `FindObjectsOfType` 은 Unity 6 에서 폐기됐다.**
+    꼭 훑어야 하면 `FindFirstObjectByType` / `FindAnyObjectByType` 을 쓴다.
 - `public` 필드로 인스펙터 노출 → `[SerializeField] private` 사용
 - 매 프레임 `Instantiate` / `Destroy` → 오브젝트 풀링
 - 문자열 기반 API: `SendMessage`, `Invoke("이름")`, `Animator.Play("이름")`
