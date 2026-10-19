@@ -299,7 +299,7 @@ namespace JM2D.Enemy
                 child.SetPathField(PathField);
 
                 // 소환물도 맞으면 멈춰야 한다. 내가 받은 것을 그대로 넘긴다.
-                child.SetHitStop(HitStop);
+                child.SetHitFeedback(HitFeedback);
 
                 _summoned.Add(child.GetComponent<Health>());
             }
