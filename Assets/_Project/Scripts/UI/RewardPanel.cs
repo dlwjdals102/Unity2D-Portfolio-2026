@@ -4,6 +4,7 @@ using System.Text;
 using JM2D.Data;
 using JM2D.Logic.Bag;
 using JM2D.Logic.Stats;
+using JM2D.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,13 +21,19 @@ namespace JM2D.UI
         /// 하나를 골랐을 때 알린다.
         public event Action<ItemData> OnPicked;
 
+        /// 아무것도 고르지 않고 닫았다. 듣는 쪽은 아이템을 넣지 않고 시간만 되돌린다.
+        public event Action OnSkipped;
+
         [Header("구성")]
         [SerializeField] private GameObject _root;
 
         [Tooltip("카드 셋이 이 아래에 만들어진다")]
         [SerializeField] private RectTransform _cardRoot;
 
-        [Tooltip("제목. 글꼴도 여기서 빌린다. TMP 기본 글꼴에는 한글이 없다")]
+        [Tooltip("떠 있는 동안 공격 입력을 막는다. 카드를 누른 클릭이 공격으로 나가지 않게")]
+        [SerializeField] private PlayerInputReader _playerInput;
+
+        [Tooltip("제목. 글꼴도 여기서 빌린다. TMP 기본 글꼴에는 한글이 없다. 손에 든 것이 있으면 아래에 한 줄이 붙는다")]
         [SerializeField] private TMP_Text _title;
 
         [Header("카드 모양")]
@@ -41,9 +48,11 @@ namespace JM2D.UI
         [Tooltip("제목을 화면 위에서 얼마나 내려 놓을지")]
         [SerializeField] private float _titleOffset = 80f;
 
+#if UNITY_EDITOR
         [Header("확인용")]
-        [Tooltip("인스펙터 우클릭 메뉴로 띄워 볼 때 쓰는 아이템들")]
+        [Tooltip("인스펙터 우클릭 메뉴로 띄워 볼 때 쓰는 아이템들. 에디터에만 있다")]
         [SerializeField] private ItemData[] _debugCandidates;
+#endif
 
         /// 카드 안쪽 여백.
         private const float Margin = 12f;
@@ -53,6 +62,9 @@ namespace JM2D.UI
 
         /// 만들어 둔 카드. 다시 띄울 때 지우고 새로 만든다.
         private readonly List<GameObject> _cards = new List<GameObject>();
+
+        /// 씬에 적힌 제목. 손에 든 것이 있을 때 그 아래에 한 줄을 붙이므로 원본을 들고 있는다.
+        private string _baseTitle;
 
         public bool IsOpen => _root.activeSelf;
 
@@ -66,7 +78,11 @@ namespace JM2D.UI
             Stretch((RectTransform)_root.transform);
             Center(_cardRoot);
 
-            if (_title != null) TopCenter((RectTransform)_title.transform, _titleOffset, 400f, 60f);
+            if (_title != null)
+            {
+                _baseTitle = _title.text;
+                TopCenter((RectTransform)_title.transform, _titleOffset, 400f, 60f);
+            }
 
             _root.SetActive(false);
         }
@@ -79,22 +95,32 @@ namespace JM2D.UI
             if (Keyboard.current.digit1Key.wasPressedThisFrame) Pick(0);
             else if (Keyboard.current.digit2Key.wasPressedThisFrame) Pick(1);
             else if (Keyboard.current.digit3Key.wasPressedThisFrame) Pick(2);
+            else if (Keyboard.current.escapeKey.wasPressedThisFrame) Skip();
         }
 
         /// 후보를 받아 창을 띄운다. 셋이 아니어도 받은 수만큼 만든다.
-        public void Show(IReadOnlyList<ItemData> candidates)
+        /// heldItemName 은 지금 손에 든 것의 이름이고, 없으면 null 이다.
+        /// 창이 가방을 참조하지 않도록 띄우는 쪽이 넘겨 준다.
+        public void Show(IReadOnlyList<ItemData> candidates, string heldItemName)
         {
             _candidates.Clear();
             _candidates.AddRange(candidates);
 
+            WriteTitle(heldItemName);
             Build();
 
             _root.SetActive(true);
+
+            // 창이 스스로 막는다. 가방이 자기가 열고 닫으며 막는 것과 같은 모양이다.
+            // 띄우는 쪽에 두면 확인용 메뉴로 띄울 때 막히지 않아 카드 클릭이 공격으로 나간다.
+            _playerInput.SetFireBlocked(true);
         }
 
         public void Hide()
         {
             _root.SetActive(false);
+
+            _playerInput.SetFireBlocked(false);
         }
 
         /// 창을 먼저 닫고 알린다. 듣는 쪽이 이 자리에서 다시 띄워도 엉키지 않는다.
@@ -107,6 +133,29 @@ namespace JM2D.UI
             Hide();
 
             OnPicked?.Invoke(picked);
+        }
+
+        /// 제목 아래에 안내를 한 줄 붙인다. 넘길 수 있다는 것은 늘 적고,
+        /// 손에 든 것이 있으면 그것이 사라진다는 것까지 함께 적는다.
+        /// 고르는 순간 덮어쓰는 것이 규칙이고, 창은 그 사실을 미리 알리는 데까지만 한다.
+        /// 제목 칸의 넘침 설정이 Overflow 라 두 줄이 되어도 잘리지 않는다.
+        private void WriteTitle(string heldItemName)
+        {
+            if (_title == null) return;
+
+            string hint = string.IsNullOrEmpty(heldItemName)
+                ? "Esc 를 누르면 넘깁니다"
+                : $"손에 든 {heldItemName} 은 사라집니다. Esc 로 넘기면 지킬 수 있습니다";
+
+            _title.text = $"{_baseTitle}\n{hint}";
+        }
+
+        /// 고르기와 같은 순서다. 창을 먼저 닫고 알린다.
+        private void Skip()
+        {
+            Hide();
+
+            OnSkipped?.Invoke();
         }
 
         private void Build()
@@ -271,11 +320,15 @@ namespace JM2D.UI
             }
         }
 
+#if UNITY_EDITOR
         /// 플레이 중에 컴포넌트를 우클릭해 부른다. 방을 깨지 않고 창을 확인한다.
+        /// 빌드에는 들어가지 않는다. 휠 팔레트와 달리 플레이 중 입력을 먹지 않아 남겼다.
         [ContextMenu("확인용으로 띄우기")]
         private void ShowDebugCandidates()
         {
-            Show(_debugCandidates);
+            // 손에 든 것은 넘기지 않는다. 경고 줄까지 보려면 실제로 방을 깨야 한다.
+            Show(_debugCandidates, null);
         }
+#endif
     }
 }

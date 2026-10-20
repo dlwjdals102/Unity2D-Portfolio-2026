@@ -8,6 +8,9 @@ namespace JM2D.Player
         [SerializeField] private Camera _camera;
         private PlayerControls _controls;
 
+        /// 가방이나 보상 창이 열려 있는가. 열린 쪽이 켜고 끈다.
+        private bool _isFireBlocked;
+
         /// 플레이어에서 마우스를 향하는 방향. 크기는 1.
         public Vector2 AimDirection { get; private set; }
         /// 이번 프레임의 이동 입력. 크기는 0~1.
@@ -49,9 +52,15 @@ namespace JM2D.Player
             Vector3 worldPos = _camera.ScreenToWorldPoint(screenPos);
             AimDirection = ((Vector2)worldPos - (Vector2)transform.position).normalized;
 
-            FireHeld = _controls.Player.Fire.IsPressed();
+            // 창이 열려 있으면 누르고 있어도 눌리지 않은 것으로 읽는다.
+            // 창을 보려고 누른 클릭이 공격으로 나가지 않게 하는 자리다.
+            FireHeld = !_isFireBlocked && _controls.Player.Fire.IsPressed();
             WeaponSlotPressed = ReadWeaponSlot();
         }
+
+        /// 창을 여는 쪽이 공격 입력을 막는다. 가방과 보상 창 둘이 쓴다.
+        /// 둘이 동시에 열리지 않아 참거짓 하나로 두었다. 세 번째가 생기면 겹침을 세야 한다.
+        public void SetFireBlocked(bool blocked) { _isFireBlocked = blocked; }
 
         private void OnDashPerformed(InputAction.CallbackContext ctx) { DashRequested = true; }
         /// PlayerMotor가 대시 요청을 가져갔다고 알린다.

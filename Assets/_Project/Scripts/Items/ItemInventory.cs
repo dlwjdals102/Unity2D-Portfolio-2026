@@ -37,7 +37,8 @@ namespace JM2D.Items
             return true;
         }
         
-        /// 보상이나 디버그가 손을 채운다. 이미 들고 있으면 덮어쓴다.
+        /// 방 보상이 손을 채운다. 이미 들고 있으면 덮어쓰고, 그것이 규칙이다.
+        /// 놓지 않은 채 다음 보상을 고르면 든 것을 잃는다. 보상 창이 그 사실을 미리 알린다.
         public void PutInHand(ItemData data)
         {
             _hand = new ItemInstance(data);
