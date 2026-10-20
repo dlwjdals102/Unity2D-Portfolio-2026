@@ -37,6 +37,7 @@ namespace JM2D.Items
         {
             _combat.OnRoomCleared += OnRoomCleared;
             _panel.OnPicked += OnPicked;
+            _panel.OnSkipped += OnSkipped;
         }
 
         // LevelBuilder 가 Awake 에서 시드를 정한다. 그 뒤라야 읽을 수 있어 Start 에서 한다.
@@ -49,6 +50,7 @@ namespace JM2D.Items
         {
             _combat.OnRoomCleared -= OnRoomCleared;
             _panel.OnPicked -= OnPicked;
+            _panel.OnSkipped -= OnSkipped;
         }
 
         /// 전투 방을 깨면 후보를 뽑아 창을 띄운다. 보스 방은 클리어 화면이 뜬다.
@@ -63,7 +65,12 @@ namespace JM2D.Items
             foreach (int index in indices)
                 _candidates.Add(_items[index]);
 
-            _panel.Show(_candidates);
+            // 손에 든 것은 고르는 순간 덮어쓰인다. 창이 알릴 수 있게 이름을 함께 넘긴다.
+            // 창에 가방을 알려 주지 않으려고 여기서 읽는다. 잇는 일이 이 클래스의 몫이다.
+            ItemInstance hand = _inventory.Hand;
+            string heldName = hand == null ? null : hand.Data.DisplayName;
+
+            _panel.Show(_candidates, heldName);
 
             Time.timeScale = 0f;
         }
@@ -72,7 +79,17 @@ namespace JM2D.Items
         private void OnPicked(ItemData data)
         {
             _inventory.PutInHand(data);
+
+            // 창이 닫히며 공격 블록을 스스로 풀고, 가방이 열리며 다시 건다.
             _bag.Open();
+
+            Time.timeScale = 1f;
+        }
+
+        /// 넘기면 손을 건드리지 않고 시간만 되돌린다. 가방도 열지 않는다.
+        /// 들고 있던 것을 지키려고 넘긴 것이므로 놓을지는 플레이어가 Tab 으로 정한다.
+        private void OnSkipped()
+        {
             Time.timeScale = 1f;
         }
     }

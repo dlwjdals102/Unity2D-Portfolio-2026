@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JM2D.Data;
 using JM2D.Items;
 using JM2D.Logic.Bag;
 using JM2D.Player;
@@ -17,7 +16,6 @@ namespace JM2D.UI
     /// 여러 칸을 덮는 아이템을 얹을 때 레이아웃과 싸워야 한다.
     ///
     /// 놓을 수 있는 것은 손에 든 아이템 하나다. 손은 ItemInventory 가 갖고 방 보상이 채운다.
-    /// 휠 팔레트는 디버그 체크를 켰을 때만 도는 확인용이다.
     public class BagView : MonoBehaviour
     {
         [Header("구성")]
@@ -30,7 +28,10 @@ namespace JM2D.UI
         [Tooltip("전투가 시작되면 가방을 닫고 잠근다. 방을 깨면 푼다")]
         [SerializeField] private RoomCombat _roomCombat;
 
-        [Tooltip("배치에 따라 스탯이 어떻게 바뀌는지 보여준다. 디버그용이며 Phase 5 에서 정리한다")]
+        [Tooltip("열려 있는 동안 공격 입력을 막는다. 칸을 누른 클릭이 공격으로 나가지 않게")]
+        [SerializeField] private PlayerInputReader _playerInput;
+
+        [Tooltip("손에 든 것과 배치에 따라 바뀌는 스탯을 적는 자리")]
         [SerializeField] private PlayerStats _stats;
         [SerializeField] private TMP_Text _statText;
 
@@ -49,20 +50,10 @@ namespace JM2D.UI
         [SerializeField] private float _labelFontSize = 16f;
         [SerializeField] private Color _labelColor = Color.black;
 
-        [Header("디버그")]
-        [Tooltip("켜면 휠로 아무 아이템이나 손에 넣는다. 배치를 만들어 볼 때 쓴다")]
-        [SerializeField] private bool _debugPalette;
-
-        [Tooltip("디버그 팔레트의 휠 순서")]
-        [SerializeField] private ItemData[] _palette;
-
         private readonly List<Image> _itemViews = new List<Image>();
 
         private Image _previewView;
         private TMP_Text _previewLabel;
-
-        /// 디버그 팔레트에서 몇 번째를 골랐는가. -1 이면 아직 고르지 않았다.
-        private int _selectedIndex = -1;
 
         /// 전투 중인가. 잠긴 동안에는 Tab 이 아무 일도 하지 않는다.
         private bool _isLocked;
@@ -87,8 +78,6 @@ namespace JM2D.UI
         /// 구독 전에 바뀐 값(무기는 Start 에서 얹힌다)을 놓치지 않게 끝에서 한 번 쓴다.
         private void Start()
         {
-            if (_stats == null) return;
-
             _stats.AttackDamage.OnChanged += UpdateInfoText;
             _stats.MoveSpeed.OnChanged += UpdateInfoText;
             _stats.AttackSpeed.OnChanged += UpdateInfoText;
@@ -114,8 +103,6 @@ namespace JM2D.UI
 
             if (Mouse.current == null) return;
 
-            if (_debugPalette) ReadSelectionWheel();
-
             UpdatePreview();
 
             if (Mouse.current.leftButton.wasPressedThisFrame) TryPlaceAtMouse();
@@ -130,8 +117,6 @@ namespace JM2D.UI
 
         private void OnDestroy()
         {
-            if (_stats == null) return;
-
             _stats.AttackDamage.OnChanged -= UpdateInfoText;
             _stats.MoveSpeed.OnChanged -= UpdateInfoText;
             _stats.AttackSpeed.OnChanged -= UpdateInfoText;
@@ -170,30 +155,13 @@ namespace JM2D.UI
 
             _panel.SetActive(opening);
 
+            // 여는 것과 닫는 것이 둘 다 이 자리를 지나간다. 전투가 시작돼 강제로 닫힐 때도 같다.
+            _playerInput.SetFireBlocked(opening);
+
             if (!opening)
                 _previewView.gameObject.SetActive(false);
 
             // 열 때도 다시 쓴다. 손은 가방 밖(보상)에서 채워져, 열어 보기 전까지 글이 옛것이다.
-            UpdateInfoText();
-        }
-
-        /// 디버그 전용. 휠을 굴리면 팔레트를 한 칸씩 넘겨 그 아이템을 손에 넣는다.
-        /// 들고 있던 것은 덮어쓴다. 끝에 닿으면 반대쪽 끝으로 돌아간다.
-        /// 휠 값의 크기는 기기마다 달라 방향만 본다. 한 프레임에 여러 칸을 굴려도 한 칸이다.
-        private void ReadSelectionWheel()
-        {
-            float scroll = Mouse.current.scroll.ReadValue().y;
-
-            if (scroll == 0f || _palette.Length == 0) return;
-
-            int step = scroll < 0f ? 1 : -1;    // 아래로 굴리면 다음 아이템
-
-            if (_selectedIndex < 0)
-                _selectedIndex = step > 0 ? 0 : _palette.Length - 1;
-            else
-                _selectedIndex = (_selectedIndex + step + _palette.Length) % _palette.Length;
-
-            _inventory.PutInHand(_palette[_selectedIndex]);
             UpdateInfoText();
         }
 
@@ -231,16 +199,8 @@ namespace JM2D.UI
 
             if (!TryGetCellUnderMouse(out int x, out int y)) return;
 
-            // 놓고 나면 손이 비어 이름을 읽을 수 없다. 먼저 담아 둔다.
-            string placed = hand.Data.DisplayName;
-
-            if (!_inventory.TryPlaceHand(x, y))
-            {
-                Debug.Log($"[가방] ({x},{y}) 에는 놓을 수 없다");
-                return;
-            }
-
-            Debug.Log($"[가방] {placed} 을 ({x},{y}) 에 놓았다");
+            // 놓지 못하면 손에 그대로 남는다. 미리보기의 빨강이 이미 알려 주고 있다.
+            if (!_inventory.TryPlaceHand(x, y)) return;
 
             _previewView.gameObject.SetActive(false);
             Redraw();
@@ -256,8 +216,6 @@ namespace JM2D.UI
 
             _inventory.Remove(instance);
             Redraw();
-
-            Debug.Log($"[가방] {instance.Data.DisplayName} 을 뺐다");
         }
 
         /// 마우스가 어느 칸 위에 있는지. 격자 밖이면 false.
@@ -284,11 +242,17 @@ namespace JM2D.UI
         {
             BagGrid grid = _inventory.Grid;
 
-            // 격자의 기준점을 왼쪽 위로 못 박는다.
-            // 인스펙터 설정에 맡기면 피벗이 가운데인 채로 좌표가 어긋난다.
-            _cellRoot.anchorMin = new Vector2(0f, 1f);
-            _cellRoot.anchorMax = new Vector2(0f, 1f);
+            Vector2 size = new Vector2(grid.Width * _cellSize, grid.Height * _cellSize);
+
+            // 격자의 기준점을 왼쪽 위로 못 박는다. 칸 좌표 계산과 마우스로 칸을 찾는 계산이
+            // 둘 다 이 피벗을 전제하므로 인스펙터 설정에 맡기면 오류 없이 자리만 어긋난다.
+            //
+            // 앵커는 부모의 가운데에 두고 격자 절반만큼 되밀어 화면 가운데를 맞춘다.
+            // 피벗만으로는 못 맞춘다. 피벗을 가운데로 옮기면 좌표 계산의 전제가 깨진다.
+            _cellRoot.anchorMin = _cellRoot.anchorMax = new Vector2(0.5f, 0.5f);
             _cellRoot.pivot = new Vector2(0f, 1f);
+            _cellRoot.sizeDelta = size;
+            _cellRoot.anchoredPosition = new Vector2(-size.x / 2f, size.y / 2f);
 
             for (int y = 0; y < grid.Height; y++)
             {
@@ -299,8 +263,6 @@ namespace JM2D.UI
                     PlaceAt(cell.rectTransform, x, y, 1, 1);
                 }
             }
-
-            _cellRoot.sizeDelta = new Vector2(grid.Width * _cellSize, grid.Height * _cellSize);
         }
 
         private void BuildPreview()
@@ -336,8 +298,6 @@ namespace JM2D.UI
         /// 스탯에는 시너지가 반영된 값이 그대로 보인다.
         private void UpdateInfoText()
         {
-            if (_statText == null || _stats == null) return;
-
             ItemInstance hand = _inventory.Hand;
 
             string held = hand == null
