@@ -11,6 +11,12 @@ namespace JM2D.Core
             LoadScene(SceneNames.Gameplay);
         }
 
+        /// 판을 시작하기 전과 끝낸 뒤에 머무는 곳. 타이틀의 시작 버튼이 여기로 보낸다.
+        public void LoadTown()
+        {
+            LoadScene(SceneNames.Town);
+        }
+
         public void LoadTitle()
         {
             LoadScene(SceneNames.Title);
