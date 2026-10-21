@@ -1103,6 +1103,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859195277}
   m_CullTransparentMesh: 1
+--- !u!1 &966334038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 966334039}
+  - component: {fileID: 966334040}
+  m_Layer: 0
+  m_Name: RunRecorder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &966334039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966334038}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1243228701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &966334040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966334038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a134999975dabe449184c2695071f2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JM2D.Runtime::JM2D.Core.RunRecorder
+  _combat: {fileID: 1107003876}
+  _level: {fileID: 1107003873}
+  _playerHealth: {fileID: 1268753873}
+  _playerAttack: {fileID: 1268753872}
 --- !u!1 &1055807494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1263,7 +1311,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 518329595}
         m_TargetAssemblyTypeName: JM2D.Core.SceneLoader, JM2D.Runtime
-        m_MethodName: Restart
+        m_MethodName: LoadTown
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1364,7 +1412,7 @@ MonoBehaviour:
   _fixedSeed: 50
   _currentSeed: 0
   _roomPrefab: {fileID: 2335482721221929077, guid: 8fc4927b357d2ae4fabb07ede4826db3, type: 3}
-  _debugRoomCount: 3
+  _debugRoomCount: 8
 --- !u!114 &1107003874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1691,6 +1739,7 @@ Transform:
   - {fileID: 1144486538}
   - {fileID: 1245885717}
   - {fileID: 226625439}
+  - {fileID: 966334039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1245885716
@@ -3575,7 +3624,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB2E4\uC2DC \uC2DC\uC791"
+  m_text: "\uB9C8\uC744\uB85C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}
   m_sharedMaterial: {fileID: 8697514844509816437, guid: 20f5de154936a1744baa9b7d34749de1, type: 2}

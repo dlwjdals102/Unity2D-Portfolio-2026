@@ -1,6 +1,7 @@
 ﻿using JM2D.Logic.Stats;
 using JM2D.View;
 using JM2D.Weapons;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JM2D.Player
@@ -38,6 +39,8 @@ namespace JM2D.Player
         private int _pendingDamage;
 
         private bool CanFire => _fireCooldownLeft <= 0f && !_motor.IsDashing;
+        /// 마을의 선택대가 이름과 수치를 읽는다. 번호 순서가 해금 규칙의 순서와 같아야 한다.
+        public IReadOnlyList<Weapon> Weapons => _weapons;
 
         /// 구독이 OnEnable 에 있어 참조를 Awake 에서 잡는다. OnEnable 은 Start 보다 먼저 돈다.
         private void Awake()
@@ -52,19 +55,16 @@ namespace JM2D.Player
             _characterAnimator.AttackFrameReached += FirePendingAttack;
         }
 
-        /// PlayerStats 가 Awake 에서 스탯을 만든 뒤라야 모디파이어를 붙일 수 있어 Start 에서 든다.
-        private void Start()
-        {
-            Equip(0);
-        }
-
         private void Update()
         {
             FacePlayer();
 
+#if UNITY_EDITOR
+            // 확인용 뒷문. 무기를 고르는 정식 경로는 마을의 무기대다.
             int slot = _input.WeaponSlotPressed;
             if (slot >= 0 && slot < _weapons.Length)
                 Equip(slot);
+#endif
 
             if (_fireCooldownLeft > 0f)
                 _fireCooldownLeft -= Time.deltaTime;
@@ -109,7 +109,7 @@ namespace JM2D.Player
         }
 
         /// 무기를 든다. 옛 무기가 얹은 값만 떼고 새 무기의 값을 얹는다. 아이템이 얹은 값은 건드리지 않는다.
-        private void Equip(int index)
+        public void Equip(int index)
         {
             if (_current != null)
             {

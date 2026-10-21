@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b8e798693845a8a7dde14b7acdf5b9, type: 3}
   m_Name: WeaponData_Spear
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.MeleeWeaponData
+  _displayName: "\uCC3D"
   _attackDamage: 2
   _attacksPerSecond: 2.5
   _length: 2.6

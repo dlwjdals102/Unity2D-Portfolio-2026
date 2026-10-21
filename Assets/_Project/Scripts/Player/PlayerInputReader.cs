@@ -20,9 +20,14 @@ namespace JM2D.Player
         /// 발사 버튼이 지금 눌려 있는가.
         public bool FireHeld { get; private set; }
 
+#if UNITY_EDITOR
         /// 이번 프레임에 누른 무기 칸. 0, 1, 2 이고 누르지 않았으면 -1.
         /// 확인용이라 입력 에셋이 아니라 키보드를 바로 읽는다. 가방의 Tab 과 같다.
+        ///
+        /// 무기를 고르는 정식 경로는 마을의 무기대다. 이 길은 해금을 지나쳐 잠긴 무기도 들려서
+        /// 빌드에 남기지 않는다. 개발 중에 던전에서 무기를 바꿔 보는 데만 쓴다.
         public int WeaponSlotPressed { get; private set; }
+#endif
 
         private void Awake()
         {
@@ -55,7 +60,10 @@ namespace JM2D.Player
             // 창이 열려 있으면 누르고 있어도 눌리지 않은 것으로 읽는다.
             // 창을 보려고 누른 클릭이 공격으로 나가지 않게 하는 자리다.
             FireHeld = !_isFireBlocked && _controls.Player.Fire.IsPressed();
+
+#if UNITY_EDITOR
             WeaponSlotPressed = ReadWeaponSlot();
+#endif
         }
 
         /// 창을 여는 쪽이 공격 입력을 막는다. 가방과 보상 창 둘이 쓴다.
@@ -66,6 +74,7 @@ namespace JM2D.Player
         /// PlayerMotor가 대시 요청을 가져갔다고 알린다.
         public void ConsumeDashRequest() { DashRequested = false; }
 
+#if UNITY_EDITOR
         private int ReadWeaponSlot()
         {
             if (Keyboard.current == null) return -1;
@@ -76,5 +85,6 @@ namespace JM2D.Player
 
             return -1;
         }
+#endif
     }
 }
