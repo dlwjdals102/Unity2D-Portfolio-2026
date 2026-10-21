@@ -6,6 +6,9 @@ namespace JM2D.Data
     /// 공격하는 방식은 여기 없다. 무기 컴포넌트가 이 값을 읽어 공격한다.
     public abstract class WeaponData : ScriptableObject
     {
+        [Tooltip("마을의 선택대에 보이는 이름")]
+        [SerializeField] private string _displayName = "무기";
+
         [Header("공격")]
         [SerializeField] private float _attackDamage = 1f;
 
@@ -13,6 +16,7 @@ namespace JM2D.Data
         [Tooltip("초당 공격 수. 공격 간격은 이 값의 역수다")]
         [SerializeField] private float _attacksPerSecond = 6.67f;
 
+        public string DisplayName => _displayName;
         public float AttackDamage => _attackDamage;
         public float AttacksPerSecond => _attacksPerSecond;
     }

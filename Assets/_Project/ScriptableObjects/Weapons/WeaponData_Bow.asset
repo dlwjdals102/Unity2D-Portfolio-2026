@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18f154f6dcf444da71394bf9caa0fd7, type: 3}
   m_Name: WeaponData_Bow
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Data.BowWeaponData
+  _displayName: "\uD65C"
   _attackDamage: 1
   _attacksPerSecond: 6.67
   _projectilePrefab: {fileID: 7464044306449956177, guid: 1f0aeca24ba6810448452a9097561aae, type: 3}
