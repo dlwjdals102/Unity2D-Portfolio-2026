@@ -74,5 +74,23 @@ namespace JM2D.Logic.Progress
                 BestRoomsReached = Math.Max(save.BestRoomsReached, roomsReached),
             };
         }
+
+        /// 이번 판으로 새로 열린 무기 수.
+        ///
+        /// 전과 후를 모두 받는 이유는 열린 목록을 저장하지 않기 때문이다.
+        /// 지금 열려 있는지는 기록에서 계산하므로, '새로' 열렸는지는 두 기록을 견줘야 안다.
+        /// 전에 잠겨 있던 것만 센다. 지금 열린 것을 모두 세면 두 번째 클리어에서도
+        /// 열렸다고 알리게 된다.
+        public static int NewlyUnlockedCount(SaveData before, SaveData after)
+        {
+            int count = 0;
+
+            for (int i = 0; i < Rules.Length; i++)
+            {
+                if (!IsUnlocked(i, before) && IsUnlocked(i, after)) count++;
+            }
+
+            return count;
+        }
     }
 }

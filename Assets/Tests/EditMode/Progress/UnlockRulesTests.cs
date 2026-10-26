@@ -103,6 +103,61 @@ namespace JM2D.Tests.Progress
         }
 
         [Test]
+        public void 보스를_처음_잡으면_하나가_열린다()
+        {
+            SaveData before = 기록(0, 3);
+
+            SaveData after = UnlockRules.After(before, bossKilled: true, roomsReached: 3);
+
+            Assert.AreEqual(1, UnlockRules.NewlyUnlockedCount(before, after));
+        }
+
+        [Test]
+        public void 보스를_두_번째로_잡으면_새로_열리는_것이_없다()
+        {
+            SaveData before = 기록(1, 3);
+            Assert.IsTrue(UnlockRules.IsUnlocked(1, before), "준비: 검이 이미 열려 있어야 한다");
+
+            SaveData after = UnlockRules.After(before, bossKilled: true, roomsReached: 3);
+
+            Assert.AreEqual(0, UnlockRules.NewlyUnlockedCount(before, after));
+        }
+
+        [Test]
+        public void 여섯째_방을_처음_밟으면_하나가_열린다()
+        {
+            SaveData before = 기록(1, 5);
+            Assert.IsFalse(UnlockRules.IsUnlocked(2, before), "준비: 창이 아직 잠겨 있어야 한다");
+
+            SaveData after = UnlockRules.After(before, bossKilled: false, roomsReached: 6);
+
+            Assert.AreEqual(1, UnlockRules.NewlyUnlockedCount(before, after));
+        }
+
+        [Test]
+        public void 보스를_잡으며_여섯째_방도_처음이면_둘이_열린다()
+        {
+            SaveData before = 기록(0, 5);
+            Assert.IsFalse(UnlockRules.IsUnlocked(1, before), "준비: 검이 잠겨 있어야 한다");
+            Assert.IsFalse(UnlockRules.IsUnlocked(2, before), "준비: 창도 잠겨 있어야 한다");
+
+            SaveData after = UnlockRules.After(before, bossKilled: true, roomsReached: 8);
+
+            Assert.AreEqual(2, UnlockRules.NewlyUnlockedCount(before, after));
+        }
+
+        [Test]
+        public void 나아간_것이_없는_판은_아무것도_열지_않는다()
+        {
+            SaveData before = 기록(1, 8);
+            Assert.IsTrue(UnlockRules.IsUnlocked(2, before), "준비: 셋이 다 열려 있어야 한다");
+
+            SaveData after = UnlockRules.After(before, bossKilled: false, roomsReached: 2);
+
+            Assert.AreEqual(0, UnlockRules.NewlyUnlockedCount(before, after));
+        }
+
+        [Test]
         public void 고른_무기와_포맷_번호는_판이_끝나도_그대로다()
         {
             var before = new SaveData { SelectedWeapon = 2, Version = 1 };
