@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using JM2D.Combat;
 using JM2D.Player;
 using JM2D.Rooms;
@@ -16,6 +17,13 @@ namespace JM2D.Core
         [SerializeField] private LevelBuilder _level;
         [SerializeField] private Health _playerHealth;
         [SerializeField] private PlayerAttack _playerAttack;
+
+        /// 판이 끝나고 기록을 저장한 뒤에 알린다. 인자는 차례로
+        /// 보스를 잡았는가, 저장된 기록, 이번 판으로 새로 열린 무기 수다.
+        ///
+        /// 저장이 끝난 뒤에 알리는 것이 요점이다. 듣는 쪽이 죽음이나 클리어를 직접 들으면
+        /// 저장보다 먼저 글을 쓸 수 있고, 그러면 기록이 한 판 뒤처져 보인다.
+        public event Action<bool, SaveData, int> OnRunFinished;
 
         private readonly SaveFile _file = new SaveFile();
 
@@ -82,12 +90,14 @@ namespace JM2D.Core
             if (_isRunOver) return;
             _isRunOver = true;
 
-            SaveData save = _file.Load();
+            // 전과 후를 각자 들고 있는다. 새로 열린 것을 세려면 둘을 견줘야 한다.
+            SaveData before = _file.Load();
+            SaveData after = UnlockRules.After(before, bossKilled, _roomsReached);
 
-            // After 는 새 값을 돌려준다. 받은 것을 다시 넣지 않으면 갱신이 조용히 사라진다.
-            save = UnlockRules.After(save, bossKilled, _roomsReached);
+            _file.Save(after);
 
-            _file.Save(save);
+            // 저장을 마친 뒤에 알린다. 값을 함께 넘겨 듣는 쪽이 파일을 다시 읽지 않게 한다.
+            OnRunFinished?.Invoke(bossKilled, after, UnlockRules.NewlyUnlockedCount(before, after));
         }
     }
 }

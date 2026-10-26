@@ -11,6 +11,9 @@ namespace JM2D.Player
         /// 가방이나 보상 창이 열려 있는가. 열린 쪽이 켜고 끈다.
         private bool _isFireBlocked;
 
+        /// Esc 를 마지막으로 쓴 프레임. 창 여럿이 같은 Esc 를 각자 읽는 것을 막는다.
+        private int _escapeUsedFrame = -1;
+
         /// 플레이어에서 마우스를 향하는 방향. 크기는 1.
         public Vector2 AimDirection { get; private set; }
         /// 이번 프레임의 이동 입력. 크기는 0~1.
@@ -19,6 +22,11 @@ namespace JM2D.Player
         public bool DashRequested { get; private set; }
         /// 발사 버튼이 지금 눌려 있는가.
         public bool FireHeld { get; private set; }
+        /// 가방이나 보상 창이 열려 있는가. Esc 메뉴가 자기 차례인지 보는 데 쓴다.
+        /// 이름이 _isFireBlocked 와 다른 것은 막는 것(발사)과 묻는 것(창)이 달라서이고 값은 같다.
+        public bool IsWindowOpen => _isFireBlocked;
+        /// 이 프레임에 Esc 가 이미 쓰였는가. 창이 닫히는 그 한 프레임을 막는다.
+        public bool IsEscapeUsedThisFrame => _escapeUsedFrame == Time.frameCount;
 
 #if UNITY_EDITOR
         /// 이번 프레임에 누른 무기 칸. 0, 1, 2 이고 누르지 않았으면 -1.
@@ -50,8 +58,14 @@ namespace JM2D.Player
 
         private void Update() 
         {
+            // 시간이 멈춘 동안에는 이동 입력이 없는 것으로 읽는다. 걷지는 않는데 방향키로
+            // 몸만 뒤집히는 것을 막는 자리다. 몸이 보는 쪽은 쏘지 않을 때 이 값을 따른다.
+            // 히트스톱도 시간을 멈추지만 적을 때릴 때가 0.01초, 맞을 때가 0.08초라 짧다.
+            //
             // 게임패드 미세 조작을 살리려고 normalized 대신 ClampMagnitude를 쓴다
-            MoveInput = Vector2.ClampMagnitude(_controls.Player.Move.ReadValue<Vector2>(), 1f);
+            MoveInput = Time.timeScale == 0f
+                ? Vector2.zero
+                : Vector2.ClampMagnitude(_controls.Player.Move.ReadValue<Vector2>(), 1f);
 
             Vector2 screenPos = _controls.Player.Aim.ReadValue<Vector2>();
             Vector3 worldPos = _camera.ScreenToWorldPoint(screenPos);
@@ -66,9 +80,13 @@ namespace JM2D.Player
 #endif
         }
 
-        /// 창을 여는 쪽이 공격 입력을 막는다. 가방과 보상 창 둘이 쓴다.
-        /// 둘이 동시에 열리지 않아 참거짓 하나로 두었다. 세 번째가 생기면 겹침을 세야 한다.
+        /// 창을 여는 쪽이 공격 입력을 막는다. 가방, 보상 창, Esc 메뉴 셋이 쓴다.
+        /// 셋이 동시에 열리지 않아 참거짓 하나로 두었다. 넷째가 생기면 겹침을 세야 한다.
         public void SetFireBlocked(bool blocked) { _isFireBlocked = blocked; }
+
+        /// Esc 로 창을 닫은 쪽이 알린다. 뒤에 도는 창이 같은 Esc 를 또 쓰지 않게 한다.
+        /// Update 가 도는 순서는 보장되지 않아, 먼저 돈 쪽이 메모를 남기는 방식으로 막는다.
+        public void MarkEscapeUsed() { _escapeUsedFrame = Time.frameCount; }
 
         private void OnDashPerformed(InputAction.CallbackContext ctx) { DashRequested = true; }
         /// PlayerMotor가 대시 요청을 가져갔다고 알린다.

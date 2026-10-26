@@ -72,9 +72,8 @@ namespace JM2D.UI
         /// 인스펙터에 맡기면 오브젝트를 어떻게 만들었느냐에 따라 기준점이 달라지고, 오류 없이 위치만 틀린다.
         private void Awake()
         {
-            // 이 오브젝트 자체도 화면을 덮어야 한다. 빈 오브젝트로 만들면 100 x 100 이라
-            // 가림막이 그만큼만 덮이고 화면 가운데 작은 네모로 보인다.
-            Stretch((RectTransform)transform);
+            // 가림막이 화면 전체를 덮어야 한다. 빈 오브젝트로 만들면 100 x 100 이라
+            // 화면 가운데 작은 네모만 덮인다. 부모가 Canvas 라 이 한 줄로 화면 크기가 된다.
             Stretch((RectTransform)_root.transform);
             Center(_cardRoot);
 
@@ -84,6 +83,8 @@ namespace JM2D.UI
                 TopCenter((RectTransform)_title.transform, _titleOffset, 400f, 60f);
             }
 
+            // 씬에 켜 둔 채로 저장해도 시작할 때 꺼진다. 모양을 보며 작업할 수 있고,
+            // 켠 채로 저장해 게임이 창과 함께 시작하는 실수가 없어진다.
             _root.SetActive(false);
         }
 
@@ -151,10 +152,13 @@ namespace JM2D.UI
         }
 
         /// 고르기와 같은 순서다. 창을 먼저 닫고 알린다.
+        /// 이 Esc 를 썼다고 알리는 것은, 같은 프레임에 도는 Esc 메뉴가 창이 닫힌 것을 보고
+        /// 자기 차례라 여기며 열리는 것을 막기 위해서다.
         private void Skip()
         {
             Hide();
 
+            _playerInput.MarkEscapeUsed();
             OnSkipped?.Invoke();
         }
 

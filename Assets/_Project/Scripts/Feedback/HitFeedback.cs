@@ -1,4 +1,5 @@
-﻿using Unity.Cinemachine;
+﻿using JM2D.Player;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace JM2D.Feedback
@@ -11,6 +12,9 @@ namespace JM2D.Feedback
     {
         [Tooltip("맞을 때마다 한 번 난다")]
         [SerializeField] private AudioClip _hitClip;
+
+        [Tooltip("창이 열려 시간을 멈춰 두었는지 묻는다. 그 동안에는 멈춤을 풀지 않는다")]
+        [SerializeField] private PlayerInputReader _playerInput;
 
         private AudioSource _audio;
 
@@ -37,7 +41,11 @@ namespace JM2D.Feedback
             // 멈춘 시간을 재는 값은 멈추지 않는 시간이어야 한다.
             _stopLeft -= Time.unscaledDeltaTime;
 
-            if (_stopLeft <= 0f)
+            // 창이 열려 있으면 되돌리지 않는다. timeScale 의 주인이 둘이고
+            // 히트스톱은 0.01초, 창은 고를 때까지라, 짧은 쪽이 긴 쪽을 풀어 버린다.
+            // 보상 창이 뜬 채로 돌아다닐 수 있던 것이 이것 때문이었다.
+            // 창이 닫힐 때 1 로 되돌리는 것은 창을 띄운 쪽이 이미 하고 있다.
+            if (_stopLeft <= 0f && !_playerInput.IsWindowOpen)
                 Time.timeScale = 1f;
         }
 
