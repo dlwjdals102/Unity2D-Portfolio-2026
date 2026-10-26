@@ -95,6 +95,15 @@ namespace JM2D.UI
 
             if (!_panel.activeSelf) return;
 
+            // Esc 로도 닫는다. 썼다고 알리는 것은 같은 프레임에 도는 Esc 메뉴가
+            // 가방이 닫힌 것을 보고 자기 차례라 여기며 열리는 것을 막기 위해서다.
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                Toggle();
+                _playerInput.MarkEscapeUsed();
+                return;
+            }
+
             if (Keyboard.current.rKey.wasPressedThisFrame && _inventory.Hand != null)
             {
                 _inventory.RotateHand();
