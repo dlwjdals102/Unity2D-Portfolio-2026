@@ -30,6 +30,9 @@ namespace JM2D.View
         /// 휘두르는 동작에서 칼이 뻗는 프레임에 일어난다. 공격 판정을 여기에 맞춘다.
         public event Action AttackFrameReached;
 
+        /// 휘두르는 동작이 끝나는 프레임에 일어난다. 그동안 몸이 돌지 않게 막는 쪽이 듣는다.
+        public event Action AttackEnded;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -57,6 +60,13 @@ namespace JM2D.View
         public void OnAttackFrame()
         {
             AttackFrameReached?.Invoke();
+        }
+
+        /// 애니메이션 이벤트가 부른다. 위와 같은 주의가 그대로 적용된다.
+        /// 이름은 클립 안에 문자열로 적혀 있어 바꾸면 조용히 끊어진다.
+        public void OnAttackEnd()
+        {
+            AttackEnded?.Invoke();
         }
     }
 }
