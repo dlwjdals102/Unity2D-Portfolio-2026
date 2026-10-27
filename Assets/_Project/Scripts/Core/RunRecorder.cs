@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using JM2D.Combat;
-using JM2D.Player;
 using JM2D.Rooms;
 using JM2D.Logic.Progress;
 using JM2D.Logic.Rooms;
@@ -16,7 +15,6 @@ namespace JM2D.Core
         [SerializeField] private RoomCombat _combat;
         [SerializeField] private LevelBuilder _level;
         [SerializeField] private Health _playerHealth;
-        [SerializeField] private PlayerAttack _playerAttack;
 
         /// 판이 끝나고 기록을 저장한 뒤에 알린다. 인자는 차례로
         /// 보스를 잡았는가, 저장된 기록, 이번 판으로 새로 열린 무기 수다.
@@ -38,22 +36,6 @@ namespace JM2D.Core
             _combat.OnCombatStarted += OnCombatStarted;
             _combat.OnRoomCleared += OnRoomCleared;
             _playerHealth.OnDied += OnPlayerDied;
-        }
-
-        /// PlayerStats 가 Awake 에서 스탯을 만든 뒤라야 무기의 값을 얹을 수 있어 Start 에서 든다.
-        /// PlayerAttack 이 스스로 0번을 들던 자리를 여기로 옮겼다. 둘 다 들면 한 프레임 동안 활이 들린다.
-        private void Start()
-        {
-            SaveData save = _file.Load();
-
-            // 저장된 번호를 그대로 믿지 않는다. 해금 조건을 올리면 옛 선택이 잠긴 무기가 되고,
-            // 저장 파일을 손으로 고치면 없는 번호가 들어올 수도 있다.
-            // IsUnlocked 가 범위 밖 번호도 잠긴 것으로 답해서 둘을 한 번에 거른다.
-            int weapon = UnlockRules.IsUnlocked(save.SelectedWeapon, save)
-                ? save.SelectedWeapon
-                : UnlockRules.StarterWeapon;
-
-            _playerAttack.Equip(weapon);
         }
 
         private void OnDisable()

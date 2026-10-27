@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Town.WeaponRack
   _prompt: {fileID: 197758318}
-  _weaponIndex: 0
+  _weaponIndex: 1
   _playerAttack: {fileID: 1166947535}
   _promptText: {fileID: 304445370}
   _icon: {fileID: 181220974}
@@ -1657,8 +1657,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 181220971}
   - {fileID: 1980723137}
+  - {fileID: 181220971}
   - {fileID: 1585336826}
   - {fileID: 1075422729}
   - {fileID: 269661441}
@@ -3092,8 +3092,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerAttack
   _weapons:
-  - {fileID: 73134702}
   - {fileID: 810010806}
+  - {fileID: 73134702}
   - {fileID: 764120437}
   _swingClip: {fileID: 8300000, guid: 5c6a6eed9c33cc64c9987cca28414de5, type: 3}
   _input: {fileID: 1166947537}
@@ -3780,6 +3780,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5289563254106695483, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -7116,7 +7132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Town.WeaponRack
   _prompt: {fileID: 526025064}
-  _weaponIndex: 1
+  _weaponIndex: 0
   _playerAttack: {fileID: 1166947535}
   _promptText: {fileID: 1268128401}
   _icon: {fileID: 1980723136}

@@ -515,6 +515,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneFader
       objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

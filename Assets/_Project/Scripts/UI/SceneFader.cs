@@ -15,7 +15,18 @@ namespace JM2D.UI
         [Min(0.01f)]
         [SerializeField] private float _fadeTime = 0.3f;
 
-        /// 씬에 들어오면 밝아진다. 가림막은 검은 채로(알파 1) 저장해 둔다.
+        /// 씬이 열리는 첫 프레임부터 덮여 있어야 한다. Awake 는 첫 렌더보다 먼저 돌아,
+        /// 여기서 알파를 올리면 씬에 어떤 값으로 저장돼 있든 검게 시작한다.
+        ///
+        /// 이 세 줄이 '알파 1 로 저장해야 한다' 는 숨은 요구를 없앤다. 그 요구가 있던 동안에는
+        /// 에디터에서 화면이 검게 덮여 가림막을 꺼 두게 되고, 꺼진 채로 저장하면
+        /// 그 씬에서 페이드가 조용히 사라진다. 한 번 겪었다.
+        private void Awake()
+        {
+            SetAlpha(1f);
+        }
+
+        /// 씬에 들어오면 밝아진다.
         private void Start()
         {
             StartCoroutine(Fade(1f, 0f));

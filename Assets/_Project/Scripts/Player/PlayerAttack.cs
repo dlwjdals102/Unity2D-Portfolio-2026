@@ -1,4 +1,6 @@
-﻿using JM2D.Logic.Stats;
+﻿using JM2D.Core;
+using JM2D.Logic.Progress;
+using JM2D.Logic.Stats;
 using JM2D.View;
 using JM2D.Weapons;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace JM2D.Player
     [RequireComponent(typeof(AudioSource))]
     public class PlayerAttack : MonoBehaviour
     {
-        [Tooltip("0 번이 시작할 때 드는 무기다")]
+        [Tooltip("저장된 무기가 없거나 잠겨 있으면 0 번을 든다")]
         [SerializeField] private Weapon[] _weapons;
 
         [Tooltip("공격을 시작할 때 한 번 난다. 맞지 않아도 난다")]
@@ -25,6 +27,9 @@ namespace JM2D.Player
         [SerializeField] private PlayerInputReader _input;
         [SerializeField] private PlayerMotor _motor;
         [SerializeField] private PlayerStats _stats;
+
+        /// 시작할 때 저장된 무기를 읽는 데 쓴다.
+        private readonly SaveFile _file = new SaveFile();
 
         private Weapon _current;
         private SpriteFacing _facing;
@@ -37,6 +42,10 @@ namespace JM2D.Player
         private Weapon _pendingWeapon;
         private Vector2 _pendingDirection;
         private int _pendingDamage;
+
+        /// 휘두르는 중인가. 공격이 시작될 때 켜고 애니메이션이 끝날 때 끈다.
+        /// 그동안 몸을 돌리지 않아, 칼이 왼쪽으로 가다 오른쪽에서 이어지는 일이 없다.
+        private bool _isSwinging;
 
         private bool CanFire => _fireCooldownLeft <= 0f && !_motor.IsDashing;
         /// 마을의 선택대가 이름과 수치를 읽는다. 번호 순서가 해금 규칙의 순서와 같아야 한다.
@@ -53,6 +62,25 @@ namespace JM2D.Player
         private void OnEnable()
         {
             _characterAnimator.AttackFrameReached += FirePendingAttack;
+            _characterAnimator.AttackEnded += OnSwingEnded;
+        }
+
+        /// 저장된 무기를 들고 시작한다. 던전과 마을 둘 다 이 자리를 지난다.
+        ///
+        /// Start 인 이유는 PlayerStats 가 Awake 에서 스탯을 만들기 때문이다.
+        /// 그보다 먼저 들면 무기의 공격력과 공격 속도를 얹을 자리가 아직 없다.
+        private void Start()
+        {
+            SaveData save = _file.Load();
+
+            // 저장된 번호를 그대로 믿지 않는다. 해금 조건을 올리면 옛 선택이 잠긴 무기가 되고,
+            // 저장 파일을 손으로 고치면 없는 번호가 들어올 수도 있다.
+            // IsUnlocked 가 범위 밖 번호도 잠긴 것으로 답해서 둘을 한 번에 거른다.
+            int weapon = UnlockRules.IsUnlocked(save.SelectedWeapon, save)
+                ? save.SelectedWeapon
+                : UnlockRules.StarterWeapon;
+
+            Equip(weapon);
         }
 
         private void Update()
@@ -75,6 +103,11 @@ namespace JM2D.Player
                 _pendingDirection = _input.AimDirection;
                 _pendingDamage = _stats.AttackDamage.IntValue;
 
+                // 몸이 이 공격의 방향을 보고 그대로 멈춘다. 판정과 같은 값을 쓰므로
+                // 휘두르는 그림과 맞는 쪽이 맞는다.
+                _isSwinging = true;
+                _facing.Face(_pendingDirection.x);
+
                 _fireCooldownLeft = 1f / _stats.AttackSpeed.Value;
 
                 // 간격을 계산할 때와 같은 값을 넘긴다. 둘이 다른 곳에서 오면 아이템이 붙을 때 갈라진다.
@@ -89,6 +122,7 @@ namespace JM2D.Player
         private void OnDisable()
         {
             _characterAnimator.AttackFrameReached -= FirePendingAttack;
+            _characterAnimator.AttackEnded -= OnSwingEnded;
         }
 
         /// 칼이 뻗는 프레임에 불린다. 판정과 범위 표시가 여기서 함께 일어난다.
@@ -98,14 +132,24 @@ namespace JM2D.Player
             _pendingWeapon.Attack(transform.position, _pendingDirection, _pendingDamage);
         }
 
-        /// 쏘는 동안에는 조준한 쪽, 아니면 가는 쪽을 본다.
-        /// 조준 방향만 쓰면 쏘지 않을 때도 마우스를 흔들 때마다 몸이 깜빡인다.
-        /// 이동 방향만 쓰면 쏘는 쪽이 읽히지 않는데, 조준은 RangeView 와 투사체가 이미 알린다.
-        /// 공격하는 순간만 돌리는 안은 버렸다. 공격이 한 프레임이라 눈에 보이지 않는다.
+        /// 휘두르는 동작이 끝나면 다시 몸을 돌릴 수 있다.
+        /// 애니메이션이 Has Exit Time 으로만 나가는 것에 기댄다. 조건으로 중간에 끊기면
+        /// 이 알림이 오지 않아 방향이 고정된 채로 남는다.
+        private void OnSwingEnded()
+        {
+            _isSwinging = false;
+        }
+
+        /// 가는 쪽을 본다. 조준 쪽으로 돌리는 것은 공격이 시작될 때 한 번뿐이다.
+        ///
+        /// 전에는 쏘는 동안 조준을 따라가게 했는데, 그것이 휘두르는 중에 몸이 뒤집히는
+        /// 원인이었다. 공격마다 한 번 돌리는 지금 방식이 '마우스를 흔들면 깜빡인다' 와
+        /// '쏘는 쪽이 읽히지 않는다' 를 함께 푼다.
         private void FacePlayer()
         {
-            float x = _input.FireHeld ? _input.AimDirection.x : _input.MoveInput.x;
-            _facing.Face(x);
+            if (_isSwinging) return;
+
+            _facing.Face(_input.MoveInput.x);
         }
 
         /// 무기를 든다. 옛 무기가 얹은 값만 떼고 새 무기의 값을 얹는다. 아이템이 얹은 값은 건드리지 않는다.

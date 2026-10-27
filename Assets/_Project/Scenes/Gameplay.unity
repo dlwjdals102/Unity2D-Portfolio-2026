@@ -1450,7 +1450,6 @@ MonoBehaviour:
   _combat: {fileID: 1107003876}
   _level: {fileID: 1107003873}
   _playerHealth: {fileID: 1268753873}
-  _playerAttack: {fileID: 1268753872}
 --- !u!1 &1055807494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1711,7 @@ MonoBehaviour:
   _fixedSeed: 50
   _currentSeed: 0
   _roomPrefab: {fileID: 2335482721221929077, guid: 8fc4927b357d2ae4fabb07ede4826db3, type: 3}
-  _debugRoomCount: 3
+  _debugRoomCount: 0
 --- !u!114 &1107003874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2489,8 +2488,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: JM2D.Runtime::JM2D.Player.PlayerAttack
   _weapons:
-  - {fileID: 35470044}
   - {fileID: 1506173332}
+  - {fileID: 35470044}
   - {fileID: 1539878293}
   _swingClip: {fileID: 8300000, guid: 5c6a6eed9c33cc64c9987cca28414de5, type: 3}
   _input: {fileID: 1268753867}
@@ -4278,6 +4277,10 @@ PrefabInstance:
     - target: {fileID: 5289563254106695483, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9071335914023531588, guid: 5460a746ee93c124ebda6e330c073d1a, type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
