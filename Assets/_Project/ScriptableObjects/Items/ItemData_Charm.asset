@@ -15,6 +15,7 @@ MonoBehaviour:
   _displayName: "\uBD80\uC801"
   _width: 1
   _height: 1
+  _icon: {fileID: 8215635055485199385, guid: 79c1adfdb33e882479d1ada58de83cf9, type: 3}
   _color: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   _modifiers: []
   _synergies:

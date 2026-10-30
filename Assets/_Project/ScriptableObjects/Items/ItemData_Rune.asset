@@ -15,6 +15,7 @@ MonoBehaviour:
   _displayName: "\uB8EC"
   _width: 1
   _height: 1
+  _icon: {fileID: -6918259590573343211, guid: 79c1adfdb33e882479d1ada58de83cf9, type: 3}
   _color: {r: 0.8, g: 0.65, b: 0, a: 1}
   _modifiers:
   - Target: 3

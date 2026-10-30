@@ -40,6 +40,18 @@
 | 효과음 | Impact Sounds (Kenney) 중 `footstep_carpet_000.ogg` 1점 | [kenney.nl/assets/impact-sounds](https://kenney.nl/assets/impact-sounds) | CC0 1.0 |
 | 효과음 | RPG Audio (Kenney) 중 `drawKnife1.ogg` 1점 | [kenney.nl/assets/rpg-audio](https://kenney.nl/assets/rpg-audio) | CC0 1.0 |
 | 음악 | Chiptune Adventure Music Pack (PPEAK / Preston Peak) 중 `secret base` 1곡 | [ppeak.itch.io/chip-free](https://ppeak.itch.io/chip-free) | CC BY 4.0 |
+| 스프라이트 | RPG Icon Pack - Dark Fantasy Equipment (Clockwork Raven) 중 아이템 아이콘 15점 | [clockworkraven.itch.io/rpg-icon-pack-100-dark-fantasy-equipment](https://clockworkraven.itch.io/rpg-icon-pack-100-dark-fantasy-equipment) | 자체 라이선스 (아래) |
+
+**아이콘 팩만 저장소에서 빼 두었다.** 그 팩의 라이선스는 게임과 영상과 스트림에 쓰는 것을
+명시적으로 허용하지만, **에셋을 함께 배포해 받는 쪽이 그 그림에 접근하게 하는 것을 막는다.**
+공개 저장소에 그림을 올리는 것이 거기 걸린다고 보아 `.gitignore` 에 넣었다.
+수정과 상업적 이용은 허용되고 표기는 선택이지만, 이 표의 규칙대로 적는다.
+
+**클론해도 게임은 돈다.** `ItemData` 의 아이콘이 비면 색 사각형으로 그리도록 처음부터
+만들어 두었다. 그림을 넣고 싶으면 위 링크에서 받아 `Assets/ThirdParty/Sprites/16x16.png`
+로 두면 된다. `.meta` 는 저장소에 남겨 두어 **슬라이스와 연결이 그대로 복원된다.**
+
+다른 팩들은 CC BY 4.0 과 CC0 라 재배포가 허용되어 저장소에 그대로 있다.
 
 **스프라이트와 사운드는 Phase 5 에서 들여온다.** GDD 아트 방침이 도형 프로토타입을
 기본값으로 두고 Phase 5 에서 CC0 에셋을 입히는 것으로 정해 두었다. 방침을 바꾸는 것이 아니라
