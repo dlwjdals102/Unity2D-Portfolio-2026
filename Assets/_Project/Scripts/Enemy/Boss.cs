@@ -11,6 +11,8 @@ namespace JM2D.Enemy
     /// 패턴이 넷이어도 단계는 예고, 발동, 회복 셋이다. 발동에서 무엇을 하는지만 패턴마다 다르다.
     public class Boss : EnemyBase, IProjectileShooter
     {
+        public event System.Action OnPhase2Started;
+
         /// 쓸 수 있는 패턴.
         private enum Pattern { Sweep, Dash, Fan, Summon }
 
@@ -266,6 +268,8 @@ namespace JM2D.Enemy
             // 예고 중에 체력이 떨어지면 ChangeStep 이 더 이상 불리지 않아 표식을 끌 기회가 없다.
             ShowWarning(false);
             Health.IsExternallyInvulnerable = true;
+
+            OnPhase2Started?.Invoke();
         }
 
         /// 페이즈를 넘어가는 동안. 그 자리에 멈춰 있는다.

@@ -79,5 +79,17 @@ namespace JM2D.Feedback
         {
             _hitFeedback = hitFeedback;
         }
+
+        /// 번쩍임이 끝나면 돌아갈 색을 바꾼다. 보스가 2페이즈로 넘어갈 때처럼
+        /// 몸 색이 아예 달라지는 경우에 부른다. 색의 소유는 이 컴포넌트에 그대로 둔다.
+        /// 밖에서 스프라이트를 직접 물들이면 다음 번쩍임이 끝날 때 옛 색으로 되돌아간다.
+        public void SetBaseColor(Color color)
+        {
+            _baseColor = color;
+
+            // 번쩍이는 중이면 스프라이트를 건드리지 않는다. Update 가 끝날 때 새 색으로 돌아간다.
+            if (_flashLeft <= 0f)
+                _renderer.color = color;
+        }
     }
 }
