@@ -13,11 +13,7 @@ namespace JM2D.Data
         [Tooltip("조준 방향과 직각인 폭")]
         [SerializeField] private float _width = 2f;
 
-        [Tooltip("범위가 화면에 보이는 시간. 판정은 공격하는 순간 한 번이다")]
-        [SerializeField] private float _showTime = 0.12f;
-
         public float Length => _length;
         public float Width => _width;
-        public float ShowTime => _showTime;
     }
 }

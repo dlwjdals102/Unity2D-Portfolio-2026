@@ -35,11 +35,20 @@ namespace JM2D.UI
         [SerializeField] private PlayerStats _stats;
         [SerializeField] private TMP_Text _statText;
 
+        [Tooltip("격자 아래에 적는 조작 안내. 글은 씬에 적어 두고 자리만 코드가 정한다")]
+        [SerializeField] private TMP_Text _hintText;
+
         [Header("크기")]
         [SerializeField] private float _cellSize = 64f;
 
         [Tooltip("칸 사이 여백. 위치는 그대로 두고 크기만 줄여서 만든다")]
         [SerializeField] private float _padding = 4f;
+
+        [Tooltip("격자 오른쪽 끝에서 스탯 글까지의 여백")]
+        [SerializeField] private float _statGap = 20f;
+
+        [Tooltip("격자 아래 끝에서 안내 글까지의 여백. 옆에 붙는 글과 보기 좋은 거리가 달라 따로 둔다")]
+        [SerializeField] private float _hintGap = 16f;
 
         [Header("미리보기")]
         [Range(0f, 1f)]
@@ -263,6 +272,9 @@ namespace JM2D.UI
             _cellRoot.sizeDelta = size;
             _cellRoot.anchoredPosition = new Vector2(-size.x / 2f, size.y / 2f);
 
+            PlaceStatText(size);
+            PlaceHintText(size);
+
             for (int y = 0; y < grid.Height; y++)
             {
                 for (int x = 0; x < grid.Width; x++)
@@ -272,6 +284,32 @@ namespace JM2D.UI
                     PlaceAt(cell.rectTransform, x, y, 1, 1);
                 }
             }
+        }
+
+        /// 스탯 글을 격자 오른쪽 위에 붙인다. 격자 크기가 코드에서 나오므로 이 자리도 코드가 정한다.
+        /// 전에는 숫자로 두었는데, 칸 크기를 한 번 바꾸자 손으로 두 값을 고치게 됐다.
+        ///
+        /// 피벗이 왼쪽 위라야 이 계산이 맞는다. 씬에서 바꾸면 오류 없이 자리만 어긋난다.
+        /// 부모는 BagWindow 그대로 둔다. CellRoot 의 자식으로 옮기면 거기 붙은 RectMask2D 에
+        /// 글이 잘려 보이지 않는다. 한 번 겪었다.
+        private void PlaceStatText(Vector2 gridSize)
+        {
+            RectTransform rect = _statText.rectTransform;
+
+            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(gridSize.x / 2f + _statGap, gridSize.y / 2f);
+        }
+
+        /// 안내 글을 격자 아래 가운데에 붙인다. 스탯 글과 같은 이유로 자리를 코드가 정한다.
+        /// 피벗이 위쪽 가운데라야 이 계산이 맞는다.
+        private void PlaceHintText(Vector2 gridSize)
+        {
+            RectTransform rect = _hintText.rectTransform;
+
+            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(0f, -gridSize.y / 2f - _hintGap);
         }
 
         private void BuildPreview()
