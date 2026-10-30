@@ -32,6 +32,9 @@ namespace JM2D.Combat
         public int Current => _current;
         public int Max => _maxHealth;
 
+        /// 현재 체력을 상수가 아니라 _maxHealth 에서 읽는다. 그래서 밖에서 InitializeMaxHealth 를
+        /// 이 Awake 보다 먼저 불러도 뒤에 불러도 결과가 같고, 같은 오브젝트 안의 Awake 순서에
+        /// 기대지 않는다. Unity 는 그 순서를 보장하지 않는다.
         private void Awake()
         {
             _current = _maxHealth;
