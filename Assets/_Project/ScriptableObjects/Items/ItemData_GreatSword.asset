@@ -15,6 +15,7 @@ MonoBehaviour:
   _displayName: "\uB300\uAC80"
   _width: 1
   _height: 4
+  _icon: {fileID: -6520634922097649790, guid: 79c1adfdb33e882479d1ada58de83cf9, type: 3}
   _color: {r: 0.6, g: 0.08, b: 0.08, a: 1}
   _modifiers:
   - Target: 2
