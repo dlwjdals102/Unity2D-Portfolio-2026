@@ -9,8 +9,6 @@ namespace JM2D.Weapons
     {
         [SerializeField] private MeleeWeaponData _data;
 
-        [SerializeField] private RangeView _rangeView;
-
         private int _enemyMask;
 
         public override WeaponData Data => _data;
@@ -27,7 +25,6 @@ namespace JM2D.Weapons
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             AreaHit.Box(center, size, angle, _enemyMask, damage);
-            _rangeView.Show(center, size, angle, _data.ShowTime);
         }
     }
 }
