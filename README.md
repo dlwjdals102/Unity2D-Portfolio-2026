@@ -27,9 +27,12 @@ Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 3~4개월 (2026.08 ~)
 
 ## 구조
 
-어셈블리를 나누고 **의존 방향을 한쪽으로 고정했습니다.** `JM2D.Runtime`(씬 컴포넌트)이
-`JM2D.Logic`(MonoBehaviour 에 의존하지 않는 순수 로직)을 참조하고, `JM2D.Tests.EditMode` 는
-`Logic` 만 참조합니다. **`Runtime` 참조는 일부러 막았습니다.**
+**어셈블리를 나누고 의존 방향을 한쪽으로 고정했습니다.**
+
+- `JM2D.Logic`: MonoBehaviour 에 의존하지 않는 순수 로직. 테스트 대상입니다
+- `JM2D.Runtime`: 씬에 붙는 컴포넌트. `Logic` 을 참조합니다
+- `JM2D.Editor`: 에디터 전용
+- `JM2D.Tests.EditMode`: `Logic` 만 참조합니다. **`Runtime` 참조는 일부러 막았습니다**
 
 [어셈블리를 가른 이유와 버린 대안](docs/decisions/asmdef-structure.md)
 
