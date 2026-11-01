@@ -156,7 +156,7 @@ E. 창 넷의 구조 통일                       timeScale 주인이 둘인 버
 
 ```
 해상도가 바뀔 때 UI 가 틀어지는지        UI 정리에서 Phase 6 으로 미룬 항목
-폰트의 Clear Dynamic Data on Build       켜고 빌드해야 글리프 캐시가 안 쌓인다
+폰트의 Clear Dynamic Data on Build       이미 켜져 있다 (2026-11-01 파일에서 확인)
 #if UNITY_EDITOR 로 감싼 것들이 빠지는지  보상 창 확인용 메뉴, 숫자 키 무기 교체,
                                          저장 파일 메뉴, 로그
 저장 파일이 persistentDataPath 에 생기는지
@@ -389,9 +389,11 @@ UI 는 전부 이벤트로 돌고, 적은 처음부터 상태 머신으로 만�
   (나) 같은 네 줄이 `HitFeedback` 과 `PlayerAttack` 두 군데에 있다. **세 번째 자리가 생기면 모은다.**
   (다) 볼륨 셋을 `AudioSource` 가 각자 들고 있어 **전체를 한 번에 줄일 방법이 없다.** 소리 끄기를 넣는 날 믹서를 넣는다.
   (라) **`Assets/_Project/Audio` 가 비어 있다.** 외부 음원은 `ThirdParty/Audio` 로 가서 쓸 데가 없다. 지울지 묻지 않았다.
-- 폰트 에셋의 `Clear Dynamic Data on Build` 가 꺼져 있다. Phase 6 빌드 전에 켠다.
-  **그래서 `Pretendard-Regular SDF.asset` 이 플레이할 때마다 변경으로 뜬다.** 글리프 캐시가 쌓여서다.
-  커밋하지 않고 둔다. 위 설정을 켜면 사라진다.
+- **폰트 에셋의 `Clear Dynamic Data on Build` 는 이미 켜져 있다**(`m_ClearDynamicDataOnBuild: 1`,
+  2026-11-01 에 파일에서 확인). 그전에 '꺼져 있다, 빌드 전에 켠다' 고 적어 둔 것은 낡은 기록이다.
+  **다만 `Pretendard-Regular SDF.asset` 은 플레이할 때마다 여전히 변경으로 뜬다.**
+  이름대로 **빌드할 때** 지우는 설정이라 에디터에서 플레이하는 동안 쌓이는 글리프 캐시는 그대로다.
+  '켜면 사라진다' 고 적었던 것도 틀렸다. 커밋하지 않고 두는 것은 같다.
 - 성능 측정을 에디터에서 했다. `EditorLoop` 이 85%를 차지한다.
   Phase 6 빌드 때 개발 빌드로 다시 잰다.
 - **총알이 풀 오브젝트 밑에 모이는 비용을 잰 적이 없다.** 하이어라키 규칙은 움직이는 것을 루트에 두는데,
