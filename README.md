@@ -14,7 +14,7 @@ Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 3~4개월 (2026.08 ~)
 |---|---|
 | 게임플레이 | 상태 머신(FSM), 상속과 다형성, 인터페이스 기반 피격 판정 |
 | 입력과 UI | Input System 액션 맵, 대시 선입력 버퍼, 이벤트 기반 UI 갱신 |
-| 최적화 | 투사체 오브젝트 풀링 |
+| 최적화 | 투사체 오브젝트 풀링, 프로파일러 전후 비교 |
 | 데이터 | ScriptableObject 데이터 주도, 스탯과 모디파이어 중첩, JSON 세이브 직렬화 |
 | 알고리즘 | 절차적 방 배치, BFS 흐름장 길찾기, 격자 배치 유효성 검사 |
 | 구조와 검증 | 어셈블리 분리, EditMode 유닛테스트 |
@@ -57,7 +57,7 @@ JM2D.Tests.EditMode                                 Logic 만 참조합니다
 ## 설계 기록
 
 판단할 때마다 고른 안과 버린 안을 남겼습니다. 바꾼 판단은 옛 문서를 지우지 않고 이어 붙였습니다.
-[설계 결정](docs/decisions) · [기능 명세](docs/specs) · [기획서](docs/design/GDD.md)
+[설계 결정](docs/decisions) · [기능 명세](docs/specs) · [측정](docs/measurements) · [기획서](docs/design/GDD.md)
 
 <details>
 <summary><b>조작</b></summary>
