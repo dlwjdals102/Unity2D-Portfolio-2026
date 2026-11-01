@@ -54,14 +54,14 @@ MonoBehaviour 의존 없는 순수 로직"이라고 규정해 뒀다는 점이�
 
 | 어셈블리 | 위치 | 참조 | 역할 |
 |---|---|---|---|
-| `Game.Logic` | `_Project/Scripts/Logic/` | 없음 | 순수 로직. **테스트 대상** |
-| `Game.Runtime` | `_Project/Scripts/` | Logic, InputSystem, UI | MonoBehaviour 등 Unity 의존 |
-| `Game.Editor` | `_Project/Scripts/Editor/` | Runtime, Logic | 에디터 툴, 커스텀 인스펙터 |
-| `Game.Tests.EditMode` | `Tests/EditMode/` | **Logic만** | EditMode 테스트 |
+| `JM2D.Logic` | `_Project/Scripts/Logic/` | 없음 | 순수 로직. **테스트 대상** |
+| `JM2D.Runtime` | `_Project/Scripts/` | Logic, InputSystem, UI, TextMeshPro, Cinemachine | MonoBehaviour 등 Unity 의존 |
+| `JM2D.Editor` | `_Project/Scripts/Editor/` | Runtime, Logic | 에디터 툴, 커스텀 인스펙터 |
+| `JM2D.Tests.EditMode` | `Tests/EditMode/` | **Logic만** | EditMode 테스트 |
 
 의존 방향은 한쪽이다. `Logic ← Runtime ← Editor`, 그리고 `Tests → Logic`.
 
-`Scripts/` 루트의 `Game.Runtime`이 하위 폴더를 모두 포함하되,
+`Scripts/` 루트의 `JM2D.Runtime`이 하위 폴더를 모두 포함하되,
 `Logic/`과 `Editor/`는 자체 asmdef가 있어 그 하위 트리를 가져간다.
 따라서 기존 폴더 구조를 바꾸지 않고 폴더 2개만 추가하면 됐다.
 
@@ -80,7 +80,7 @@ MonoBehaviour 의존 없는 순수 로직"이라고 규정해 뒀다는 점이�
 ### 파급효과 — `internal`이 어셈블리 경계를 넘지 못한다
 
 검증 중 실제로 컴파일 에러(CS0122)로 확인했다.
-**`Game.Logic`에서 테스트하려는 타입은 `public`이어야 한다.**
+**`JM2D.Logic`에서 테스트하려는 타입은 `public`이어야 한다.**
 `internal`로 두려면 `InternalsVisibleTo`를 별도로 걸어야 한다.
 
 지금은 `public`으로 간다. 1인 프로젝트에서 `InternalsVisibleTo`는
@@ -90,10 +90,11 @@ MonoBehaviour 의존 없는 순수 로직"이라고 규정해 뒀다는 점이�
 
 - **Logic과 Runtime의 경계는 결국 판단이다.** 어셈블리가 강제하는 건
   "Logic이 Runtime을 못 본다"는 것뿐이고, 로직을 Runtime에 써버리는 건 막지 못한다.
-- `Game.Logic`에 `noEngineReferences`를 걸지 않았다. 즉 `Vector2Int`, `Mathf` 같은
+- `JM2D.Logic`에 `noEngineReferences`를 걸지 않았다. 즉 `Vector2Int`, `Mathf` 같은
   UnityEngine 타입을 쓸 수 있다. 완전한 순수 C#은 아니다.
   그리드 좌표와 수학 연산에 이들을 쓰는 편이 실용적이라고 판단했다.
+  **다만 실제로 쓴 파일은 없다.** Logic 의 `using`은 `System`,
+  `System.Collections.Generic`, `JM2D.Logic.Common` 뿐이다.
+  **그 선은 컴파일이 아니라 규율이 지킨다.** 걸어서 막는 편이 맞는지는 아직 정하지 않았다.
   대신 **MonoBehaviour·씬 의존이 없다**는 경계는 유지된다.
 - PlayMode 테스트 어셈블리는 만들지 않았다. 필요해지면 그때 추가한다.
-- 어셈블리 이름 접두사 `Game`은 임시다. 게임 제목이 정해지면 바꾼다.
-  asmdef 4개와 네임스페이스를 고치면 되므로 **코드가 적은 지금이 가장 싸다.**
