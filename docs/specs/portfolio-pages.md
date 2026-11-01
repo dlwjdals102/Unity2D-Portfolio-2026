@@ -385,6 +385,50 @@ docs/       더 파는 사람이 온다. 명세 32개, 결정 40개, 면접 문�
                    지켰지만 재지는 않았다. 프로파일링 뒤에 수치와 함께 넣는다
 ```
 
+### README 넷을 손본 결과 (2026-11-02)
+
+**노션을 닫은 뒤에 미뤄 두었던 넷이다.** 노션이 확정돼야 무엇을 가리킬지 정해져서 미뤘다.
+
+**하나. 링크 순서를 빌드 먼저로.** `노션 · 영상 · 빌드` 에서 `빌드 · 영상 · 노션` 으로 바꿨다.
+영어권 가이드가 **빌드를 직접 만져 보는 것이 영상보다 유용하다**고 적고, 노션은 '더 읽을 것' 이다.
+
+**둘. 어느 폴더를 보면 되는지.** 넥슨 NDC 의 `본인이 작업한 코드 위치와 간략한 설명` 이다.
+노션 1절 토글은 **기술 스택 항목별**로 보내고, README 표는 **면접 단골별**로 보낸다.
+자리가 겹치지 않는 이유는 README 가 저장소 안에 있어서다. 노션에 가지 않고 바로 누른다.
+
+```
+순수 로직과 그 테스트        Logic/ 과 Tests/EditMode/   주제 폴더가 짝을 이룬다
+플레이어 입력과 이동, 대시     Scripts/Player/
+적 상태 머신과 보스          Scripts/Enemy/
+피격 판정과 체력            Scripts/Combat/
+방 생성과 타일 칠하기        Scripts/Rooms/
+데이터 에셋 클래스          Scripts/Data/
+```
+
+**셋. 코드 경계를 드러내는 한 줄.** 리소스 표가 접혀 있어 밖에서 보이지 않았다.
+`구조` 절 첫 문단으로 올렸다. **노션 6절과 같은 문장을 쓰지 않았다.**
+노션은 `어디까지가 제 코드인지 폴더로 가릅니다` 이고 README 는
+`제가 쓴 코드는 Assets/_Project 안에만 있습니다` 다.
+
+**넷. 기술 스택 표의 원본은 README 다.**
+
+```
+왜 README 인가   저장소가 사실이 있는 곳이다. 표의 항목은 코드에서 확인된다
+                노션은 그 항목을 분류 표와 토글 열다섯으로 펼친 것이다
+고치는 순서       README 를 고치면 노션 표와 토글, check.py 의 tech 리스트를 함께 본다
+                노션의 설명 문장만 다듬는 것은 README 와 무관하다
+대조             sync.py 가 두 곳의 항목을 맞춰 본다. 순서까지 본다
+```
+
+**표를 한 곳에만 두는 안은 버렸다.** README 에서 빼면 GitHub 를 먼저 여는 심사자가
+키워드를 못 보고, 노션에서 빼면 주 포트폴리오가 약해진다. **문제는 두 벌인 것이 아니라
+어긋나는 것**이라서 대조를 기계에 맡겼다.
+
+**아이콘 팩 설명도 갈랐다.** 노션 6절이 **판단**(왜 뺐나)을 맡고 README 가 **운영**(어떻게
+되살리나)을 맡는다. 양쪽에 같은 두 문장이 있던 것을 5어절 대조로 찾았다.
+
+**첫 화면 62줄, 전체 99줄이다.** 접힌 둘(조작, 사용 리소스)이 37줄이다.
+
 ### 양을 세는 숫자는 README 에 적지 않는다
 
 **기준은 하나다. 양을 세는 숫자는 빼고, 결과를 말하는 숫자는 남긴다.**
@@ -1319,13 +1363,51 @@ for L in raw.split('\n'):
 print('\n줄 %d 개' % n)
 ```
 
-**도구 넷을 쓰는 순서.**
+### 다섯 번째 스크립트 (sync.py)
+
+**기술 스택 항목이 README 표와 노션 토글에서 같은지 본다.** 한쪽만 고치면 걸린다.
+
+```python
+# 기술 스택 항목이 README 표와 노션 토글에서 같은지 본다.
+# 항목의 원본은 README 다. 한쪽만 고치면 여기서 걸린다.
+import re, sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+readme, notion = sys.argv[1], sys.argv[2]
+
+body = open(readme, encoding='utf-8').read()
+table = re.search(r'## 기술 스택\n\n(\|.*?)\n\n', body, re.S)
+tech = []
+for row in table.group(1).split('\n'):
+    cells = [c.strip() for c in row.strip('|').split('|')]
+    if len(cells) != 2 or cells[0] in ('분류', '---'):
+        continue
+    tech += [x.strip() for x in cells[1].split(',')]
+
+page = open(notion, encoding='utf-8').read()
+tog = re.search(r'<b>표의 항목을 어디서 볼 수 있나</b>\n(.*?)</toggle>', page, re.S)
+names = re.findall(r'^- <b>([^<]+)</b>', tog.group(1), re.M)
+
+print('README 표 %d 항목 / 노션 토글 %d 줄' % (len(tech), len(names)))
+gap = 0
+for t in tech:
+    if t not in names:
+        print('  노션 토글에 없음   ' + t); gap += 1
+for t in names:
+    if t not in tech:
+        print('  README 표에 없음   ' + t); gap += 1
+if gap == 0:
+    print('  순서까지 같음' if tech == names else '  항목은 같고 순서가 다름')
+```
+
+**도구 다섯을 쓰는 순서.**
 
 ```
 절을 하나 쓸 때마다   check.py
 절을 다 쓴 뒤        blocks.py    제목이 불릿을 요약하지 않는지
 여섯 절을 다 쓴 뒤     check.py all + topics.py
 통독을 닫기 전       절 제목 대조 + leaveout.py
+노션이나 README 를 고친 뒤   sync.py
 ```
 
 

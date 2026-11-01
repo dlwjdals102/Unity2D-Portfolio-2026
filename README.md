@@ -4,10 +4,9 @@
 게임 클라이언트 개발자 지원용 포트폴리오입니다.
 Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 3~4개월 (2026.08 ~)
 
-<!-- 계단 4에서 끼운다: 가방에 아이템을 끼우고 스탯이 바뀌는 GIF -->
 > **(GIF 자리)** 가방에 아이템을 끼우고 스탯이 바뀌는 장면
 
-**[상세 포트폴리오 (노션)](#)** · **[플레이 영상](#)** · **[브라우저에서 플레이](https://play.unity.com/ko/games/a6484628-c957-42ee-aaa5-a6d5591c3d69/unity2d-portfolio-2026)**
+**[브라우저에서 플레이](https://play.unity.com/ko/games/a6484628-c957-42ee-aaa5-a6d5591c3d69/unity2d-portfolio-2026)** · **[플레이 영상](#)** · **[상세 포트폴리오 (노션)](#)**
 
 ## 기술 스택
 
@@ -22,24 +21,42 @@ Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 3~4개월 (2026.08 ~)
 
 셋은 상세 포트폴리오에서 설계 판단과 함께 자세히 다룹니다.
 
-- **가방 격자 배치와 시너지**: 5×5 격자의 어디에 어떻게 놓느냐로 빌드가 갈립니다
-- **적 공통 부모와 보스**: 일반 적과 보스가 한 부모를 씁니다. 보스를 올릴 때 부모 클래스가 한 줄 바뀌었습니다
-- **절차적 방 배치와 BFS 흐름장 길찾기**: 적이 몇 마리든 길찾기 계산이 한 번입니다
+- **가방 격자 배치와 시너지**: 목표를 바꾸면 가방의 절반 이상을 다시 놓게 됩니다
+- **적 공통 부모와 보스**: 보스를 올릴 때 부모 클래스가 한 줄 바뀌고 적 넷은 그대로였습니다
+- **절차적 방 배치와 BFS 흐름장 길찾기**: 적이 몇 마리로 늘어도 길찾기 계산은 한 번입니다
 
 ## 구조
 
-**어셈블리를 나누고 의존 방향을 한쪽으로 고정했습니다.**
+**제가 쓴 코드는 [`Assets/_Project`](Assets/_Project) 안에만 있습니다.**
+받아 온 것은 [`Assets/ThirdParty`](Assets/ThirdParty) 에 모았고 출처는 맨 아래 표에 전부 적었습니다.
 
-- `JM2D.Logic`: MonoBehaviour 에 의존하지 않는 순수 로직. 테스트 대상입니다
-- `JM2D.Runtime`: 씬에 붙는 컴포넌트. `Logic` 을 참조합니다
-- `JM2D.Editor`: 에디터 전용
-- `JM2D.Tests.EditMode`: `Logic` 만 참조합니다. **`Runtime` 참조는 일부러 막았습니다**
+**어셈블리를 넷으로 나누고 의존 방향을 한쪽으로 고정했습니다.**
 
+```
+JM2D.Logic  <--  JM2D.Runtime  <--  JM2D.Editor     화살표는 '참조한다' 를 뜻합니다
+    ^
+    |
+JM2D.Tests.EditMode                                 Logic 만 참조합니다
+```
+
+`JM2D.Logic` 은 MonoBehaviour 를 쓰지 않는 계산만 담고 **테스트 대상**입니다.
+테스트 어셈블리가 `Runtime` 을 참조하는 것은 **일부러 막았습니다.**
 [어셈블리를 가른 이유와 버린 대안](docs/decisions/asmdef-structure.md)
+
+**어느 폴더를 보면 되는지.**
+
+| 무엇 | 어디 |
+|---|---|
+| 순수 로직과 그 테스트 | [`Logic/`](Assets/_Project/Scripts/Logic) 과 [`Tests/EditMode/`](Assets/Tests/EditMode). 주제 폴더가 짝을 이룹니다 |
+| 플레이어 입력과 이동, 대시 | [`Scripts/Player/`](Assets/_Project/Scripts/Player) |
+| 적 상태 머신과 보스 | [`Scripts/Enemy/`](Assets/_Project/Scripts/Enemy) |
+| 피격 판정과 체력 | [`Scripts/Combat/`](Assets/_Project/Scripts/Combat) |
+| 방 생성과 타일 칠하기 | [`Scripts/Rooms/`](Assets/_Project/Scripts/Rooms) |
+| 데이터 에셋 클래스 | [`Scripts/Data/`](Assets/_Project/Scripts/Data) |
 
 ## 설계 기록
 
-판단할 때마다 고른 안과 버린 안을 남겼습니다.
+판단할 때마다 고른 안과 버린 안을 남겼습니다. 바꾼 판단은 옛 문서를 지우지 않고 이어 붙였습니다.
 [설계 결정](docs/decisions) · [기능 명세](docs/specs) · [기획서](docs/design/GDD.md)
 
 <details>
@@ -74,12 +91,9 @@ Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 3~4개월 (2026.08 ~)
 | 음악 | Chiptune Adventure Music Pack (PPEAK / Preston Peak) 중 `secret base` 1곡 | [ppeak.itch.io/chip-free](https://ppeak.itch.io/chip-free) | CC BY 4.0 |
 | 스프라이트 | RPG Icon Pack - Dark Fantasy Equipment (Clockwork Raven) 중 아이템 아이콘 15점 | [clockworkraven.itch.io/rpg-icon-pack-100-dark-fantasy-equipment](https://clockworkraven.itch.io/rpg-icon-pack-100-dark-fantasy-equipment) | 자체 라이선스 (아래) |
 
-**아이콘 팩만 저장소에서 빼 두었습니다.** 그 팩의 라이선스가 게임과 영상에 쓰는 것은 허용하면서
-**에셋을 함께 배포해 받는 쪽이 그 그림에 접근하게 하는 것은 막습니다.** 공개 저장소에 그림을
-올리는 것이 거기 걸린다고 보아 `.gitignore` 에 넣었습니다.
-
-**클론해도 게임은 돕니다.** 아이콘이 비면 색 사각형으로 그리도록 처음부터 만들어 두었습니다.
-그림을 넣고 싶으면 위 링크에서 받아 `Assets/ThirdParty/Sprites/16x16.png` 로 두면 됩니다.
+**아이콘 팩만 저장소에 없습니다.** 그 팩의 라이선스가 에셋 재배포를 금지합니다.
+아이콘이 비면 색 사각형으로 그려서 **클론해도 게임은 돕니다.**
+그림을 넣으려면 위 링크에서 받아 `Assets/ThirdParty/Sprites/16x16.png` 로 두면 됩니다.
 `.meta` 를 저장소에 남겨 두어 슬라이스와 연결이 그대로 복원됩니다.
 
 </details>
