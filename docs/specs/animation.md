@@ -192,7 +192,6 @@ char_attack_right  32x48   6프레임     무기를 휘두르는 범위까지 �
 - [x] 플레이모드 체크리스트 통과
 - [x] `Animator.StringToHash` 로 파라미터 이름을 캐싱했다 (`unity-csharp.md`)
 - [x] 공격 판정 시점이 바뀐 것을 [결정 문서](../decisions/attack-hits-on-animation-frame.md)에 적었다
-- [x] 면접 문답을 `docs/interview/animation.md` 에 썼다 (8문항)
 
 ## 계단
 

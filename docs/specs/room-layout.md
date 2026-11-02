@@ -181,7 +181,6 @@ related: [../decisions/map-structure.md, ../design/GDD.md, ../design/feature-poo
 - [x] EditMode 테스트 통과 (111개)
 - [x] **'정해진 것', '검토하고 버린 것', '정할 것' 다섯 가지의 결과를 이 문서 메모와 `docs/decisions/` 에 기록**
   ([한 줄 걷기](../decisions/room-layout-linear-walk.md), [Logic 폴더](../decisions/logic-folders-by-topic.md))
-- [x] 면접 문답에 항목 추가 ([room-layout.md](../interview/room-layout.md), 7문항)
 
 ## 메모
 

@@ -145,7 +145,6 @@ GDD 코어 루프의 '다음 방' 이 이 명세에서 처음으로 화면에 �
 - [x] '정해진 것' 과 '정할 것' 여섯 가지의 결과를 이 문서 메모와 `docs/decisions/` 에 기록
   ([방 프리팹](../decisions/room-prefab-tilemap.md), [방 추적](../decisions/room-tracking-by-position.md), [카메라](../decisions/room-camera-per-room.md))
 - [x] STATUS 의 설치된 패키지에 Cinemachine 을 추가
-- [x] 면접 문답에 항목 추가 ([room-traversal.md](../interview/room-traversal.md), 7문항)
 
 ## 메모
 

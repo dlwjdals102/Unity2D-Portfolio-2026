@@ -141,7 +141,6 @@ related: [room-waves.md, room-traversal.md, room-layout.md, enemy-dash.md, ../de
 - [x] 검증 항목 통과
 - [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서 메모와 `docs/decisions/` 에 기록
 - [x] STATUS 와 기능 후보 풀(6번)에서 이 항목을 옮긴다
-- [x] 면접 문답에 항목 추가
 
 ## 메모
 

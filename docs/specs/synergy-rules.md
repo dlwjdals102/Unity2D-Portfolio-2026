@@ -157,7 +157,6 @@ related: [bag-synergy.md, bag-grid.md, ../decisions/synergy-direction.md]
 - [x] 플레이모드 체크리스트 통과
 - [x] **배치를 바꿔 보고 최적해가 자명하지 않은지 판단한다**
 - [x] 설계 판단을 `docs/decisions/`에 기록
-- [x] 면접 문답에 항목 추가
 
 ## 메모
 

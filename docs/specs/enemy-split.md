@@ -143,7 +143,6 @@ related: [enemy-ranged.md, enemy-melee.md, damage-death.md, scene-flow.md, ../de
 - [x] 플레이모드 체크리스트 통과
 - [x] **'정할 것' 네 가지의 결과를 이 문서 메모와 `docs/decisions/` 에 기록**
 - [x] `MeleeEnemy` 를 고쳤는지 기록. 고쳤다면 FSM 구조 결정의 '부품을 붙인다' 가 빗나간 이유를 적는다
-- [x] 면접 문답에 항목 추가
 
 ## 메모
 

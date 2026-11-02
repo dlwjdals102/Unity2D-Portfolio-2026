@@ -3,7 +3,7 @@ name: 보스
 status: done
 owner: user
 phase: 4
-related: [room-waves.md, enemy-dash.md, enemy-ranged.md, enemy-split.md, ../design/GDD.md, ../decisions/enemy-fsm-structure.md, ../decisions/obstacles-and-flow-field.md, ../decisions/boss-on-enemy-base.md, ../decisions/boss-pattern-rotation.md, ../interview/boss.md]
+related: [room-waves.md, enemy-dash.md, enemy-ranged.md, enemy-split.md, ../design/GDD.md, ../decisions/enemy-fsm-structure.md, ../decisions/obstacles-and-flow-field.md, ../decisions/boss-on-enemy-base.md, ../decisions/boss-pattern-rotation.md]
 ---
 
 # 보스 (5)
@@ -163,7 +163,6 @@ related: [room-waves.md, enemy-dash.md, enemy-ranged.md, enemy-split.md, ../desi
 - [x] 검증 항목 통과
 - [x] **`EnemyBase` 가 몇 줄 바뀌었는지 적는다. 한 줄이다.** 이유는 계단 4 메모에 있다
 - [x] 설계 판단을 `docs/decisions/` 에 기록
-- [x] 면접 문답 작성
 
 ## 메모
 

@@ -147,7 +147,6 @@ related: [room-waves.md, bag-grid.md, item-roster.md, ../decisions/encounter-dat
 - [x] 검증 항목 통과
 - [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서 메모와 `docs/decisions/` 에 기록
 - [x] STATUS 의 '열려 있는 질문' 에서 가방 여는 시점을 지우고 결과를 옮긴다
-- [x] 면접 문답에 항목 추가
 
 ## 메모
 

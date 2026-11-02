@@ -255,7 +255,6 @@ Assets/ThirdParty/
 - [x] 받은 에셋이 전부 `Assets/ThirdParty/` 아래에 있다
 - [x] **적 프리팹의 임시 색을 흰색으로 돌렸다.** 여섯 전부 `(1,1,1,1)` 인 것을 파일에서 확인했다
 - [x] **루트 README 출처 표에 적었다.** 스프라이트 둘과 폰트 하나다
-- [x] 면접 문답을 `docs/interview/cc0-assets.md` 에 썼다 (8문항)
 
 ## 계단
 

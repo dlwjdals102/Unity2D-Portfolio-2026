@@ -138,7 +138,6 @@ related: [player-attack.md, stat-system.md, item-effects.md, enemy-melee.md, ene
 - [x] 검과 창이 코드 없이 데이터로 갈렸는지 기록. 갈리지 않았다면 이유를 적는다
 - [x] 무기와 아이템이 서로를 키우는지 확인한 결과를 기록
 - [x] 적의 근접 공격을 옮긴 뒤 `EnemyBase` 에서 무엇이 빠졌는지 기록
-- [x] 면접 문답에 항목 추가
 
 ## 메모
 
