@@ -11,11 +11,8 @@ using UnityEngine.UI;
 namespace JM2D.UI
 {
     /// 가방 격자를 화면에 그리고 Tab 으로 열고 닫는다.
-    ///
-    /// 칸 위치를 코드로 계산한다. Grid Layout Group 을 쓰면 칸 배치는 공짜지만
-    /// 여러 칸을 덮는 아이템을 얹을 때 레이아웃과 싸워야 한다.
-    ///
-    /// 놓을 수 있는 것은 손에 든 아이템 하나다. 손은 ItemInventory 가 갖고 방 보상이 채운다.
+    /// 칸 위치를 코드로 계산한다. Grid Layout Group 은 여러 칸을 덮는 아이템에서 레이아웃과 싸우게 된다.
+    /// 놓을 수 있는 것은 손에 든 하나뿐이고, 손은 ItemInventory 가 갖는다.
     public class BagView : MonoBehaviour
     {
         [Header("구성")]
@@ -82,8 +79,7 @@ namespace JM2D.UI
             _roomCombat.OnRoomCleared += Unlock;
         }
 
-        /// 스탯이 바뀌면 곧바로 다시 쓴다. 무기, 아이템, 시너지 어느 쪽이 바꿔도 같다.
-        /// 스탯은 PlayerStats.Awake 에서 만들어져, 그보다 먼저 돌 수 있는 Awake 나 OnEnable 이 아니라 여기서 구독한다.
+        /// 스탯은 PlayerStats.Awake 에서 만들어지므로 Awake 나 OnEnable 이 아니라 여기서 구독한다.
         /// 구독 전에 바뀐 값(무기는 Start 에서 얹힌다)을 놓치지 않게 끝에서 한 번 쓴다.
         private void Start()
         {
@@ -104,8 +100,7 @@ namespace JM2D.UI
 
             if (!_panel.activeSelf) return;
 
-            // Esc 로도 닫는다. 썼다고 알리는 것은 같은 프레임에 도는 Esc 메뉴가
-            // 가방이 닫힌 것을 보고 자기 차례라 여기며 열리는 것을 막기 위해서다.
+            // 썼다고 알리는 것은, 같은 프레임에 도는 Esc 메뉴가 가방이 닫힌 것을 보고 열리는 것을 막기 위해서다.
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 Toggle();
@@ -141,8 +136,7 @@ namespace JM2D.UI
             _stats.MaxHealth.OnChanged -= UpdateInfoText;
         }
 
-        /// 밖에서 연다. 방 보상을 고르면 곧바로 놓을 수 있게 열어 준다.
-        /// 잠겨 있거나 이미 열려 있으면 아무 일도 하지 않는다.
+        /// 방 보상을 고른 뒤 곧바로 놓을 수 있게 밖에서 부른다.
         public void Open()
         {
             if (_isLocked || _panel.activeSelf) return;
@@ -150,8 +144,7 @@ namespace JM2D.UI
             Toggle();
         }
 
-        /// 전투가 시작되면 잠그고, 열려 있으면 닫는다.
-        /// 방은 받지만 쓰지 않는다. 짝이 되는 두 이벤트의 모양을 맞춰 둔 것이다.
+        /// 방은 받지만 쓰지 않는다. 짝이 되는 Unlock 과 이벤트 모양을 맞춘 것이다.
         private void Lock(Room room)
         {
             _isLocked = true;
@@ -159,14 +152,12 @@ namespace JM2D.UI
             if (_panel.activeSelf) Toggle();
         }
 
-        /// 방을 깨면 다시 열 수 있다.
         private void Unlock(Room room)
         {
             _isLocked = false;
         }
 
-        /// 창을 닫아도 손에 든 것은 그대로 남는다. 다음에 열면 여전히 들고 있다.
-        /// 놓을 자리를 못 정한 채로 다음 방에 갈 수 있어야 한다.
+        /// 창을 닫아도 손에 든 것은 남는다. 놓을 자리를 못 정한 채 다음 방에 갈 수 있어야 한다.
         private void Toggle()
         {
             bool opening = !_panel.activeSelf;
@@ -183,8 +174,7 @@ namespace JM2D.UI
             UpdateInfoText();
         }
 
-        /// 마우스가 가리키는 칸에 놓을 모습을 반투명하게 보여준다.
-        /// 놓을 수 없으면 빨강이라 클릭하기 전에 알 수 있다.
+        /// 마우스가 가리키는 칸에 놓을 모습을 반투명하게 보여준다. 놓을 수 없으면 빨강이다.
         private void UpdatePreview()
         {
             ItemInstance hand = _inventory.Hand;
@@ -217,7 +207,6 @@ namespace JM2D.UI
 
             if (!TryGetCellUnderMouse(out int x, out int y)) return;
 
-            // 놓지 못하면 손에 그대로 남는다. 미리보기의 빨강이 이미 알려 주고 있다.
             if (!_inventory.TryPlaceHand(x, y)) return;
 
             _previewView.gameObject.SetActive(false);
@@ -229,7 +218,6 @@ namespace JM2D.UI
             if (!TryGetCellUnderMouse(out int x, out int y)) return;
 
             // 그리드는 IGridItem 만 알므로 여기서 되돌린다.
-            // 넣는 것이 ItemInstance 뿐이라 실패할 일은 없지만 조용히 넘긴다.
             if (_inventory.Grid.GetAt(x, y) is not ItemInstance instance) return;
 
             _inventory.Remove(instance);
@@ -262,11 +250,8 @@ namespace JM2D.UI
 
             Vector2 size = new Vector2(grid.Width * _cellSize, grid.Height * _cellSize);
 
-            // 격자의 기준점을 왼쪽 위로 못 박는다. 칸 좌표 계산과 마우스로 칸을 찾는 계산이
-            // 둘 다 이 피벗을 전제하므로 인스펙터 설정에 맡기면 오류 없이 자리만 어긋난다.
-            //
-            // 앵커는 부모의 가운데에 두고 격자 절반만큼 되밀어 화면 가운데를 맞춘다.
-            // 피벗만으로는 못 맞춘다. 피벗을 가운데로 옮기면 좌표 계산의 전제가 깨진다.
+            // 칸 좌표 계산과 마우스 판정이 둘 다 왼쪽 위 피벗을 전제하므로 코드가 못 박는다.
+            // 인스펙터에 맡기면 오류 없이 자리만 어긋난다. 가운데 맞추기는 앵커로 한다.
             _cellRoot.anchorMin = _cellRoot.anchorMax = new Vector2(0.5f, 0.5f);
             _cellRoot.pivot = new Vector2(0f, 1f);
             _cellRoot.sizeDelta = size;
@@ -286,12 +271,8 @@ namespace JM2D.UI
             }
         }
 
-        /// 스탯 글을 격자 오른쪽 위에 붙인다. 격자 크기가 코드에서 나오므로 이 자리도 코드가 정한다.
-        /// 전에는 숫자로 두었는데, 칸 크기를 한 번 바꾸자 손으로 두 값을 고치게 됐다.
-        ///
-        /// 피벗이 왼쪽 위라야 이 계산이 맞는다. 씬에서 바꾸면 오류 없이 자리만 어긋난다.
-        /// 부모는 BagWindow 그대로 둔다. CellRoot 의 자식으로 옮기면 거기 붙은 RectMask2D 에
-        /// 글이 잘려 보이지 않는다. 한 번 겪었다.
+        /// 격자 크기가 코드에서 나오므로 스탯 글의 자리도 코드가 정한다. 피벗이 왼쪽 위라야 맞는다.
+        /// 부모는 BagWindow 그대로 둔다. CellRoot 의 자식으로 옮기면 거기 붙은 RectMask2D 에 글이 잘린다.
         private void PlaceStatText(Vector2 gridSize)
         {
             RectTransform rect = _statText.rectTransform;
@@ -301,8 +282,7 @@ namespace JM2D.UI
             rect.anchoredPosition = new Vector2(gridSize.x / 2f + _statGap, gridSize.y / 2f);
         }
 
-        /// 안내 글을 격자 아래 가운데에 붙인다. 스탯 글과 같은 이유로 자리를 코드가 정한다.
-        /// 피벗이 위쪽 가운데라야 이 계산이 맞는다.
+        /// 스탯 글과 같은 이유로 자리를 코드가 정한다. 피벗이 위쪽 가운데라야 맞는다.
         private void PlaceHintText(Vector2 gridSize)
         {
             RectTransform rect = _hintText.rectTransform;
@@ -322,8 +302,7 @@ namespace JM2D.UI
             _previewLabel = CreateLabel(_previewView);
         }
 
-        /// 놓인 것을 전부 지우고 그리드를 훑어 다시 그린다.
-        /// 25칸이라 비용이 없고, 화면과 그리드가 어긋날 수 없다.
+        /// 25칸이라 전부 지우고 다시 그려도 비용이 없고, 화면과 그리드가 어긋날 수 없다.
         private void Redraw()
         {
             foreach (Image view in _itemViews)
@@ -341,8 +320,7 @@ namespace JM2D.UI
             UpdateInfoText();
         }
 
-        /// 손에 든 것과 스탯을 보여준다. 손이나 배치가 바뀔 때마다 갱신한다.
-        /// 스탯에는 시너지가 반영된 값이 그대로 보인다.
+        /// 손이나 배치가 바뀔 때마다 갱신한다. 스탯은 시너지가 반영된 값이다.
         private void UpdateInfoText()
         {
             ItemInstance hand = _inventory.Hand;
@@ -371,8 +349,7 @@ namespace JM2D.UI
             _itemViews.Add(view);
         }
 
-        /// 아이템 위에 이름을 적는다. 아이템을 가득 채우고 가운데에 쓴다.
-        /// 프리팹을 고치지 않으려고 코드에서 만든다. 아이템과 함께 지워진다.
+        /// 아이템 위에 이름을 적는다. 프리팹을 고치지 않으려고 코드에서 만들고, 아이템과 함께 지워진다.
         private TMP_Text CreateLabel(Image parent)
         {
             var go = new GameObject("Name", typeof(RectTransform));
@@ -397,8 +374,7 @@ namespace JM2D.UI
             return label;
         }
 
-        /// 격자 좌표를 UI 좌표로 옮긴다.
-        /// UI 는 위쪽이 +y 인데 격자는 위쪽이 y=0 이라 y 를 뒤집는다.
+        /// 격자 좌표를 UI 좌표로 옮긴다. UI 는 위쪽이 +y 인데 격자는 위쪽이 y=0 이라 y 를 뒤집는다.
         private void PlaceAt(RectTransform rt, int x, int y, int width, int height)
         {
             rt.anchorMin = new Vector2(0f, 1f);

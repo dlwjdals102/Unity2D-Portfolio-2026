@@ -32,9 +32,8 @@ namespace JM2D.Combat
         public int Current => _current;
         public int Max => _maxHealth;
 
-        /// 현재 체력을 상수가 아니라 _maxHealth 에서 읽는다. 그래서 밖에서 InitializeMaxHealth 를
-        /// 이 Awake 보다 먼저 불러도 뒤에 불러도 결과가 같고, 같은 오브젝트 안의 Awake 순서에
-        /// 기대지 않는다. Unity 는 그 순서를 보장하지 않는다.
+        /// 현재 체력을 _maxHealth 에서 읽어, InitializeMaxHealth 를 이 Awake 보다 먼저 불러도
+        /// 뒤에 불러도 결과가 같다. Unity 는 같은 오브젝트 안의 Awake 순서를 보장하지 않는다.
         private void Awake()
         {
             _current = _maxHealth;
@@ -67,16 +66,14 @@ namespace JM2D.Combat
                 _invulnerableLeft = _invulnerableTime;
         }
 
-        /// 초기화 전용. 시작할 때 한 번 부른다. 체력이 최대로 찬다.
-        /// 이 메서드를 부르면 인스펙터의 Max Health 는 무시된다.
+        /// 시작할 때 한 번 부른다. 체력이 최대로 차고 인스펙터의 Max Health 는 무시된다.
         public void InitializeMaxHealth(int max)
         {
             _maxHealth = max;
             _current = _maxHealth;
         }
 
-        /// 런 도중 최대 체력이 바뀔 때 부른다.
-        /// 늘어난 만큼 현재 체력도 같이 찬다.
+        /// 런 도중 최대 체력이 바뀔 때 부른다. 늘어난 만큼 현재 체력도 같이 찬다.
         public void ChangeMaxHealth(int newMax)
         {
             if (IsDead) return;
@@ -88,8 +85,7 @@ namespace JM2D.Combat
             OnHealthChanged?.Invoke(_current, _maxHealth);
         }
 
-        /// 피해와 상관없이 즉시 죽인다. 무적도 무시한다.
-        /// 규칙이 아니라 진행이 죽이는 경우에 쓴다. 보스가 죽을 때 소환물을 함께 치우는 것이 그렇다.
+        /// 무적도 무시하고 즉시 죽인다. 규칙이 아니라 진행이 죽이는 경우(보스가 죽을 때의 소환물)에 쓴다.
         public void Kill()
         {
             if (IsDead) return;

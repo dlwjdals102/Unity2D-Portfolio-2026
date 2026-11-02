@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace JM2D.Logic.Bag
 {
-    /// 아이템을 칸에 놓고 겹침과 경계를 판단한다.
-    /// 무엇이 놓이는지는 모른다. 크기만 안다.
+    /// 아이템을 칸에 놓고 겹침과 경계를 판단한다. 무엇이 놓이는지는 모르고 크기만 안다.
     public class BagGrid
     {
         private readonly IGridItem[,] _cells;
@@ -73,7 +72,6 @@ namespace JM2D.Logic.Bag
             return neighbors.Count;
         }
 
-        /// 그 칸에 다른 아이템이 있으면 명단에 담는다.
         /// 격자 밖이거나, 비었거나, 자기 자신이면 담지 않는다.
         private void AddOther(HashSet<IGridItem> set, IGridItem self, int x, int y)
         {
@@ -103,7 +101,6 @@ namespace JM2D.Logic.Bag
             return found.Count;
         }
 
-        /// 그 행에 이 아이템이 걸쳐 있는가.
         private bool OccupiesRow(IGridItem item, int y)
         {
             for (int x = 0; x < Width; x++)
@@ -129,7 +126,6 @@ namespace JM2D.Logic.Bag
             return found.Count;
         }
 
-        /// 그 열에 이 아이템이 걸쳐 있는가.
         private bool OccupiesColumn(IGridItem item, int x)
         {
             for (int y = 0; y < Height; y++)
@@ -154,8 +150,7 @@ namespace JM2D.Logic.Bag
             return count;
         }
 
-        /// 조건에 맞는 세는 메서드를 골라 부른다.
-        /// 짝이 뒤바뀌어도 오류가 나지 않으므로 테스트가 지킨다.
+        /// 조건에 맞는 메서드를 골라 부른다. 짝이 뒤바뀌어도 오류가 나지 않아 테스트가 지킨다.
         public int Count(IGridItem item, SynergyCondition condition)
         {
             switch (condition)
@@ -168,8 +163,7 @@ namespace JM2D.Logic.Bag
             }
         }
 
-        /// 놓인 아이템을 왼쪽 위 좌표와 함께 돌려준다.
-        /// 여러 칸을 덮는 아이템도 한 번만 나온다.
+        /// 왼쪽 위 좌표와 함께 돌려준다. 여러 칸을 덮는 아이템도 한 번만 나온다.
         public List<PlacedItem> GetPlacedItems()
         {
             var result = new List<PlacedItem>();

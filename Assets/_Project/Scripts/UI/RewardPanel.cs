@@ -12,13 +12,10 @@ using UnityEngine.UI;
 
 namespace JM2D.UI
 {
-    /// 방을 깨면 뜨는 보상 창. 아이템 셋을 보여주고 고른 것을 알린다.
-    /// 고른 아이템을 어디에 넣는지는 모른다. 듣는 쪽이 정한다.
-    ///
-    /// 카드는 코드로 만든다. 가방 칸을 코드로 만드는 것과 같은 방식이다.
+    /// 방을 깨면 뜨는 보상 창. 고른 것을 알리기만 하고 어디에 넣는지는 모른다.
+    /// 카드는 가방 칸과 같은 방식으로 코드가 만든다.
     public class RewardPanel : MonoBehaviour
     {
-        /// 하나를 골랐을 때 알린다.
         public event Action<ItemData> OnPicked;
 
         /// 아무것도 고르지 않고 닫았다. 듣는 쪽은 아이템을 넣지 않고 시간만 되돌린다.
@@ -54,13 +51,11 @@ namespace JM2D.UI
         [SerializeField] private ItemData[] _debugCandidates;
 #endif
 
-        /// 카드 안쪽 여백.
         private const float Margin = 12f;
 
         /// 지금 창에 떠 있는 후보. 숫자 키로 고를 때 쓴다.
         private readonly List<ItemData> _candidates = new List<ItemData>();
 
-        /// 만들어 둔 카드. 다시 띄울 때 지우고 새로 만든다.
         private readonly List<GameObject> _cards = new List<GameObject>();
 
         /// 씬에 적힌 제목. 손에 든 것이 있을 때 그 아래에 한 줄을 붙이므로 원본을 들고 있는다.
@@ -68,12 +63,10 @@ namespace JM2D.UI
 
         public bool IsOpen => _root.activeSelf;
 
-        /// 자리 계산의 기준이 되는 앵커와 피벗은 코드가 정한다.
-        /// 인스펙터에 맡기면 오브젝트를 어떻게 만들었느냐에 따라 기준점이 달라지고, 오류 없이 위치만 틀린다.
+        /// 자리 계산의 기준인 앵커와 피벗은 코드가 정한다. 인스펙터에 맡기면 오류 없이 위치만 틀린다.
         private void Awake()
         {
-            // 가림막이 화면 전체를 덮어야 한다. 빈 오브젝트로 만들면 100 x 100 이라
-            // 화면 가운데 작은 네모만 덮인다. 부모가 Canvas 라 이 한 줄로 화면 크기가 된다.
+            // 빈 오브젝트는 100 x 100 이라 화면 가운데만 덮인다. 부모가 Canvas 라 이 한 줄로 화면 크기가 된다.
             Stretch((RectTransform)_root.transform);
             Center(_cardRoot);
 
@@ -83,8 +76,7 @@ namespace JM2D.UI
                 TopCenter((RectTransform)_title.transform, _titleOffset, 400f, 60f);
             }
 
-            // 씬에 켜 둔 채로 저장해도 시작할 때 꺼진다. 모양을 보며 작업할 수 있고,
-            // 켠 채로 저장해 게임이 창과 함께 시작하는 실수가 없어진다.
+            // 씬에 켜 둔 채로 저장해도 시작할 때 꺼진다. 모양을 보며 작업하고도 실수가 남지 않는다.
             _root.SetActive(false);
         }
 
@@ -99,9 +91,8 @@ namespace JM2D.UI
             else if (Keyboard.current.escapeKey.wasPressedThisFrame) Skip();
         }
 
-        /// 후보를 받아 창을 띄운다. 셋이 아니어도 받은 수만큼 만든다.
-        /// heldItemName 은 지금 손에 든 것의 이름이고, 없으면 null 이다.
-        /// 창이 가방을 참조하지 않도록 띄우는 쪽이 넘겨 준다.
+        /// 셋이 아니어도 받은 수만큼 만든다.
+        /// heldItemName 은 손에 든 것의 이름이고 없으면 null 이다. 창이 가방을 참조하지 않도록 받는다.
         public void Show(IReadOnlyList<ItemData> candidates, string heldItemName)
         {
             _candidates.Clear();
@@ -112,7 +103,6 @@ namespace JM2D.UI
 
             _root.SetActive(true);
 
-            // 창이 스스로 막는다. 가방이 자기가 열고 닫으며 막는 것과 같은 모양이다.
             // 띄우는 쪽에 두면 확인용 메뉴로 띄울 때 막히지 않아 카드 클릭이 공격으로 나간다.
             _playerInput.SetFireBlocked(true);
         }
@@ -136,9 +126,7 @@ namespace JM2D.UI
             OnPicked?.Invoke(picked);
         }
 
-        /// 제목 아래에 안내를 한 줄 붙인다. 넘길 수 있다는 것은 늘 적고,
-        /// 손에 든 것이 있으면 그것이 사라진다는 것까지 함께 적는다.
-        /// 고르는 순간 덮어쓰는 것이 규칙이고, 창은 그 사실을 미리 알리는 데까지만 한다.
+        /// 손에 든 것이 있으면 그것이 사라진다는 것까지 적는다. 덮어쓰는 것이 규칙이고 창은 미리 알리기만 한다.
         /// 제목 칸의 넘침 설정이 Overflow 라 두 줄이 되어도 잘리지 않는다.
         private void WriteTitle(string heldItemName)
         {
@@ -151,9 +139,7 @@ namespace JM2D.UI
             _title.text = $"{_baseTitle}\n{hint}";
         }
 
-        /// 고르기와 같은 순서다. 창을 먼저 닫고 알린다.
-        /// 이 Esc 를 썼다고 알리는 것은, 같은 프레임에 도는 Esc 메뉴가 창이 닫힌 것을 보고
-        /// 자기 차례라 여기며 열리는 것을 막기 위해서다.
+        /// 썼다고 알리는 것은, 같은 프레임에 도는 Esc 메뉴가 창이 닫힌 것을 보고 열리는 것을 막기 위해서다.
         private void Skip()
         {
             Hide();
@@ -173,8 +159,7 @@ namespace JM2D.UI
                 _cards.Add(CreateCard(i, _candidates[i]));
         }
 
-        /// 카드 하나. 가운데를 기준으로 좌우로 펼쳐 놓는다.
-        /// 카드 안의 것들은 카드 위쪽에 붙여 내려가며 쌓는다.
+        /// 가운데를 기준으로 좌우로 펼치고, 카드 안의 것들은 위쪽에 붙여 내려가며 쌓는다.
         private GameObject CreateCard(int index, ItemData data)
         {
             var background = new GameObject($"Card {index} {data.DisplayName}", typeof(RectTransform));
@@ -193,7 +178,7 @@ namespace JM2D.UI
             Button button = background.AddComponent<Button>();
             button.onClick.AddListener(() => Pick(index));
 
-            // 번호. 키보드로 고를 때 쓴다. 카드 왼쪽 위에 붙인다.
+            // 키보드로 고를 때 쓰는 번호.
             TMP_Text number = CreateText(rect, $"{index + 1}", 28f, TextAlignmentOptions.TopLeft);
             var numberRect = (RectTransform)number.transform;
             numberRect.anchorMin = numberRect.anchorMax = new Vector2(0f, 1f);
@@ -224,8 +209,7 @@ namespace JM2D.UI
             return background;
         }
 
-        /// 글꼴은 제목의 것을 빌린다. TMP 기본 글꼴에는 한글이 없다.
-        /// 자리는 부르는 쪽이 Center 나 TopCenter 로 잡는다.
+        /// TMP 기본 글꼴에는 한글이 없어 제목의 것을 빌린다. 자리는 부르는 쪽이 잡는다.
         private TMP_Text CreateText(RectTransform parent, string text, float fontSize, TextAlignmentOptions alignment)
         {
             var go = new GameObject("Text", typeof(RectTransform));
@@ -246,7 +230,6 @@ namespace JM2D.UI
             return label;
         }
 
-        /// 부모를 가득 채운다.
         private static void Stretch(RectTransform rect)
         {
             rect.anchorMin = Vector2.zero;
@@ -271,7 +254,6 @@ namespace JM2D.UI
             rect.anchoredPosition = new Vector2(0f, -offset);
         }
 
-        /// 아이템의 효과와 시너지를 사람이 읽을 문장으로 만든다.
         private static string Describe(ItemData data)
         {
             var text = new StringBuilder();
@@ -285,8 +267,7 @@ namespace JM2D.UI
             return text.ToString();
         }
 
-        /// 퍼센트는 0.1 을 10% 로 적는다. 가산과 승산을 구분해 적지 않는다.
-        /// 계산 방식은 플레이어에게 보이지 않고, 구분해 적으면 문구만 길어진다.
+        /// 0.1 을 10% 로 적는다. 가산과 승산은 구분하지 않는다. 계산 방식은 플레이어에게 보이지 않는다.
         private static string Describe(ItemModifier modifier)
         {
             if (modifier.Type == ModifierType.Flat)

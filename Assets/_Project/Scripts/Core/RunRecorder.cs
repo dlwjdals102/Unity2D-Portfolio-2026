@@ -8,19 +8,15 @@ using JM2D.Logic.Rooms;
 namespace JM2D.Core
 {
     /// 이번 판이 어디까지 갔는지 세고, 끝날 때 저장한다.
-    /// 저장 파일을 읽고 쓰는 것은 SaveFile 이 하고, 무엇을 남길지는 UnlockRules 가 정한다.
-    /// 이 클래스는 둘을 잇고 '언제' 를 안다.
+    /// 읽고 쓰는 것은 SaveFile, 무엇을 남길지는 UnlockRules 가 정한다. 이 클래스는 '언제' 를 안다.
     public class RunRecorder : MonoBehaviour
     {
         [SerializeField] private RoomCombat _combat;
         [SerializeField] private LevelBuilder _level;
         [SerializeField] private Health _playerHealth;
 
-        /// 판이 끝나고 기록을 저장한 뒤에 알린다. 인자는 차례로
-        /// 보스를 잡았는가, 저장된 기록, 이번 판으로 새로 열린 무기 수다.
-        ///
-        /// 저장이 끝난 뒤에 알리는 것이 요점이다. 듣는 쪽이 죽음이나 클리어를 직접 들으면
-        /// 저장보다 먼저 글을 쓸 수 있고, 그러면 기록이 한 판 뒤처져 보인다.
+        /// 인자는 차례로 보스를 잡았는가, 저장된 기록, 새로 열린 무기 수다.
+        /// 저장이 끝난 뒤에 알린다. 듣는 쪽이 죽음을 직접 들으면 저장보다 먼저 글을 써 기록이 한 판 뒤처진다.
         public event Action<bool, SaveData, int> OnRunFinished;
 
         private readonly SaveFile _file = new SaveFile();
@@ -45,7 +41,6 @@ namespace JM2D.Core
             _playerHealth.OnDied -= OnPlayerDied;
         }
 
-        /// 방에 들어서서 전투가 시작되면 그 방까지 간 것이다.
         /// 걸은 순서가 곧 방 번호라 배치에 물어본다. 시작 방이 0번이므로 하나를 더한다.
         private void OnCombatStarted(Room room)
         {

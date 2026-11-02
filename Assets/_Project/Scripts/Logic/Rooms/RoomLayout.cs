@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace JM2D.Logic.Rooms
 {
-    /// 한 판의 방 배치. 걸은 순서대로 쌓인 칸 목록 하나가 전부다.
-    /// 종류와 문은 저장하지 않고 순번으로 계산한다. 기록이 하나라 어긋날 곳이 없다.
+    /// 한 판의 방 배치. 걸은 순서대로 쌓인 칸 목록 하나가 전부고,
+    /// 종류와 문은 순번으로 계산한다. 기록이 하나라 어긋날 곳이 없다.
     public class RoomLayout
     {
         private readonly List<RoomCell> _rooms;
@@ -32,8 +32,7 @@ namespace JM2D.Logic.Rooms
             return RoomType.Combat;
         }
 
-        /// 그 변에 문이 있는가. 변 너머의 방과 순번이 하나 차이 날 때만 있다.
-        /// 칸이 붙어 있어도 순번이 멀면 벽이다.
+        /// 변 너머의 방과 순번이 하나 차이 날 때만 문이다. 칸이 붙어 있어도 순번이 멀면 벽이다.
         public bool HasDoor(RoomCell cell, DoorSide side)
         {
             int index = IndexOf(cell);

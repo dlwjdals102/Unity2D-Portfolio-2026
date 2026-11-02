@@ -3,11 +3,8 @@ using UnityEngine;
 
 namespace JM2D.Rooms
 {
-    /// 거리표를 씬 뷰에 그린다. 가까운 칸일수록 진하다.
-    /// 거리표는 눈에 보이지 않는 자료라, 적을 고치기 전에 표가 맞는지 본다.
-    ///
-    /// 진하기 기준은 그 방에서 실제로 나온 가장 먼 거리다. 방마다 대비가 또렷하게 나온다.
-    /// 디버그 전용이고 게임 화면에는 나오지 않는다.
+    /// 거리표를 씬 뷰에 그린다. 눈에 보이지 않는 자료라, 적을 고치기 전에 표가 맞는지 본다.
+    /// 가까운 칸일수록 진하고, 기준은 그 방에서 실제로 나온 가장 먼 거리다.
     public class FlowFieldGizmo : MonoBehaviour
     {
         [SerializeField] private RoomFlowField _flowField;

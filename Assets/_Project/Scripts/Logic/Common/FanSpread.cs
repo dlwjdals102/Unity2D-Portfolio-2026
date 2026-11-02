@@ -3,8 +3,7 @@
 namespace JM2D.Logic.Common
 {
     /// 한 방향을 가운데 두고 여러 개를 부챗살처럼 벌릴 각도를 계산한다.
-    /// UnityEngine 을 모르므로 방향이 아니라 '가운데에서 몇 도 틀어졌는지' 만 돌려준다.
-    /// 돌리는 것은 이 값을 받는 쪽이 한다.
+    /// UnityEngine 을 모르므로 '가운데에서 몇 도 틀어졌는지' 만 돌려주고, 돌리는 것은 받는 쪽이 한다.
     public static class FanSpread
     {
         /// count 개를 전체 폭 spreadDegrees 안에 고르게 벌릴 때,

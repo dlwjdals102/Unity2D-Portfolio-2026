@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 namespace JM2D.UI
 {
-    /// 보스 전용 체력 바. 보스가 나올 때 붙었다가 죽으면 사라진다.
-    /// 판이 시작될 때는 보스가 없으므로 만드는 쪽(RoomCombat)이 붙여 준다.
-    ///
-    /// 조각 셋(바탕, 채움, 경계선)은 씬에 있고 이 클래스는 값만 쓴다.
-    /// 자리와 크기와 색은 인스펙터에 있다. 계산에서 나오는 것은 채움 비율과 경계선 자리 둘뿐이다.
+    /// 보스 전용 체력 바. 판이 시작될 때는 보스가 없으므로 RoomCombat 이 붙여 준다.
+    /// 조각 셋(바탕, 채움, 경계선)은 씬에 있고, 계산에서 나오는 것은 채움 비율과 경계선 자리 둘뿐이다.
     public class BossHealthBar : MonoBehaviour
     {
         [Tooltip("체력만큼 채워지는 칸. Image Type 은 Filled, Fill Method 는 Horizontal 이어야 한다")]
@@ -34,8 +31,7 @@ namespace JM2D.UI
         {
             _normalColor = _fillImage.color;
 
-            // 판이 시작될 때는 보스가 없다. 붙을 때까지 숨어 있는다.
-            // 씬에서는 켜 둔 채로 두어야 한다. 꺼 두면 이 Awake 가 돌지 않는다.
+            // 붙을 때까지 숨어 있는다. 씬에서는 켜 둔 채로 둬야 한다. 꺼 두면 이 Awake 가 돌지 않는다.
             gameObject.SetActive(false);
         }
 
@@ -80,7 +76,7 @@ namespace JM2D.UI
             _health = null;
         }
 
-        /// 남은 비율만큼 채운다. 스프라이트가 있어 플레이어 체력 바와 같은 방식으로 줄어든다.
+        /// 남은 비율만큼 채운다. 플레이어 체력 바와 같은 방식이다.
         private void Refresh(int current, int max)
         {
             float ratio = max <= 0 ? 0f : (float)current / max;
@@ -89,8 +85,7 @@ namespace JM2D.UI
             _fillImage.color = ratio > _phaseAt ? _normalColor : _fillColorPhase2;
         }
 
-        /// 경계선의 가로 자리는 비율에서 나오는 계산값이라 코드가 정한다.
-        /// 세로로 늘어나는 것과 폭은 보기값이라 씬이 정한 대로 둔다. 그래서 x 만 바꾼다.
+        /// 가로 자리만 계산값이라 코드가 정하고, 세로와 폭은 보기값이라 씬이 정한 대로 둔다.
         /// 앵커는 구조체여서 x 하나만 고쳐 넣을 수 없다. 받아서 고치고 다시 넣는다.
         private void PlaceLine()
         {

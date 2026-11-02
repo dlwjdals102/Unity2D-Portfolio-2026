@@ -5,9 +5,8 @@ using UnityEngine;
 
 namespace JM2D.Enemy
 {
-    /// 보스가 2페이즈로 넘어가는 순간의 연출. 보스에 붙인다.
-    /// 색과 세기를 이 컴포넌트가 들고 있어, Boss 는 '넘어갔다' 는 것만 알리고 무슨 색인지 모른다.
-    /// CinemachineImpulseSource 는 HitReaction 이 요구하므로 함께 따라온다.
+    /// 보스가 2페이즈로 넘어가는 순간의 연출.
+    /// 색과 세기를 이 컴포넌트가 들고 있어 Boss 는 '넘어갔다' 는 것만 알린다.
     [RequireComponent(typeof(Boss), typeof(HitReaction))]
     public class BossPhaseFeedback : MonoBehaviour
     {
@@ -62,11 +61,9 @@ namespace JM2D.Enemy
             _shaking = StartCoroutine(Shake());
         }
 
-        /// 끊어서 여러 번 흔든다. 한 프레임에 몰아 부르면 셋이 하나로 삼켜진다.
-        /// 임펄스 리스너가 UseLargest 라 겹친 신호 중 가장 센 것만 쓰는데(Room.prefab),
-        /// 세 번이 같은 크기이므로 한 번 흔든 것과 결과가 같아진다. 그러면 타격 셰이크와 구분되지 않는다.
-        /// 기다리는 것이 흔드는 것보다 먼저인 이유도 같다. 2페이즈로 넘어가게 한 그 타격이
-        /// 이미 흔들고 있어서, 곧바로 흔들면 첫 번째가 거기 묻혀 두 번으로 보인다.
+        /// 끊어서 여러 번 흔든다. 임펄스 리스너가 UseLargest 라(Room.prefab) 한 프레임에 몰아 부르면
+        /// 같은 크기 셋이 하나로 삼켜져 타격 셰이크와 구분되지 않는다.
+        /// 기다리는 것이 먼저인 것도 같은 이유다. 2페이즈로 넘긴 타격이 이미 흔들고 있다.
         private IEnumerator Shake()
         {
             for (int i = 0; i < _shakeCount; i++)

@@ -48,7 +48,6 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 타이머를 한 스텝만큼 줄이고, 다 됐는지 알려 준다.
         private bool TimeUp()
         {
             _stateTimeLeft -= Time.fixedDeltaTime;

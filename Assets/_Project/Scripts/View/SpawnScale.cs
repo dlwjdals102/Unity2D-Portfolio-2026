@@ -3,10 +3,8 @@ using UnityEngine;
 namespace JM2D.View
 {
     /// 태어날 때 몸이 제 크기로 커진다. 한 프레임에 툭 나타나는 것을 막는다.
-    ///
-    /// 알파가 아니라 스케일을 쓴다. HitReaction 이 Awake 에서 SpriteRenderer 의 색을
-    /// 돌아갈 색으로 캐싱하는데, 같은 오브젝트의 Awake 순서는 보장되지 않는다.
-    /// 알파를 0 으로 깔아 두면 그 값이 캐싱돼 한 번 맞은 뒤 투명해질 수 있다.
+    /// 알파가 아니라 스케일을 쓰는 것은, HitReaction 이 Awake 에서 색을 캐싱하는데 Awake 순서가
+    /// 보장되지 않아 알파 0 이 캐싱되면 한 번 맞은 뒤 투명해지기 때문이다.
     public class SpawnScale : MonoBehaviour
     {
         [Tooltip("제 크기가 되기까지 걸리는 시간")]
@@ -37,8 +35,7 @@ namespace JM2D.View
 
             _left -= Time.deltaTime;
 
-            // 0 에서 1 로 간다. 남은 시간을 그대로 쓰면 거꾸로 줄어든다.
-            // Clamp01 이 없으면 마지막 프레임에 제 크기를 넘었다가 돌아온다.
+            // 남은 시간을 그대로 쓰면 거꾸로 줄어든다. Clamp01 이 없으면 마지막 프레임에 제 크기를 넘는다.
             float grown = Mathf.Clamp01(1f - _left / _growTime);
 
             transform.localScale = _fullScale * grown;

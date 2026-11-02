@@ -1,7 +1,6 @@
 namespace JM2D.Logic.Rooms
 {
-    /// 방 안의 칸 격자. 어느 칸을 지나갈 수 있는지만 안다.
-    /// 무엇이 막고 있는지(벽인지 장애물인지)는 모른다.
+    /// 방 안의 칸 격자. 어느 칸을 지나갈 수 있는지만 알고, 무엇이 막는지는 모른다.
     public class RoomGrid
     {
         private readonly bool[,] _isBlocked;
@@ -26,7 +25,6 @@ namespace JM2D.Logic.Rooms
                     if (!other.IsPassable(x, y)) Block(x, y);
         }
 
-        /// 격자 안의 칸인가.
         public bool InBounds(int x, int y)
         {
             return x >= 0 && y >= 0 && x < Width && y < Height;

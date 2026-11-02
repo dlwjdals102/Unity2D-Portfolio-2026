@@ -12,11 +12,11 @@ using UnityEngine.Serialization;
 
 namespace JM2D.Rooms
 {
-    /// 방의 전투를 진행한다. 입장을 듣고, 플레이어가 방 안으로 들어서면 문을 닫고 웨이브를 부른다.
-    /// 마지막 웨이브를 잡으면 방을 연다. 한 번에 한 방만 싸우므로 씬에 하나만 둔다.
+    /// 방의 전투를 진행한다. 들어서면 문을 닫고 웨이브를 부르고, 마지막 웨이브를 잡으면 방을 연다.
+    /// 한 번에 한 방만 싸우므로 씬에 하나만 둔다.
     public class RoomCombat : MonoBehaviour
     {
-        /// 방의 마지막 웨이브를 깼을 때 알린다. 클리어 화면과 4-D 의 보상이 듣는다.
+        /// 방의 마지막 웨이브를 깼을 때 알린다. 클리어 화면과 보상이 듣는다.
         public event Action<Room> OnRoomCleared;
 
         /// 방의 첫 웨이브가 나올 때 알린다. 가방 잠금이 듣는다.
@@ -57,7 +57,6 @@ namespace JM2D.Rooms
         /// 들어섰지만 아직 전투가 시작되지 않은 방. 없으면 null.
         private Room _waiting;
 
-        /// 지금 싸우는 중인 방. 없으면 null.
         private Room _fighting;
 
         private int _waveIndex;
@@ -71,11 +70,10 @@ namespace JM2D.Rooms
         /// 지점을 어디서부터 쓰기 시작할지. 매 웨이브 바뀐다.
         private int _startIndex;
 
-        /// 지금 방에서 고른 조합.
         private EncounterData _current;
 
-        /// 조합을 고르는 난수. 배치를 만든 난수와 별개이고 시드만 같다.
-        /// UnityEngine.Random 이 아니라 System.Random 이라 다른 코드가 뽑는 것과 섞이지 않는다.
+        /// 배치를 만든 난수와 별개이고 시드만 같다.
+        /// System.Random 이라 UnityEngine.Random 을 쓰는 다른 코드와 섞이지 않는다.
         private System.Random _encounterRandom;
 
         private void OnEnable()
@@ -113,14 +111,12 @@ namespace JM2D.Rooms
         {
             _waiting = room.State == RoomState.NotStarted ? room : null;
 
-            // 몸이 문 밖으로 다 나오려면 벽 두께에 몸 반폭을 더한 만큼 들어와야 한다.
-            // 몸이 정사각형이 아니어도 걸리지 않게 큰 쪽을 쓴다.
+            // 벽 두께에 몸 반폭을 더한 만큼 들어와야 몸이 문 밖으로 다 나온다. 큰 쪽을 써서 정사각형이 아니어도 걸리지 않는다.
             Vector3 extents = _player.bounds.extents;
             float bodyHalf = Mathf.Max(extents.x, extents.y);
             _margin = room.WallThickness + bodyHalf + _extraMargin;
         }
 
-        /// 문을 닫고 첫 웨이브를 부른다.
         private void Begin(Room room)
         {
             _waiting = null;
@@ -141,7 +137,7 @@ namespace JM2D.Rooms
             return _encounters[_encounterRandom.Next(_encounters.Length)];
         }
 
-        /// 지금 웨이브의 적이 모두 죽었다. 다음 웨이브가 있으면 부르고, 없으면 방을 연다.
+        /// 다음 웨이브가 있으면 부르고, 없으면 방을 연다.
         private void OnWaveCleared()
         {
             if (_fighting == null) return;
@@ -152,7 +148,7 @@ namespace JM2D.Rooms
             {
                 _fighting.EndCombat();
 
-                // 상태를 먼저 정리하고 알린다. 듣는 쪽이 이 자리에서 RoomCombat 을 다시 건드려도 싸우는 중으로 보이지 않는다.
+                // 상태를 먼저 정리하고 알린다. 듣는 쪽이 여기서 다시 건드려도 싸우는 중으로 보이지 않는다.
                 Room cleared = _fighting;
                 _fighting = null;
                 OnRoomCleared?.Invoke(cleared);
@@ -184,7 +180,7 @@ namespace JM2D.Rooms
                     if (enemy is IProjectileShooter shooter)
                         shooter.SetProjectilePool(_enemyProjectiles);
 
-                    // 체력 바도 씬에 있다. 보스가 태어날 때 붙여 준다.
+                    // 체력 바도 씬에 있어 보스가 태어날 때 붙여 준다.
                     if (enemy is Boss boss)
                         _bossBar.Bind(boss);
 
@@ -194,7 +190,6 @@ namespace JM2D.Rooms
         }
 
         /// 보스는 방 가운데에서 나온다. 구석에서 나오면 등장이 우연처럼 보인다.
-        /// 나머지는 출현 지점을 순서대로 돌려 쓴다.
         private Vector2 SpawnPosition(EnemyBase prefab, int spawned)
         {
             if (prefab is Boss)
@@ -225,12 +220,10 @@ namespace JM2D.Rooms
             if (_points.Count == 0)
                 _points.Add(Farthest(all, player));
 
-            // System.Random 도 이 파일에 있어 어느 쪽인지 끝까지 적는다.
-            // 자리는 판마다 달라도 되는 값이라 시드 난수를 쓰지 않는다.
+            // 자리는 판마다 달라도 되는 값이라 시드 난수를 쓰지 않는다. 같은 파일에 둘이 있어 끝까지 적는다.
             _startIndex = UnityEngine.Random.Range(0, _points.Count);
         }
 
-        /// 주어진 자리에서 가장 먼 지점.
         private static Transform Farthest(IReadOnlyList<Transform> points, Vector2 from)
         {
             Transform best = points[0];

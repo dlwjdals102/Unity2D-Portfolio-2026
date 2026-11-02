@@ -2,8 +2,7 @@
 
 namespace JM2D.View
 {
-    /// 바라보는 쪽으로 스프라이트를 뒤집는다. 어느 쪽을 볼지는 밖에서 정해 준다.
-    /// 플레이어는 조준 방향, 적은 가는 방향을 넘긴다.
+    /// 바라보는 쪽으로 스프라이트를 뒤집는다. 플레이어는 조준 방향, 적은 가는 방향을 넘긴다.
     /// 스프라이트가 오른쪽을 보고 있다고 가정한다.
     [RequireComponent(typeof(SpriteRenderer))]
     public class SpriteFacing : MonoBehaviour

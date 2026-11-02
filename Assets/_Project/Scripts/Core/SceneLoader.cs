@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace JM2D.Core
 {
-    /// 버튼의 OnClick 에 연결해서 쓴다.
-    /// 어두워지기를 기다린 뒤 씬을 바꾸므로, 부르고 나서 한 박자 뒤에 넘어간다.
+    /// 버튼의 OnClick 에 연결해서 쓴다. 어두워지기를 기다린 뒤 씬을 바꿔 한 박자 뒤에 넘어간다.
     public class SceneLoader : MonoBehaviour
     {
         [Tooltip("씬을 넘을 때 어두워지는 가림막. 씬마다 하나씩 있다")]
@@ -31,7 +30,6 @@ namespace JM2D.Core
             Begin(SceneNames.Title);
         }
 
-        /// 지금 씬을 처음부터 다시 시작한다.
         public void Restart()
         {
             Begin(SceneManager.GetActiveScene().name);
@@ -52,8 +50,7 @@ namespace JM2D.Core
 
             yield return _fader.Fade(0f, 1f);
 
-            // 결과 화면에서 0으로 멈춰둔 시간도 여기서 함께 풀린다.
-            // timeScale 은 씬을 다시 로드해도 초기화되지 않는다.
+            // timeScale 은 씬을 다시 로드해도 초기화되지 않아, 결과 화면에서 멈춰둔 것도 여기서 풀린다.
             Time.timeScale = 1f;
 
             SceneManager.LoadScene(sceneName);

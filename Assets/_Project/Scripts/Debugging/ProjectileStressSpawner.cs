@@ -4,12 +4,8 @@ using UnityEngine;
 
 namespace JM2D.Debugging
 {
-    /// <summary>
-    /// 오브젝트 풀링 전후를 비교하기 위한 부하 테스트 도구.
-    /// 실제 게임에서는 쓰지 않으며 측정 전용 씬에만 배치한다.
-    /// 초당 일정한 수를 사방으로 발사한다.
-    /// 게임의 발사 경로와 같은 방식을 써야 비교가 성립하므로 풀을 거친다.
-    /// </summary>
+    /// 오브젝트 풀링 전후를 비교하는 부하 테스트 도구. 측정 전용 씬에만 배치한다.
+    /// 초당 일정한 수를 사방으로 발사하고, 비교가 성립하려면 게임과 같은 경로여야 하므로 풀을 거친다.
     public class ProjectileStressSpawner : MonoBehaviour
     {
         [SerializeField] private Projectile _prefab;

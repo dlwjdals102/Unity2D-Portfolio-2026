@@ -15,16 +15,14 @@ namespace JM2D.Data
         public int Count;
     }
 
-    /// 웨이브 하나. 여러 종류를 섞을 수 있다.
-    /// 배열을 클래스로 한 겹 감싼 이유는 Unity 직렬화가 배열의 배열을 저장하지 못하기 때문이다.
+    /// 웨이브 하나. Unity 직렬화가 배열의 배열을 저장하지 못해 배열을 클래스로 한 겹 감쌌다.
     [System.Serializable]
     public struct Wave
     {
         public WaveEntry[] Entries;
     }
 
-    /// 방 하나에서 벌어지는 전투. 웨이브가 적힌 순서대로 나온다.
-    /// 에셋을 하나 더 만들면 방에서 나올 수 있는 전투가 하나 는다.
+    /// 방 하나에서 벌어지는 전투. 웨이브가 적힌 순서대로 나오고, 에셋을 하나 더 만들면 전투가 하나 는다.
     [CreateAssetMenu(fileName = "EncounterData_", menuName = "JM2D/Encounter Data")]
     public class EncounterData : ScriptableObject
     {

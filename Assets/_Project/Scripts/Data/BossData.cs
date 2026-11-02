@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace JM2D.Data
 {
-    /// 패턴 하나가 지나가는 세 단계의 시간과 색.
-    /// 보스의 패턴들이 예고, 발동, 회복이라는 같은 모양이라 이 묶음을 함께 쓴다.
+    /// 패턴 하나가 지나가는 세 단계의 시간과 색. 패턴들이 예고, 발동, 회복이라는 같은 모양이다.
     [System.Serializable]
     public class PatternSteps
     {
@@ -94,9 +93,8 @@ namespace JM2D.Data
         public int MaxAlive = 4;
     }
 
-    /// 페이즈 하나가 쓰는 패턴 전부.
-    /// 페이즈가 바뀌면 이 묶음을 통째로 갈아 끼운다.
-    /// 그래서 보스 코드에 '지금 몇 페이즈인가' 를 묻는 곳이 한 군데도 없다.
+    /// 페이즈 하나가 쓰는 패턴 전부. 페이즈가 바뀌면 통째로 갈아 끼운다.
+    /// 그래서 보스 코드에 '지금 몇 페이즈인가' 를 묻는 곳이 없다.
     [System.Serializable]
     public class PhasePatterns
     {

@@ -13,13 +13,12 @@ namespace JM2D.Enemy
     {
         public event System.Action OnPhase2Started;
 
-        /// 쓸 수 있는 패턴.
         private enum Pattern { Sweep, Dash, Fan, Summon }
 
         /// 패턴 하나가 지나가는 단계. 어느 패턴이든 이 셋을 지난다.
         private enum Step { Windup, Act, Recover }
 
-        /// 순환 순서. 계단 3과 5에서 여기에 패턴을 더한다.
+        /// 순환 순서. 패턴을 더하면 여기에 넣는다.
         private static readonly Pattern[] Order = { Pattern.Sweep, Pattern.Dash, Pattern.Fan, Pattern.Summon };
 
         [SerializeField] private BossData _data;
@@ -28,7 +27,6 @@ namespace JM2D.Enemy
         private Step _step;
         private float _stepTimeLeft;
 
-        /// 순환에서 지금 어디까지 왔나.
         private int _orderIndex;
 
         /// 지금 패턴의 단계 시간과 색. 패턴이 정해질 때 한 번 꺼내 둔다.
@@ -70,9 +68,8 @@ namespace JM2D.Enemy
 
             _current = _data.Phase1;
 
-            // EnemyBase 의 OnEnable 이 private 이라, 여기서 같은 이름을 선언하면 부모 것이 가려질 수 있다.
-            // 가려지면 부모가 죽음을 구독하지 못해 보스가 죽지 않는다.
-            // 그 답에 기대는 대신 이름이 겹치지 않는 자리를 쓴다.
+            // EnemyBase 의 OnEnable 이 private 이라 같은 이름을 선언하면 부모 것이 가려질 수 있다.
+            // 가려지면 부모가 죽음을 구독하지 못해 보스가 죽지 않는다. 이름이 겹치지 않는 자리를 쓴다.
             Health.OnHealthChanged += OnHealthChanged;
             Health.OnDied += OnBossDied;
         }
@@ -83,7 +80,7 @@ namespace JM2D.Enemy
             Health.OnDied -= OnBossDied;
         }
 
-        /// 판 도중에 태어나므로 프리팹이 씬의 풀을 가리킬 수 없다. 만드는 쪽이 넣어 준다.
+        /// 판 도중에 태어나 프리팹이 씬의 풀을 가리킬 수 없다.
         /// 넣지 않으면 쏘는 순간 터진다. 조용히 안 쏘는 것보다 낫다.
         public void SetProjectilePool(ProjectilePool pool)
         {
@@ -122,8 +119,7 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 차례를 한 칸 넘긴다. 지금 거리에서 쓸 수 없는 패턴은 건너뛴다.
-        /// 한 바퀴를 다 돌아도 쓸 것이 없으면 마지막으로 본 것을 그냥 쓴다.
+        /// 쓸 수 없는 패턴은 건너뛴다. 한 바퀴를 다 돌아도 없으면 마지막으로 본 것을 쓴다.
         private Pattern NextPattern(float distance)
         {
             for (int i = 0; i < Order.Length; i++)
@@ -136,7 +132,6 @@ namespace JM2D.Enemy
             return Order[_orderIndex];
         }
 
-        /// 지금 거리에서 쓸 만한 패턴인가.
         private bool CanUse(Pattern pattern, float distance)
         {
             switch (pattern)
@@ -149,7 +144,7 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 패턴을 정하고 그 패턴의 값을 꺼내 둔다. 패턴을 더할 때 고치는 곳은 여기다.
+        /// 패턴의 값을 꺼내 둔다. 패턴을 더할 때 고치는 곳은 여기다.
         private void StartPattern(Pattern pattern)
         {
             _pattern = pattern;
@@ -190,14 +185,12 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 예고에 들어가는 순간 한 번.
         private void BeginWindup()
         {
             // 돌진은 여기서 방향을 정한다. 예고 동안 플레이어가 빠져나갈 수 있어야 한다.
             if (_pattern == Pattern.Dash) _dashDirection = DirectionToTarget();
         }
 
-        /// 발동에 들어가는 순간 한 번.
         private void BeginAct()
         {
             switch (_pattern)
@@ -220,8 +213,7 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 플레이어 쪽을 가운데 두고 여러 발을 한 번에 뿌린다.
-        /// 몇 도씩 벌릴지는 Logic 이 세고, 그 각도만큼 방향을 돌리는 것은 여기서 한다.
+        /// 몇 도씩 벌릴지는 Logic 이 세고, 그 각도만큼 방향을 돌리는 것만 여기서 한다.
         private void ShootFan()
         {
             FanPattern fan = _current.Fan;
@@ -251,7 +243,7 @@ namespace JM2D.Enemy
                 _hasHitThisDash = true;
         }
 
-        /// 체력이 바뀔 때마다 불린다. 절반 아래로 처음 내려가는 순간 2페이즈로 넘어간다.
+        /// 절반 아래로 처음 내려가는 순간 2페이즈로 넘어간다.
         private void OnHealthChanged(int current, int max)
         {
             if (_isPhase2) return;
@@ -288,7 +280,7 @@ namespace JM2D.Enemy
             _stepTimeLeft = 0f;
         }
 
-        /// 보스 둘레에 잡몹을 고르게 놓는다. 분열 적이 갈라질 때와 같은 계산을 쓴다.
+        /// 분열 적이 갈라질 때와 같은 계산으로 보스 둘레에 고르게 놓는다.
         private void SpawnSummons()
         {
             SummonPattern summon = _current.Summon;
@@ -302,16 +294,16 @@ namespace JM2D.Enemy
                 child.SetTarget(Target);
                 child.SetPathField(PathField);
 
-                // 소환물도 맞으면 멈춰야 한다. 내가 받은 것을 그대로 넘긴다.
+                // 소환물도 맞으면 멈춰야 하므로 내가 받은 것을 그대로 넘긴다.
                 child.SetHitFeedback(HitFeedback);
 
                 _summoned.Add(child.GetComponent<Health>());
             }
         }
 
-        /// 놓을 자리. 막혔으면 반대쪽을 보고, 그것도 막혔으면 보스 자리에 놓는다.
-        /// 보스가 벽에 붙어 있다는 것은 반대쪽이 비어 있다는 뜻이라 한 번 뒤집는 것으로 거의 해결된다.
-        /// 보스가 서 있는 칸은 지나갈 수 있는 칸이라 마지막 자리로 안전하다.
+        /// 막혔으면 반대쪽, 그것도 막혔으면 보스 자리에 놓는다.
+        /// 벽에 붙어 있다는 것은 반대쪽이 비었다는 뜻이라 한 번 뒤집으면 거의 해결되고,
+        /// 보스가 선 칸은 지나갈 수 있는 칸이라 마지막 자리로 안전하다.
         private Vector2 SummonSpot(Vector2 offset)
         {
             Vector2 center = transform.position;
@@ -323,7 +315,6 @@ namespace JM2D.Enemy
             return center;
         }
 
-        /// 살아 있는 소환물 수.
         private int CountAliveSummons()
         {
             int alive = 0;
@@ -334,8 +325,7 @@ namespace JM2D.Enemy
             return alive;
         }
 
-        /// 보스가 죽으면 불러낸 것도 함께 죽는다.
-        /// 그러지 않으면 적 수가 0이 되지 않아 방이 열리지 않는다.
+        /// 불러낸 것도 함께 죽인다. 그러지 않으면 적 수가 0이 되지 않아 방이 열리지 않는다.
         private void OnBossDied()
         {
             foreach (Health health in _summoned)
@@ -347,7 +337,6 @@ namespace JM2D.Enemy
             _summoned.Clear();
         }
 
-        /// 타이머를 한 스텝만큼 줄이고, 다 됐는지 알려 준다.
         private bool TimeUp()
         {
             _stepTimeLeft -= Time.fixedDeltaTime;

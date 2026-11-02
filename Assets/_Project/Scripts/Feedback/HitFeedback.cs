@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace JM2D.Feedback
 {
-    /// 타격 순간 씬 전체에서 한 번 일어나는 일을 모은다. 시간을 짧게 멈추고 타격음을 낸다.
-    /// 둘 다 씬에 하나여야 하는 것이다. 시간은 하나뿐이고,
-    /// 소리는 맞은 적이 그 프레임에 사라져도 끝까지 들려야 한다.
+    /// 타격 순간 씬 전체에서 한 번 일어나는 일. 시간을 짧게 멈추고 타격음을 낸다.
+    /// 둘 다 씬에 하나여야 한다. 시간은 하나뿐이고, 소리는 맞은 적이 그 프레임에 사라져도 끝까지 들려야 한다.
     [RequireComponent(typeof(AudioSource))]
     public class HitFeedback : MonoBehaviour
     {
@@ -38,13 +37,10 @@ namespace JM2D.Feedback
             if (_stopLeft <= 0f) return;
 
             // timeScale 이 0 이면 deltaTime 도 0 이라 영원히 줄지 않는다.
-            // 멈춘 시간을 재는 값은 멈추지 않는 시간이어야 한다.
             _stopLeft -= Time.unscaledDeltaTime;
 
-            // 창이 열려 있으면 되돌리지 않는다. timeScale 의 주인이 둘이고
-            // 히트스톱은 0.01초, 창은 고를 때까지라, 짧은 쪽이 긴 쪽을 풀어 버린다.
-            // 보상 창이 뜬 채로 돌아다닐 수 있던 것이 이것 때문이었다.
-            // 창이 닫힐 때 1 로 되돌리는 것은 창을 띄운 쪽이 이미 하고 있다.
+            // timeScale 의 주인이 둘이라, 짧은 쪽(히트스톱 0.01초)이 긴 쪽(창)을 풀어 버린다.
+            // 창이 닫힐 때 되돌리는 것은 창을 띄운 쪽이 한다.
             if (_stopLeft <= 0f && !_playerInput.IsWindowOpen)
                 Time.timeScale = 1f;
         }
@@ -56,15 +52,13 @@ namespace JM2D.Feedback
             Time.timeScale = 1f;
         }
 
-        /// 타격이 일어났다고 알린다. 맞은 쪽마다 한 번 불린다.
-        /// 멈춤은 이미 멈춰 있으면 긴 쪽이 남고, 소리는 한 프레임에 한 번만 난다.
+        /// 맞은 쪽마다 한 번 불린다. 멈춤은 긴 쪽이 남고, 소리는 한 프레임에 한 번만 난다.
         public void Hit(float stopTime)
         {
             // 더하면 창으로 다섯을 한 번에 때릴 때 다섯 배로 멈춘다.
             _stopLeft = Mathf.Max(_stopLeft, stopTime);
             Time.timeScale = 0f;
 
-            // 멈춤이 겹쳐 길어지지 않는 것과 같은 규칙이다. 한 번의 공격은 한 번만 들린다.
             // 소리 길이나 멈춤 시간으로 막으면 그 사이에 들어온 다음 공격까지 조용해진다.
             if (_lastSoundFrame == Time.frameCount) return;
 

@@ -4,22 +4,17 @@ using JM2D.Logic.Common;
 
 namespace JM2D.Logic.Rooms
 {
-    /// 방 안에 장애물을 놓을 칸을 정한다. 실제로 칠하는 일은 하지 않는다.
-    /// 놓은 뒤에도 문과 출현 지점에 닿는지 BFS 로 확인하고, 막히면 버리고 다시 놓는다.
-    ///
-    /// 방 안쪽을 구역으로 나누고 구역마다 덩어리를 하나씩 놓는다.
-    /// 자리를 순전히 난수에 맡기면 한쪽 구석에 몰려 다른 쪽이 텅 빈다.
-    ///
-    /// 구역 수는 방 크기에서 센다. 고정해 두면 방을 줄였을 때 구역이 덩어리보다 작아져
-    /// 아무것도 놓지 못한다. 방을 32x18 에서 20x12 로 줄였을 때 실제로 그랬다.
+    /// 장애물을 놓을 칸을 정한다. 칠하는 일은 하지 않는다.
+    /// 놓은 뒤 문과 출현 지점에 닿는지 BFS 로 확인하고, 막히면 버리고 다시 놓는다.
+    /// 방 안쪽을 구역으로 나누고 구역마다 덩어리를 하나씩 놓는다. 난수에만 맡기면 한쪽 구석에 몰린다.
+    /// 구역 수를 고정하면 방을 줄였을 때 구역이 덩어리보다 작아져 아무것도 놓지 못한다(32x18 에서 20x12 로 줄였을 때).
     public static class ObstaclePlacer
     {
         /// 덩어리 모양. 가로 세로 칸 수다.
         private static readonly (int Width, int Height)[] Shapes =
             { (1, 1), (2, 2), (1, 3), (3, 1) };
 
-        /// 구역 하나가 적어도 이만큼은 돼야 한다. 구역 하나에 덩어리 하나다.
-        /// 가장 큰 모양이 3칸인데 CanPlace 가 둘레 한 칸을 더 보므로 4 다.
+        /// 구역 하나의 최소 크기. 가장 큰 모양이 3칸인데 CanPlace 가 둘레 한 칸을 더 보므로 4 다.
         private const int MinRegionSize = 4;
 
         private const int MinClusters = 4;
@@ -94,7 +89,6 @@ namespace JM2D.Logic.Rooms
             }
         }
 
-        /// 이미 놓은 덩어리들에서 충분히 떨어져 있는가.
         /// 가로 세로 중 먼 쪽으로 잰다(체스판 거리). 대각선으로 붙은 것도 붙은 것으로 본다.
         private static bool IsFarFromPlaced(List<RoomCell> placed, int x, int y, int width, int height)
         {
@@ -111,11 +105,9 @@ namespace JM2D.Logic.Rooms
             return true;
         }
 
-        /// 방 안쪽을 몇 구역으로 나눌지 방 크기에서 센다.
-        /// 여기서 세는 범위는 GetRegion 이 실제로 나누는 범위와 같아야 한다.
-        /// 방 전체로 세면 구역 수가 많아져 구역 하나가 덩어리보다 작아진다.
-        ///
-        /// 테스트가 같은 계산을 다시 적지 않도록 열어 둔다. 적어 두면 여기를 고칠 때 조용히 어긋난다.
+        /// 세는 범위는 GetRegion 이 실제로 나누는 범위와 같아야 한다.
+        /// 방 전체로 세면 구역 하나가 덩어리보다 작아진다.
+        /// 테스트가 같은 계산을 다시 적지 않도록 열어 둔다.
         public static void GetRegionCounts(RoomGrid grid, out int columns, out int rows)
         {
             int innerWidth = grid.Width - 2 * EdgeMargin - 2;
@@ -126,8 +118,7 @@ namespace JM2D.Logic.Rooms
             rows = Math.Max(1, innerHeight / MinRegionSize);
         }
 
-        /// 구역 하나가 덮는 칸 범위. 방 안쪽(벽에서 EdgeMargin 만큼 뗀 곳)을 고르게 나눈다.
-        /// 나누어떨어지지 않는 나머지는 마지막 구역이 가져간다.
+        /// 방 안쪽(벽에서 EdgeMargin 만큼 뗀 곳)을 고르게 나누고, 나머지는 마지막 구역이 가져간다.
         private static void GetRegion(RoomGrid grid, int index,
             out int minX, out int minY, out int maxX, out int maxY)
         {
@@ -150,8 +141,7 @@ namespace JM2D.Logic.Rooms
             maxY = row == rows - 1 ? lastY : minY + rowHeight - 1;
         }
 
-        /// 덩어리가 놓일 칸과 그 둘레 한 칸이 모두 비어 있어야 한다.
-        /// 둘레까지 보는 이유는 덩어리끼리 붙어 오목한 모양이 되는 것을 막기 위해서다.
+        /// 놓일 칸과 그 둘레 한 칸이 모두 비어야 한다. 둘레까지 보는 것은 덩어리끼리 붙어 오목해지는 것을 막는다.
         private static bool CanPlace(RoomGrid grid, HashSet<RoomCell> keepClear,
             int x, int y, int width, int height)
         {

@@ -55,8 +55,7 @@ namespace JM2D.Logic.Rooms
         /// 시작 칸에서 퍼져 나가며 거리를 다시 적는다.
         public void Rebuild(RoomGrid grid, int startX, int startY)
         {
-            // 지난 계산이 남지 않게 먼저 전부 지운다.
-            // 이 줄이 '아직 안 본 칸' 이라는 표시도 겸한다.
+            // 전부 지워 지난 계산을 없애고, 그 값이 '아직 안 본 칸' 이라는 표시도 겸한다.
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)
                     _distance[x, y] = Unreachable;

@@ -6,20 +6,18 @@ using UnityEngine;
 
 namespace JM2D.Items
 {
-    /// 가방 그리드에 아이템을 놓고 빼면서 스탯에 모디파이어를 붙이고 뗀다.
-    /// 아이템 목록은 그리드가 갖는다. 이 클래스는 그리드와 스탯을 잇는다.
+    /// 그리드에 아이템을 놓고 빼면서 스탯에 모디파이어를 붙이고 뗀다.
+    /// 아이템 목록은 그리드가 갖고, 이 클래스는 그리드와 스탯을 잇는다.
     public class ItemInventory : MonoBehaviour
     {
         [SerializeField] private PlayerStats _stats;
 
         private readonly BagGrid _grid = new BagGrid(5, 5);
 
-        /// 시너지가 붙인 모디파이어의 출처.
-        /// 아이템이 붙인 것과 구분되어야 시너지만 지울 수 있다.
+        /// 시너지가 붙인 모디파이어의 출처. 아이템이 붙인 것과 구분되어야 시너지만 지울 수 있다.
         private readonly object _synergySource = new object();
 
-        /// 아직 가방에 놓지 않은 아이템. 없으면 null.
-        /// 방 보상으로 들어오고, 그리드에 놓이면 빈다. 판이 끝날 때까지 남는다.
+        /// 아직 가방에 놓지 않은 아이템. 없으면 null. 그리드에 놓이면 비고, 그때까지 남는다.
         private ItemInstance _hand;
 
         public BagGrid Grid => _grid;

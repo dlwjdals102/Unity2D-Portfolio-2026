@@ -11,13 +11,12 @@ namespace JM2D.Enemy
 {
     /// 모든 적이 함께 갖는 것. 대기, 추적, 체력 연결, 죽음 처리.
     /// 가까워지면 교전으로 넘기고, 교전 중에 할 일은 자식이 정한다.
-    /// 왜 이 모양인지는 docs/specs/enemy-dash.md 의 계단 1 결과에 있다.
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class EnemyBase : MonoBehaviour
     {
         private enum Phase { Idle, Chase, Engaged }
 
-        /// 적이 태어나면 알린다. 적 수를 세는 쪽이 듣는다. 적은 누가 듣는지 모른다.
+        /// 적이 태어나면 알린다. 적은 누가 듣는지 모른다.
         public static event Action<Health> Spawned;
 
         [SerializeField] private Transform _target;
@@ -46,14 +45,14 @@ namespace JM2D.Enemy
         /// 길 안내. 없으면 플레이어 쪽으로 곧장 간다.
         private IPathField _pathField;
 
-        /// 씬의 타격 피드백. 여기서 쓰지는 않고, 받아서 반응에 넘기고 갈라진 적에게 물려준다.
+        /// 씬의 타격 피드백. 받아서 반응에 넘기고 갈라진 적에게 물려준다.
         private HitFeedback _hitFeedback;
 
         /// 지금 향하고 있는 자리. 닿을 때까지 바꾸지 않는다.
         private Vector2 _waypoint;
         private bool _hasWaypoint;
 
-        /// 이 자리를 붙잡은 지 얼마나 됐나. 플레이어가 움직이면 길도 바뀌므로 오래 붙잡지 않는다.
+        /// 이 자리를 붙잡은 지 얼마나 됐나. 플레이어가 움직이면 길도 바뀌어 오래 붙잡지 않는다.
         private float _waypointAge;
 
         /// 자식은 자기 데이터를 제 타입으로 갖고, 부모에게는 공통 칸만 보여 준다.
@@ -67,10 +66,10 @@ namespace JM2D.Enemy
         public IPathField PathField => _pathField;
         public HitFeedback HitFeedback => _hitFeedback;
 
-        /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
+        /// 자식이 체력 변화나 죽음을 듣고 싶을 때 쓴다.
         protected Health Health => _health;
 
-        /// 자식이 공격 동작을 돌리거나 그 프레임을 듣고 싶을 때 쓴다. 참조를 또 잡지 않게 연다.
+        /// 자식이 공격 동작을 돌리거나 그 프레임을 듣고 싶을 때 쓴다.
         protected CharacterAnimator CharacterAnimator => _characterAnimator;
 
         /// 자식이 Awake 를 쓰려면 override 하고 base.Awake() 를 먼저 부른다.
@@ -145,8 +144,7 @@ namespace JM2D.Enemy
             _pathField = field;
         }
 
-        /// 판 도중에 태어난 적에게 씬의 타격 피드백을 넣는다.
-        /// 보관하는 이유는 갈라진 적과 소환물에게 그대로 물려주기 때문이다.
+        /// 갈라진 적과 소환물에게 그대로 물려주려고 보관한다.
         public void SetHitFeedback(HitFeedback hitFeedback)
         {
             _hitFeedback = hitFeedback;
@@ -185,9 +183,8 @@ namespace JM2D.Enemy
             Move(direction.normalized, speed);
         }
 
-        /// 길 안내가 준 자리로 갈 방향.
         /// 플레이어가 보이면 그 자리로 곧장 가고, 아니면 다음 칸을 붙잡고 간다.
-        /// 칸을 붙잡는 이유는, 매 프레임 고르면 칸 경계에서 선택이 뒤집혀 제자리에서 떨기 때문이다.
+        /// 매 프레임 고르면 칸 경계에서 선택이 뒤집혀 제자리에서 떤다.
         private bool TryGetPathDirection(Vector2 here, out Vector2 direction)
         {
             direction = Vector2.zero;
@@ -251,15 +248,14 @@ namespace JM2D.Enemy
             _rb.linearVelocity = direction * speed;
         }
 
-        /// 자기 둘레 반경 안에 몸이 걸린 대상에게 피해를 준다. 피해를 준 수를 돌려준다.
-        /// 대상이 있는 레이어를 찾으므로 적은 서로를 때리지 않는다.
+        /// 반경 안에 몸이 걸린 대상에게 피해를 주고 그 수를 돌려준다.
+        /// 대상 레이어만 찾으므로 적은 서로를 때리지 않는다.
         protected int HitAround(float radius, int damage)
         {
             return AreaHit.Circle(transform.position, radius, 1 << _target.gameObject.layer, damage);
         }
 
-        /// 공격을 예고하는 동안 머리 위에 표식을 띄운다.
-        /// 켜고 끄는 시점은 자식이 정한다. 예고가 있는 적만 쓴다.
+        /// 머리 위에 예고 표식을 띄운다. 켜고 끄는 시점은 자식이 정한다.
         protected void ShowWarning(bool show)
         {
             _warning.enabled = show;

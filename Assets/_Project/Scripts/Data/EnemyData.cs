@@ -2,10 +2,8 @@
 
 namespace JM2D.Data
 {
-    /// 모든 적이 함께 갖는 수치. 대기와 추적에 쓰인다.
-    /// 공격 수치는 적마다 달라 자식 데이터가 더한다. 한 클래스에 다 넣으면
-    /// 적마다 절반이 늘 비어 있는 에셋이 된다.
-    /// 행동은 여기 없다. 적 컨트롤러가 이 값을 읽어 움직인다.
+    /// 모든 적이 함께 갖는 수치. 공격 수치는 적마다 달라 자식 데이터가 더한다.
+    /// 한 클래스에 다 넣으면 적마다 절반이 비어 있는 에셋이 된다. 행동은 적 컨트롤러가 갖는다.
     public abstract class EnemyData : ScriptableObject
     {
         [Header("체력")]
@@ -34,8 +32,7 @@ namespace JM2D.Data
         public float SeparationRadius => _separationRadius;
         public float SeparationStrength => _separationStrength;
 
-        /// 들어가는 값과 나오는 값이 뒤바뀌면 오류 없이 상태가 깜빡인다.
-        /// 고쳐 주지 않고 알리기만 한다.
+        /// 들어가는 값과 나오는 값이 뒤바뀌면 오류 없이 상태가 깜빡인다. 고쳐 주지 않고 알리기만 한다.
         protected virtual void OnValidate()
         {
             if (_giveUpRange < _detectRange)

@@ -5,11 +5,9 @@ using UnityEngine.Tilemaps;
 
 namespace JM2D.Rooms
 {
-    /// 방 하나의 장애물. 판이 시작될 때 시드로 자리를 정해 타일을 칠한다.
-    /// 어디에 놓을지는 Logic 의 ObstaclePlacer 가 정한다. 여기서는 격자를 만들어 넘기고, 돌려받은 칸을 칠한다.
-    ///
-    /// 격자 칸은 0 부터 세고 타일 칸은 방 가운데가 0 이다. 두 범위는 벽 Tilemap 이 칠한 넓이에서 나온다.
-    /// 둘 사이를 옮기는 곳은 ToTilemapCell 과 ToGridCell 두 곳뿐이다.
+    /// 방 하나의 장애물. 어디에 놓을지는 Logic 의 ObstaclePlacer 가 정하고,
+    /// 여기서는 격자를 만들어 넘기고 돌려받은 칸을 칠한다.
+    /// 격자 칸은 0 부터 세고 타일 칸은 방 가운데가 0 이다. 옮기는 곳은 ToTilemapCell 과 ToGridCell 뿐이다.
     [RequireComponent(typeof(Room))]
     public class RoomObstacles : MonoBehaviour
     {
@@ -30,7 +28,7 @@ namespace JM2D.Rooms
         private Room _room;
         private RoomGrid _grid;
 
-        /// 이 방의 칸 격자. 벽과 장애물이 막힌 칸이다. 흐름장(계단 4)이 읽는다.
+        /// 이 방의 칸 격자. 벽과 장애물이 막힌 칸이다. 흐름장이 읽는다.
         public RoomGrid Grid => _grid;
 
         private void Awake()
@@ -38,7 +36,7 @@ namespace JM2D.Rooms
             _room = GetComponent<Room>();
         }
 
-        /// 방을 놓은 뒤 한 번 부른다. 자리를 정하고 타일을 칠한다.
+        /// 방을 놓은 뒤 한 번 부른다.
         public void Build(System.Random random)
         {
             _grid = BuildWallGrid();
@@ -75,8 +73,7 @@ namespace JM2D.Rooms
             return grid;
         }
 
-        /// 가장자리인데 벽 타일이 없는 칸이 문 구멍이다.
-        /// 문 폭이나 가운데 좌표를 코드에 적지 않아, 프리팹에서 문을 넓히면 따라온다.
+        /// 가장자리인데 벽 타일이 없는 칸이 문 구멍이다. 문 폭을 코드에 적지 않아 프리팹에서 넓히면 따라온다.
         private List<RoomCell> FindDoorCells()
         {
             var cells = new List<RoomCell>();
@@ -100,8 +97,7 @@ namespace JM2D.Rooms
             foreach (Transform point in _room.SpawnPoints)
                 cells.Add(ToGridCell(_walls.WorldToCell(point.position)));
 
-            // 보스는 출현 지점이 아니라 방 가운데에서 나온다.
-            // 여기 넣으면 둘레 비우기와 길 검증을 출현 지점과 똑같이 받는다.
+            // 보스는 방 가운데에서 나온다. 여기 넣으면 둘레 비우기와 길 검증을 출현 지점과 똑같이 받는다.
             cells.Add(ToGridCell(transform.position));
 
             return cells;

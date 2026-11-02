@@ -38,7 +38,6 @@ namespace JM2D.Combat
             _pool.Release(this);
         }
 
-        /// 발사한 쪽이 방향과 피해량을 정해서 알려준다.
         public void Launch(Vector2 direction, int damage)
         {
             _rb.linearVelocity = direction * _data.Speed;

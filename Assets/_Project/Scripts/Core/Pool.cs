@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace JM2D.Core
 {
-    /// <summary>
     /// 컴포넌트를 재사용한다. 부족하면 새로 만들고, 돌아온 것은 비활성화해 쌓아둔다.
-    /// MonoBehaviour 가 아니다. 쓰는 쪽이 필드로 소유한다.
-    /// </summary>
+    /// MonoBehaviour 가 아니라 쓰는 쪽이 필드로 소유한다.
     public class Pool<T> where T : Component
     {
         private readonly T _prefab;
@@ -30,7 +28,6 @@ namespace JM2D.Core
             return instance;
         }
 
-        /// 다 쓴 것을 돌려준다.
         public void Release(T instance)
         {
             if (!instance.gameObject.activeSelf) return;

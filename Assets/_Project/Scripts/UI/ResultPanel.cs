@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace JM2D.UI
 {
-    /// 판이 끝났을 때 뜨는 창. 이겼는지 졌는지와 기록, 그리고 이번 판으로 열린 것을 알린다.
-    ///
-    /// 죽음과 클리어를 직접 듣지 않고 RunRecorder 가 알려 주는 것만 듣는다.
-    /// 같은 이벤트를 따로 들으면 저장보다 먼저 글을 쓸 수 있고, 그러면 기록이 한 판 뒤처진다.
+    /// 판이 끝났을 때 뜨는 창. 승패와 기록, 이번 판으로 열린 것을 알린다.
+    /// 죽음과 클리어를 직접 듣지 않는다. 따로 들으면 저장보다 먼저 글을 써 기록이 한 판 뒤처진다.
     public class ResultPanel : MonoBehaviour
     {
         [SerializeField] private GameObject _root;
@@ -46,9 +44,7 @@ namespace JM2D.UI
         }
 
         /// 누적 기록 한 줄과, 열린 것이 있으면 안내 한 줄.
-        ///
-        /// 이번 판이 몇 번째 방까지 갔는지는 적지 않는다. 화면의 진행 표시가 이미 말하고 있고,
-        /// 죽은 자리에 그 숫자가 그대로 남는다.
+        /// 몇 번째 방까지 갔는지는 적지 않는다. 화면의 진행 표시가 죽은 자리에 그대로 남아 있다.
         private string BuildRecord(SaveData save, int newlyUnlocked)
         {
             var text = new StringBuilder();

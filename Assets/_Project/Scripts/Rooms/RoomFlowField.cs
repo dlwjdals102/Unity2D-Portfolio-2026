@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace JM2D.Rooms
 {
-    /// 지금 싸우는 방의 거리표를 들고 있다가, 플레이어가 칸을 옮기면 다시 계산한다.
-    /// 한 번에 한 방만 싸우므로 표도 하나면 된다. 적이 몇 마리든 이 표 하나를 같이 읽는다.
+    /// 지금 싸우는 방의 거리표를 들고 있다가 플레이어가 칸을 옮기면 다시 계산한다.
+    /// 한 번에 한 방만 싸우므로 표도 하나고, 적이 몇 마리든 이 표를 같이 읽는다.
     public class RoomFlowField : MonoBehaviour, IPathField
     {
         [SerializeField] private RoomTracker _tracker;
@@ -58,7 +58,6 @@ namespace JM2D.Rooms
             if (_field == null)
                 _field = new FlowField(obstacles.Grid.Width, obstacles.Grid.Height);
 
-            // 방이 바뀌었으니 지금 위치로 한 번 계산해 둔다.
             Rebuild(_room.ToGridCell(_player.position));
         }
 

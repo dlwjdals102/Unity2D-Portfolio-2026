@@ -5,9 +5,8 @@ using JM2D.Combat;
 
 namespace JM2D.Feedback
 {
-    /// 맞았을 때 일어나는 일을 모은다. 맞는 대상에 붙인다.
-    /// 세기를 여기서 들고 있으므로 플레이어와 적이 서로 다른 값을 가진다.
-    /// 색은 이 컴포넌트가 혼자 소유한다. 번쩍임이 끝나면 스프라이트의 원래 색으로 돌아간다.
+    /// 맞았을 때 일어나는 일. 맞는 대상에 붙이므로 플레이어와 적이 서로 다른 세기를 가진다.
+    /// 색은 이 컴포넌트가 혼자 소유한다.
     [RequireComponent(typeof(Health), typeof(CinemachineImpulseSource))]
     public class HitReaction : MonoBehaviour
     {
@@ -29,7 +28,6 @@ namespace JM2D.Feedback
         private CinemachineImpulseSource _impulse;
         private SpriteRenderer _renderer;
 
-        /// 번쩍임이 끝날 때까지 남은 시간.
         private float _flashLeft;
 
         /// 번쩍임이 끝나면 돌아갈 색. 스프라이트의 원래 색이다.
@@ -73,15 +71,13 @@ namespace JM2D.Feedback
             _renderer.color = _flashColor;
         }
 
-        /// 판 도중에 태어나는 적은 프리팹이 씬의 HitFeedback 을 가리킬 수 없다. 만드는 쪽이 넣어 준다.
         /// 적은 EnemyBase 가 받아서 넘겨 주고, 플레이어는 씬에 있어 인스펙터로 잇는다.
         public void SetHitFeedback(HitFeedback hitFeedback)
         {
             _hitFeedback = hitFeedback;
         }
 
-        /// 번쩍임이 끝나면 돌아갈 색을 바꾼다. 보스가 2페이즈로 넘어갈 때처럼
-        /// 몸 색이 아예 달라지는 경우에 부른다. 색의 소유는 이 컴포넌트에 그대로 둔다.
+        /// 보스가 2페이즈로 넘어갈 때처럼 몸 색이 아예 달라질 때 부른다.
         /// 밖에서 스프라이트를 직접 물들이면 다음 번쩍임이 끝날 때 옛 색으로 되돌아간다.
         public void SetBaseColor(Color color)
         {

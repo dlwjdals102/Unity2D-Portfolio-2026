@@ -35,19 +35,16 @@ namespace JM2D.Player
 
         private void FixedUpdate()
         {
-            // 1. 타이머 감소
             if (_dashTimeLeft > 0f) _dashTimeLeft -= Time.fixedDeltaTime;
             if (_cooldownLeft > 0f) _cooldownLeft -= Time.fixedDeltaTime;
             if (_bufferLeft > 0f) _bufferLeft -= Time.fixedDeltaTime;
 
-            // 2-1. 입력을 버퍼에 담는다
             if (_input.DashRequested)
             {
                 _input.ConsumeDashRequest();
                 _bufferLeft = _dashInputBuffer;
             }
 
-            // 2-2. 조건이 맞으면 대시를 시작한다
             if (HasBufferedDash && !IsDashing && !IsDashOnCooldown)
             {
                 _dashDirection = IsMoving ? _input.MoveInput.normalized : _facing;
@@ -56,7 +53,6 @@ namespace JM2D.Player
                 _bufferLeft = 0f;
             }
 
-            // 3. 속도 적용
             if (IsDashing)
                 _rb.linearVelocity = _dashDirection * _dashSpeed;
             else

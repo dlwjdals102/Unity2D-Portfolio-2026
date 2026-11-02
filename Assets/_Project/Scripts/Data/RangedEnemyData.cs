@@ -2,8 +2,7 @@
 
 namespace JM2D.Data
 {
-    /// 원거리 적. 멈춰서 조준한 뒤 쏘는 순간의 플레이어 쪽으로 한 발 쏜다.
-    /// 가까이 오면 물러나면서 쏜다.
+    /// 원거리 적. 멈춰서 조준한 뒤 한 발 쏘고, 가까이 오면 물러나면서 쏜다.
     /// 'Fire' 는 화염 피해로 읽혀 'Shoot' 을 쓴다.
     [CreateAssetMenu(fileName = "EnemyData_", menuName = "JM2D/Enemy Data/Ranged")]
     public class RangedEnemyData : EnemyData
@@ -45,8 +44,8 @@ namespace JM2D.Data
             if (_shootStopRange < _shootStartRange)
                 Debug.LogWarning($"{name}: 사격 멈춤 거리({_shootStopRange})가 사격 시작 거리({_shootStartRange})보다 작다", this);
 
-            // 후퇴가 사격 구간을 넘어가면 물러나기와 쫓기가 거리를 반대로 밀어 추적과 교전을 오간다.
-            // 시작과 멈춤 사이여도 깨지지는 않지만 멈춰서 쏘는 구간이 사라져 시작 거리를 기준으로 삼는다.
+            // 후퇴가 사격 구간을 넘으면 물러나기와 쫓기가 거리를 반대로 밀어 추적과 교전을 오간다.
+            // 시작과 멈춤 사이여도 멈춰서 쏘는 구간이 사라져 시작 거리를 기준으로 삼는다.
             if (_retreatRange >= _shootStartRange)
                 Debug.LogWarning($"{name}: 후퇴 거리({_retreatRange})가 사격 시작 거리({_shootStartRange})보다 좁지 않다. 멈춰서 쏘는 구간이 없다", this);
         }

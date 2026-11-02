@@ -3,8 +3,7 @@
 namespace JM2D.Logic.Progress
 {
     /// 판과 판 사이에 남는 값. 저장 파일에 그대로 들어간다.
-    /// ScriptableObject 가 아니다. 인스펙터에서 만드는 데이터 에셋은 Scripts/Data 에 있다.
-    /// 이 클래스는 파일도 씬도 모른다. 읽고 쓰는 것은 Runtime 의 SaveFile 이 맡는다.
+    /// 파일도 씬도 모른다. 읽고 쓰는 것은 Runtime 의 SaveFile 이 맡는다.
     [Serializable]
     public class SaveData
     {

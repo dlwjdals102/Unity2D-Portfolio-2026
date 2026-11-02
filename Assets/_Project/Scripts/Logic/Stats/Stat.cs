@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace JM2D.Logic.Stats
 {
-    /// 기본값에 모디파이어를 얹어 최종값을 낸다.
-    /// UnityEngine 에 의존하지 않는다. 씬도 시간도 모른다.
+    /// 기본값에 모디파이어를 얹어 최종값을 낸다. 씬도 시간도 모른다.
     public class Stat
     {
-        /// 모디파이어가 늘거나 줄었을 때 발생한다.
-        /// 값이 실제로 달라졌는지는 보지 않는다.
+        /// 모디파이어가 늘거나 줄면 발생한다. 값이 실제로 달라졌는지는 보지 않는다.
         public event Action OnChanged;
 
         private readonly float _baseValue;
@@ -51,7 +49,6 @@ namespace JM2D.Logic.Stats
             MarkChanged();
         }
 
-        /// 특정 출처가 붙인 모디파이어만 전부 제거한다.
         public void RemoveAllFrom(object source)
         {
             _modifiers.RemoveAll(m => m.Source == source);

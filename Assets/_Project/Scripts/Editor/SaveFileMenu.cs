@@ -8,9 +8,6 @@ namespace JM2D.Editor
 {
     /// 저장 파일을 눈으로 확인하는 자리. 메뉴 > JM2D 에 들어간다.
     /// 에디터 어셈블리라 빌드에 들어가지 않고, 씬에 오브젝트를 두지 않아 지우는 것을 잊을 일도 없다.
-    ///
-    /// 게임이 저장을 부르는 자리는 아직 없다(계단 4에서 잇는다).
-    /// 그때까지 읽고 쓰는 것이 도는지 보려고 만든 것이다.
     public static class SaveFileMenu
     {
         private const string Root = "JM2D/저장 파일/";
@@ -43,8 +40,7 @@ namespace JM2D.Editor
             }
         }
 
-        /// 판을 하나 치른 셈 친다. 보스를 잡고 여덟 번째 방까지 간 판이다.
-        /// 규칙과 파일이 함께 도는지 보는 것이라 UnlockRules 를 지나간다.
+        /// 보스를 잡고 여덟 번째 방까지 간 판을 치른 셈 친다. UnlockRules 를 지나가 규칙까지 함께 본다.
         [MenuItem(Root + "보스 잡은 판 하나 기록하기")]
         private static void RecordWinningRun()
         {
@@ -69,8 +65,7 @@ namespace JM2D.Editor
             Debug.Log($"기록했다. 보스 처치 {after.BossKills}  최고 기록 {after.BestRoomsReached}");
         }
 
-        /// 파일이 없을 때 처음 상태로 시작하는지 보려고 쓴다.
-        /// 확인 창을 띄우는 것은 눌러 놓고 잊어버리는 일을 막으려는 것이다.
+        /// 파일이 없을 때 처음 상태로 시작하는지 보려고 쓴다. 눌러 놓고 잊는 일을 막으려 확인 창을 띄운다.
         [MenuItem(Root + "저장 파일 지우기")]
         private static void DeleteFile()
         {

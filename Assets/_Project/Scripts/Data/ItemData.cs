@@ -19,8 +19,7 @@ namespace JM2D.Data
         public float Value;
     }
 
-    /// 배치 조건 하나와 그 조건에 걸린 효과.
-    /// 시너지도 결국 효과라서 ItemModifier 를 품는다. 조건만 더 붙어 있다.
+    /// 배치 조건 하나와 그 조건에 걸린 효과. 시너지도 효과라서 ItemModifier 를 품고 조건만 더 붙는다.
     [System.Serializable]
     public struct ItemSynergy
     {
@@ -31,8 +30,7 @@ namespace JM2D.Data
         public ItemModifier Modifier;
     }
 
-    /// 아이템 한 종류. 코드가 아니라 데이터다.
-    /// 에셋을 하나 더 만들면 아이템이 하나 는다.
+    /// 아이템 한 종류. 에셋을 하나 더 만들면 아이템이 하나 는다.
     [CreateAssetMenu(fileName = "ItemData_", menuName = "JM2D/Item Data")]
     public class ItemData : ScriptableObject
     {
@@ -64,8 +62,7 @@ namespace JM2D.Data
         public int Height => _height;
         public Sprite Icon => _icon;
 
-        /// 아이콘에 곱할 색. 아이콘이 없으면 아이템 색이 그대로 사각형이 되고,
-        /// 있으면 흰색을 곱해 아이콘의 원색이 나온다. sprite 와 짝으로 써야 한다.
+        /// 아이콘이 없으면 아이템 색이 그대로 사각형이 되고, 있으면 흰색을 곱해 원색이 나온다.
         public Color IconTint => _icon == null ? _color : Color.white;
 
         /// 읽기 전용으로 노출한다. 배열을 그대로 주면 밖에서 고쳐 에셋이 오염된다.
@@ -74,8 +71,7 @@ namespace JM2D.Data
         /// 배치 조건과 효과의 목록. 비어 있으면 시너지가 없다.
         public IReadOnlyList<ItemSynergy> Synergies => _synergies;
 
-        /// 변마다 4까지 허용하므로 2x3 같은 크기를 인스펙터가 막지 못한다.
-        /// 고쳐 주지 않고 알리기만 한다. 조용히 값을 바꾸면 무엇이 바뀌었는지 모른다.
+        /// 변마다 4까지 허용하므로 2x3 같은 크기를 인스펙터가 막지 못한다. 고쳐 주지 않고 알리기만 한다.
         private void OnValidate()
         {
             if (_width * _height > 4)
@@ -91,12 +87,9 @@ namespace JM2D.Data
                     WarnIfPercentOnIntegerStat(synergy.Modifier, "시너지");
         }
 
-        /// 정수로 읽는 스탯에 퍼센트를 얹으면 반올림에 묻힌다.
-        /// 공격력과 최대 체력은 플레이어가 Stat.IntValue 로 읽고 기본값이 1과 3이라,
-        /// +10% 는 어떤 반올림 방식으로도 사라진다. 그래서 퍼센트는 이동 속도와 연사에만 쓴다.
-        ///
-        /// 이 규칙은 아이템 15종을 채울 때 정했는데 글로만 있었다.
-        /// 지키는지 사람이 눈으로 보고 있었고, 어기면 경고 없이 효과가 사라진다.
+        /// 공격력과 최대 체력은 Stat.IntValue 로 읽고 기본값이 1과 3이라, +10% 는
+        /// 어떤 반올림 방식으로도 사라진다. 퍼센트는 이동 속도와 연사에만 쓴다.
+        /// 어기면 경고 없이 효과가 사라져서 글로만 둔 규칙을 여기로 옮겼다.
         private void WarnIfPercentOnIntegerStat(ItemModifier modifier, string where)
         {
             if (modifier.Type == ModifierType.Flat) return;

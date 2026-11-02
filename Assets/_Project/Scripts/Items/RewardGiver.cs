@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace JM2D.Items
 {
-    /// 방을 깨면 보상 후보를 뽑아 창에 띄우고, 고른 것을 손에 넣는다.
-    /// 전투 진행과 창과 가방을 잇기만 한다. 셋은 서로를 모른다.
+    /// 방을 깨면 후보를 뽑아 창에 띄우고 고른 것을 손에 넣는다.
+    /// 전투 진행과 창과 가방을 잇기만 하고, 셋은 서로를 모른다.
     public class RewardGiver : MonoBehaviour
     {
         [Tooltip("보상으로 나올 수 있는 아이템 전부")]
@@ -30,7 +30,6 @@ namespace JM2D.Items
         /// 후보를 뽑는 난수. 조합을 뽑는 난수와 별개이고 시드만 같다.
         private System.Random _random;
 
-        /// 이번에 보여줄 후보. 방마다 다시 채운다.
         private readonly List<ItemData> _candidates = new List<ItemData>();
 
         private void OnEnable()
@@ -65,8 +64,7 @@ namespace JM2D.Items
             foreach (int index in indices)
                 _candidates.Add(_items[index]);
 
-            // 손에 든 것은 고르는 순간 덮어쓰인다. 창이 알릴 수 있게 이름을 함께 넘긴다.
-            // 창에 가방을 알려 주지 않으려고 여기서 읽는다. 잇는 일이 이 클래스의 몫이다.
+            // 손에 든 것은 고르는 순간 덮어쓰인다. 창에 가방을 알려 주지 않으려고 여기서 읽어 이름만 넘긴다.
             ItemInstance hand = _inventory.Hand;
             string heldName = hand == null ? null : hand.Data.DisplayName;
 
@@ -86,8 +84,7 @@ namespace JM2D.Items
             Time.timeScale = 1f;
         }
 
-        /// 넘기면 손을 건드리지 않고 시간만 되돌린다. 가방도 열지 않는다.
-        /// 들고 있던 것을 지키려고 넘긴 것이므로 놓을지는 플레이어가 Tab 으로 정한다.
+        /// 손을 건드리지 않고 시간만 되돌린다. 들고 있던 것을 지키려고 넘긴 것이라 가방도 열지 않는다.
         private void OnSkipped()
         {
             Time.timeScale = 1f;

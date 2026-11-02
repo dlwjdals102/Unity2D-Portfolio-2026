@@ -2,12 +2,10 @@
 
 namespace JM2D.Logic.Rooms
 {
-    /// 칸 좌표와 월드 위치 사이의 변환. 이 변환은 여기 한 곳에만 둔다.
-    /// 방 가운데가 칸 좌표에 방 크기를 곱한 자리이고, 방은 거기서 반씩 퍼져 있다.
-    /// 이 모양을 아는 곳이 여기뿐이라 방 안쪽 판정도 여기 둔다.
+    /// 칸 좌표와 월드 위치 사이의 변환. 여기 한 곳에만 둔다.
+    /// 방 가운데가 칸 좌표에 방 크기를 곱한 자리고 거기서 반씩 퍼져 있다. 안쪽 판정도 여기 둔다.
     public static class RoomSpace
     {
-        /// 칸의 가운데를 월드 위치로 바꾼다.
         public static void ToWorld(RoomCell cell, int roomWidth, int roomHeight, out float x, out float y)
         {
             x = cell.X * roomWidth;
@@ -24,7 +22,6 @@ namespace JM2D.Logic.Rooms
             return new RoomCell(cellX, cellY);
         }
 
-        /// 위치가 이 칸의 방 안으로 여유 거리 이상 들어와 있는지 본다.
         /// 여유 거리는 방 바깥 경계에서 잰다. 딱 맞으면 안쪽이다.
         public static bool IsInside(RoomCell cell, float x, float y, int roomWidth, int roomHeight, float margin)
         {

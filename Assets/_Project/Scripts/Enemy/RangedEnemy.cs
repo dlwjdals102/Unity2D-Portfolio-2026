@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace JM2D.Enemy
 {
-    /// 원거리 적. 가까워지면 멈춰서 조준하고, 조준이 끝나는 순간의 플레이어 쪽으로 한 발 쏜다.
-    /// 플레이어가 너무 가까우면 물러나면서 쏜다.
+    /// 가까워지면 멈춰 조준하고, 조준이 끝나는 순간의 플레이어 쪽으로 한 발 쏜다.
+    /// 너무 가까우면 물러나면서 쏜다.
     public class RangedEnemy : EnemyBase, IProjectileShooter
     {
         private enum State { Aim, Cooldown }
@@ -35,8 +35,7 @@ namespace JM2D.Enemy
             CharacterAnimator.AttackFrameReached -= FireShot;
         }
 
-        /// 판 도중에 태어난 적에게 투사체 풀을 넣는다. 프리팹은 씬의 풀을 가리킬 수 없다.
-        /// 넣지 않으면 쏘는 순간 터진다. 조용히 안 쏘는 것보다 낫다.
+        /// 프리팹은 씬의 풀을 가리킬 수 없다. 넣지 않으면 쏘는 순간 터지는데, 조용히 안 쏘는 것보다 낫다.
         public void SetProjectilePool(ProjectilePool pool)
         {
             _projectiles = pool;
@@ -72,7 +71,6 @@ namespace JM2D.Enemy
             ChangeState(State.Cooldown);
         }
 
-        /// 타이머를 한 스텝만큼 줄이고, 다 됐는지 알려 준다.
         private bool TimeUp()
         {
             _stateTimeLeft -= Time.fixedDeltaTime;

@@ -7,10 +7,8 @@ using JM2D.Player;
 
 namespace JM2D.Town
 {
-    /// 무기 하나가 놓인 자리. 다가가면 안내가 뜨고 E 를 누르면 그 무기를 든다.
-    /// 고른 것은 저장되고, 던전은 그 값을 읽어 시작한다.
-    ///
-    /// 무기마다 하나씩 놓는다. 창을 띄우지 않으므로 이동이나 공격을 막을 일도 없다.
+    /// 무기 하나가 놓인 자리. 고른 것은 저장되고 던전이 그 값을 읽어 시작한다.
+    /// 무기마다 하나씩 놓고, 창을 띄우지 않으므로 이동이나 공격을 막을 일도 없다.
     public class WeaponRack : Interactable
     {
         [Tooltip("이 자리의 무기 번호. 해금 규칙과 PlayerAttack 의 무기 순서를 함께 따른다")]
@@ -39,8 +37,7 @@ namespace JM2D.Town
                 _icon.color = _lockedTint;
         }
 
-        /// 다가온 순간 파일을 읽는다. 다른 자리에서 무기를 바꾸고 와도 글이 맞는다.
-        /// 무기대끼리 서로를 모르면서 표시가 어긋나지 않는 것이 이 한 줄 덕이다.
+        /// 다가온 순간 파일을 읽는다. 무기대끼리 서로를 모르면서도 표시가 어긋나지 않는다.
         protected override void OnPlayerNear()
         {
             _save = _file.Load();
@@ -58,7 +55,6 @@ namespace JM2D.Town
 
             _playerAttack.Equip(_weaponIndex);
 
-            // 든 뒤의 글로 바꾼다. '지금 든 것' 이 된다.
             WritePrompt();
         }
 
