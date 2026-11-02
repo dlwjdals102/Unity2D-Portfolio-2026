@@ -52,7 +52,7 @@ related: [enemy-ranged.md, enemy-melee.md, damage-death.md, scene-flow.md, ../de
 
 ## 정할 것
 
-**구조를 먼저 정하지 않는다.** 원거리 적 명세처럼 계단에서 대안을 견주고 정한 뒤 이 문서 메모에 적는다.
+**구조를 먼저 정하지 않는다.** 원거리 적 명세처럼 계단에서 대안을 견주고 정한 뒤 이 문서의 '만들며 알게 된 것' 에 적는다.
 
 ### 1. 태어난 적이 참조를 받는 길
 
@@ -141,10 +141,10 @@ related: [enemy-ranged.md, enemy-melee.md, damage-death.md, scene-flow.md, ../de
 
 - [x] 동작 정의를 전부 만족
 - [x] 플레이모드 체크리스트 통과
-- [x] **'정할 것' 네 가지의 결과를 이 문서 메모와 `docs/decisions/` 에 기록**
+- [x] **'정할 것' 네 가지의 결과를 이 문서의 '만들며 알게 된 것' 과 `docs/decisions/` 에 기록**
 - [x] `MeleeEnemy` 를 고쳤는지 기록. 고쳤다면 FSM 구조 결정의 '부품을 붙인다' 가 빗나간 이유를 적는다
 
-## 메모
+## 만들며 알게 된 것
 
 **`EnemyBase.Awake` 가 `_target` 을 바로 쓴다.** `_targetDamageable = _target.GetComponent<IDamageable>()` 다.
 씬에 놓인 적은 인스펙터 값이 `Awake` 전에 들어와 있어 문제가 없었다. 정할 것 1번의 가 안은 이 줄부터 본다.

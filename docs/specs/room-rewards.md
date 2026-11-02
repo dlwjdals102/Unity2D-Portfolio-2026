@@ -71,7 +71,7 @@ related: [room-waves.md, bag-grid.md, item-roster.md, ../decisions/encounter-dat
 
 ## 정할 것
 
-**구조를 먼저 정하지 않는다.** 계단에서 대안을 견주고 정한 뒤 메모에 적는다.
+**구조를 먼저 정하지 않는다.** 계단에서 대안을 견주고 정한 뒤 '만들며 알게 된 것' 에 적는다.
 
 ### 1. '손' 을 누가 갖는가
 
@@ -145,10 +145,10 @@ related: [room-waves.md, bag-grid.md, item-roster.md, ../decisions/encounter-dat
 
 - [x] 동작 정의를 전부 만족
 - [x] 검증 항목 통과
-- [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서 메모와 `docs/decisions/` 에 기록
+- [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서의 '만들며 알게 된 것' 과 `docs/decisions/` 에 기록
 - [x] STATUS 의 '열려 있는 질문' 에서 가방 여는 시점을 지우고 결과를 옮긴다
 
-## 메모
+## 만들며 알게 된 것
 
 **계단 1 결과: `Logic/Common/RandomPick.Distinct(종류 수, 뽑을 수, 난수)` 를 만들었다(정할 것 2).**
 `Logic` 은 `Runtime` 을 참조하지 않아 `ItemData` 를 볼 수 없다. 그래서 번호만 뽑고, 번호로 아이템을 꺼내는 일은 부르는 쪽이 한다.

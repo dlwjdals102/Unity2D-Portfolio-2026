@@ -158,7 +158,7 @@ related: [bag-synergy.md, bag-grid.md, ../decisions/synergy-direction.md]
 - [x] **배치를 바꿔 보고 최적해가 자명하지 않은지 판단한다**
 - [x] 설계 판단을 `docs/decisions/`에 기록
 
-## 메모
+## 만들며 알게 된 것
 
 **완료 조건 넷째가 이번에도 진짜 목적이다.** 앞 명세에서 '부족하다' 로 답했던
 질문을 다시 던진다. **넷으로 충분한지, 아직도 답이 뻔한지**를 본다.

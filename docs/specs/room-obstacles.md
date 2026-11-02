@@ -65,7 +65,7 @@ related: [room-waves.md, room-traversal.md, room-layout.md, enemy-dash.md, ../de
 
 ## 정할 것
 
-**구조를 먼저 정하지 않는다.** 계단에서 대안을 견주고 정한 뒤 메모에 적는다.
+**구조를 먼저 정하지 않는다.** 계단에서 대안을 견주고 정한 뒤 '만들며 알게 된 것' 에 적는다.
 
 ### 1. 격자를 무엇으로 들고 있나
 
@@ -139,10 +139,10 @@ related: [room-waves.md, room-traversal.md, room-layout.md, enemy-dash.md, ../de
 
 - [x] 동작 정의를 전부 만족
 - [x] 검증 항목 통과
-- [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서 메모와 `docs/decisions/` 에 기록
+- [x] '정해진 것' 과 '정할 것' 의 결과를 이 문서의 '만들며 알게 된 것' 과 `docs/decisions/` 에 기록
 - [x] STATUS 와 기능 후보 풀(6번)에서 이 항목을 옮긴다
 
-## 메모
+## 만들며 알게 된 것
 
 **계단 1 결과: `RoomGrid` 와 `FlowField` 를 만들었다(정할 것 1, 2).** 격자는 `bool[,]`, 거리표는 `int[,]` 이고 `BagGrid` 와 같은 모양이다.
 갈 수 없는 칸은 -1 로, 계산 중에는 '아직 안 본 칸' 이라는 표시를 겸한다. 배열과 큐는 다시 쓰므로 **계산을 시작할 때 전부 지우는 줄이 알고리즘의 일부**다.

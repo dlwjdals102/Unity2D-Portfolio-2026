@@ -17,9 +17,9 @@ related: [play-video.md, ../progress/ROADMAP.md, ../README.md]
 ## 확정 규칙 (2026-11-01)
 
 **쓰기 전에 이 절만 본다.** 아래 `동작 정의` 는 각 규칙이 왜 생겼는지의 기록이고,
-`메모` 는 조사한 표본이다. 쓰면서 그쪽을 뒤지지 않는다.
+`만들며 알게 된 것` 은 조사한 표본이다. 쓰면서 그쪽을 뒤지지 않는다.
 
-이 절은 2026-11-01 의 조사를 거쳐 확정했다. 표본과 출처는 `메모 / 계단 2` 에 있다.
+이 절은 2026-11-01 의 조사를 거쳐 확정했다. 표본과 출처는 `만들며 알게 된 것 / 계단 2` 에 있다.
 
 ### 노션 뼈대
 
@@ -336,7 +336,7 @@ docs/       더 파는 사람이 온다. 명세 32개, 결정 40개
 **글만 있으면 링크를 누르지 않으므로** 맨 위 하나는 노션으로 미루지 않는다.
 
 **'고민한 점' 은 노션에 둔다. README 에는 셋 각 한 줄이다.**
-처음에는 README 에 무엇·어떻게·고민한 점 3단으로 넣었다가 뺐다(아래 계단 3 메모).
+처음에는 README 에 무엇·어떻게·고민한 점 3단으로 넣었다가 뺐다(아래 '만들며 알게 된 것' 의 계단 3).
 각 줄에는 **결과 하나씩만** 남긴다. '부모가 한 줄 바뀌었다', '계산이 한 번이다' 다.
 설명이 아니라 **더 볼 이유**를 적는 자리다.
 
@@ -1129,351 +1129,21 @@ python -I check.py all.md 4 all    여섯 절을 다 쓴 뒤
 
 **키워드는 그 주제를 쓸 때 실제로 칠 말이어야 한다.** 그래야 0회가 '빠졌다' 를 뜻한다.
 
-### 스크립트
+### 도구 다섯은 저장소에 두지 않는다
 
-**저장소에 파일로 두지 않는다.** 포트폴리오 저장소에 글 검사 도구가 늘어날 이유가 없다.
-필요할 때 아래를 임시 폴더에 그대로 만들어 쓴다.
+**포트폴리오 저장소에 글 검사 도구가 있을 이유가 없다.** 다섯 다 게임이 아니라 한국어 문장을
+보는 것이고, 이 명세를 쓰는 동안만 쓴다. 전문은 저장소 밖에 둔다.
 
-````python
-import sys
-import re
-from collections import Counter
+| 도구 | 무엇을 보는가 | 언제 |
+|---|---|---|
+| `check.py` | 위의 여덟 | 절을 하나 쓸 때마다 |
+| `blocks.py` | 블록 안에서 제목과 불릿이 같은 말을 하는지. n-gram 이 못 잡는 자리다 | 절을 다 쓴 뒤 |
+| `topics.py` | 한 주제가 몇 절에 흩어졌는지. 절 번호와 토글 안팎을 함께 보인다 | 여섯 절을 다 쓴 뒤 |
+| `leaveout.py` | 모든 줄을 블록 단위 번호로 펼친다. 한 줄씩 빼 보는 시험지다 | 통독을 닫기 전 |
+| `sync.py` | 기술 스택 항목이 README 표와 노션 토글에서 같은지 | 한쪽을 고친 뒤 |
 
-sys.stdout.reconfigure(encoding='utf-8')
-
-path = sys.argv[1]
-n = int(sys.argv[2]) if len(sys.argv) > 2 else 4
-# 세 번째 인자로 all 을 주면 '0회인 항목' 까지 본다. 전체 글일 때만 뜻이 있다.
-whole = len(sys.argv) > 3 and sys.argv[3] == 'all'
-
-with open(path, encoding='utf-8') as f:
-    raw = f.read()
-
-lines = raw.split('\n')
-body = [(i, L) for i, L in enumerate(lines, 1) if not L.lstrip().startswith('#')]
-
-problems = 0
-
-
-def head(title):
-    print('')
-    print('=== ' + title + ' ===')
-
-
-# 1. 중복
-head('1. 중복 (' + str(n) + '어절)')
-t = re.sub('```[^`]*```', ' ', raw)
-t = re.sub('https?://[^ )]+', ' ', t)
-t = re.sub('<[^>]+>', ' ', t)
-t = re.sub('[^가-힣a-zA-Z0-9 ]', ' ', t)
-w = t.split()
-grams = Counter(tuple(w[i:i + n]) for i in range(len(w) - n + 1))
-dups = sorted([(c, g) for g, c in grams.items() if c > 1], reverse=True)
-if dups:
-    problems += len(dups)
-    for c, g in dups:
-        print('  ' + str(c) + '회  ' + ' '.join(g))
-else:
-    print('  없음')
-
-# 2. 사동, 명사형, 번역투
-head('2. 사동 / 명사형 / 번역투')
-bad = ['하게 만', '가능하게', '되어지', '에 대한', '에 있어서', '를 진행',
-       '을 진행', '를 가지고 있', '중 하나입니다', '했었었', '를 탐색', '활용하']
-found = [(i, p, L) for i, L in body for p in bad if p in L]
-if found:
-    problems += len(found)
-    for i, p, L in found:
-        print('  ' + str(i) + ': [' + p + '] ' + L.strip()[:70])
-else:
-    print('  없음')
-
-# 3. 내부 참조와 목표
-head('3. 내부 참조와 목표')
-inner = ['목표는', '0줄', '완료 조건', '명세에 적', '기획서가', '앞에서 ', '위에서 ']
-found = [(i, p, L) for i, L in body for p in inner if p in L]
-found += [(i, 'N절', L) for i, L in body if re.search('[1-9]절', L)]
-if found:
-    problems += len(found)
-    for i, p, L in found:
-        print('  ' + str(i) + ': [' + p + '] ' + L.strip()[:70])
-else:
-    print('  없음')
-
-# 4. 두 문장 불릿
-head('4. 두 문장 불릿 (둘째가 새 정보인가)')
-two = [(i, L) for i, L in body
-       if L.lstrip().startswith('- ') and re.search('니다\\.\\s*\\S', L)]
-if two:
-    for i, L in two:
-        print('  ' + str(i) + ': ' + L.strip()[:80])
-else:
-    print('  없음')
-
-# 5. 기술 스택 항목과 면접 단골 (전체 글일 때만)
-if whole:
-    head('5. 0회인 항목')
-    tech = ['상태 머신', '다형성', '피격', 'Input System', '이벤트', '풀링',
-            'ScriptableObject', '모디파이어', 'JSON', '방 배치', 'BFS',
-            '격자', '어셈블리', '테스트']
-    interview = ['대시', '스탯', '세이브', '절차적']
-    zero = [k for k in tech + interview if raw.count(k) == 0]
-    if zero:
-        problems += len(zero)
-        for k in zero:
-            print('  0회  ' + k)
-    else:
-        print('  없음')
-
-# 6. 숫자
-head('6. 숫자 (센 것인가 잰 것인가)')
-num = [(i, L) for i, L in body
-       if re.search('[0-9]', L) and 'github.com' not in L and 'mailto' not in L]
-for i, L in num:
-    print('  ' + str(i) + ': ' + L.strip()[:80])
-
-# 7. 볼드 줄
-head('7. 볼드 줄만 이어 읽기')
-for i, L in body:
-    s = L.strip()
-    if s.startswith('<b>'):
-        print('  ' + re.sub('<[^>]+>', '', s)[:90])
-
-# 8. 접속부사. 개조식에서는 불릿 자체가 관계를 보이므로 군더더기다
-head('8. 접속부사')
-adv = ['그런데', '그리고', '그래서', '또한', '하지만', '따라서', '즉',
-       '다만', '그다음', '그러므로', '게다가', '그러나', '그래도']
-found = []
-for i, L in body:
-    whole = L.strip()
-    head_ = re.sub('^<b>', '', re.sub('^-\s*', '', whole))
-    for a in adv:
-        if head_.startswith(a) or re.search('(니다[.,]|\. )\s*' + a + '\s', whole):
-            found.append((i, a, whole))
-            break
-if found:
-    problems += len(found)
-    for i, a, L in found:
-        print('  ' + str(i) + ': [' + a + '] ' + L[:70])
-else:
-    print('  없음')
-
-print('')
-print('=== 걸린 것 ' + str(problems) + ' 건 (4, 6, 7 은 눈으로 본다) ===')
-````
-
-**바깥 펜스가 백틱 넷인 이유.** 1번의 정규식에 백틱 셋이 들어 있다. 셋으로 감싸면 블록이 거기서 끊긴다.
-
-### 두 번째 스크립트 (blocks.py)
-
-**블록 안에서 제목과 불릿이 같은 말을 하는지 본다.** `check.py` 의 n-gram 이 못 잡는
-자리다. 주제어의 되풀이가 섞여 나오므로 **뽑아만 주고 사람이 가른다.**
-
-```python
-# 블록 안에서 제목과 불릿이 같은 말을 하는지 본다.
-# 어절의 앞 두 글자만 남겨 거칠게 어간을 잡고, 겹치는 수를 센다.
-import re, sys
-sys.stdout.reconfigure(encoding='utf-8')
-
-def strip_tags(s):
-    s = re.sub(r'\[[^\]]*\]\([^)]*\)', ' ', s)
-    s = re.sub(r'<[^>]+>', ' ', s)
-    return s.strip()
-
-def stems(s):
-    out = set()
-    for w in re.findall(r'[가-힣]{2,}', s):
-        out.add(w[:2])
-    return out
-
-raw = open(sys.argv[1], encoding='utf-8').read()
-raw = re.sub(r'```[^`]*```', '', raw)
-lines = raw.split('\n')
-
-cur = None
-block = []
-def flush():
-    if not cur or not block:
-        return
-    h = stems(cur)
-    if len(h) < 2:
-        return
-    for b in block:
-        t = stems(b)
-        if not t:
-            continue
-        both = h & t
-        if len(both) >= 2:
-            print('  제목  ' + cur[:70])
-            print('  겹침  ' + ' '.join(sorted(both)))
-            print('  줄    ' + b[:70])
-            print('')
-
-for L in lines:
-    s = L.strip()
-    if s.startswith('<b>') and not s.startswith('- '):
-        flush(); cur = strip_tags(s); block = []
-    elif s.startswith('- '):
-        if cur: block.append(strip_tags(s[2:]))
-    elif s == '---' or s.startswith('#'):
-        flush(); cur = None; block = []
-flush()
-```
-
-### 세 번째 스크립트 (topics.py)
-
-**한 주제가 몇 절에 흩어졌는지 본다.** 절 번호와 토글 안팎을 함께 보여, 같은 사실이
-색인(1절 표와 토글)과 본문과 다른 절에 몇 번 적혔는지 한눈에 든다.
-**세 자리 이상에 걸친 주제만 뽑는다.** 주제어의 자연스러운 되풀이가 섞이므로 사람이 가른다.
-
-```python
-# 한 주제가 여러 절에 흩어져 있는지 본다. 토글 안과 밖, 절 번호를 함께 보인다.
-import re, sys
-sys.stdout.reconfigure(encoding='utf-8')
-
-raw = open(sys.argv[1], encoding='utf-8').read()
-raw = re.sub(r'```[^`]*```', '\n', raw)
-lines = raw.split('\n')
-
-sec = '머리'
-intog = False
-rows = []
-for L in lines:
-    s = L.strip()
-    m = re.match(r'^# (\d)\.', s)
-    if m:
-        sec = m.group(1) + '절'
-    if s.startswith('<toggle>'):
-        intog = True
-    if s.startswith('</toggle>'):
-        intog = False
-        continue
-    if not s or s.startswith('<') and not s.startswith('<b>'):
-        continue
-    t = re.sub(r'\[[^\]]*\]\([^)]*\)', ' ', s)
-    t = re.sub(r'<[^>]+>', ' ', t).strip()
-    if t:
-        rows.append((sec, '토글' if intog else '본문', t))
-
-words = ['장애물', '끼', '테스트', '씬', '전수 조사', '어셈블리', '인터페이스',
-         'IGridItem', 'IPathField', '풀', '합격선', '회전', '시너지', '상태 패턴',
-         '흐름장', 'BFS', '거리표', '데이터', '결정 문서', '커밋']
-for w in words:
-    hits = [(a, b, t) for a, b, t in rows if w in t]
-    where = sorted(set(a + '/' + b for a, b, t in hits))
-    if len(where) >= 3:
-        print('=== ' + w + '  (' + str(len(hits)) + '줄, ' + ', '.join(where) + ')')
-        for a, b, t in hits:
-            print('   %-6s %-4s %s' % (a, b, t[:62]))
-        print('')
-```
-
-### 네 번째 스크립트 (leaveout.py)
-
-**모든 줄을 블록 단위 번호로 펼친다.** 한 줄씩 빼서 **그 블록의 제목이 여전히 받쳐지는가**를
-묻는 데 쓴다. 판단은 사람이 하고, 도구는 번호와 블록 경계만 준다.
-**산출물은 뺀 목록이 아니라 남긴 이유다.** 남긴 이유가 안 나오면 뺀다.
-
-```python
-# 줄마다 빼 보는 시험지. 블록 제목 아래에 그 블록의 줄을 번호로 매겨 펼친다.
-# 판단은 사람이 한다. '이 줄을 빼면 제목이 여전히 받쳐지는가' 를 묻는다.
-import re, sys
-sys.stdout.reconfigure(encoding='utf-8')
-
-raw = open(sys.argv[1], encoding='utf-8').read()
-raw = re.sub(r'```[^`]*```', '\n[그림/코드]\n', raw)
-
-def clean(s):
-    s = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', s)
-    return re.sub(r'<[^>]+>', '', s).strip()
-
-n = 0
-sec = '머리'
-for L in raw.split('\n'):
-    s = L.strip()
-    m = re.match(r'^# (\d)\.\s*(.*)', s)
-    if m:
-        sec = m.group(1)
-        print('\n' + '=' * 70)
-        print('%s절  %s' % (sec, m.group(2)))
-        print('=' * 70)
-        continue
-    if s.startswith('<callout') or s.startswith('</callout') or s.startswith('<quote') or s.startswith('</quote'):
-        continue
-    if s.startswith('<table-of'):
-        continue
-    if s == '---':
-        print('   ' + '-' * 60)
-        continue
-    if s.startswith('<toggle>'):
-        print('   [토글 시작]')
-        continue
-    if s.startswith('</toggle>'):
-        print('   [토글 끝]')
-        continue
-    t = clean(s)
-    if not t:
-        continue
-    if t.startswith('|'):
-        continue
-    n += 1
-    kind = '불릿' if s.startswith('- ') else ('제목' if s.startswith('<b>') else '산문')
-    print('%3d %s  %s' % (n, kind, t[:88]))
-print('\n줄 %d 개' % n)
-```
-
-### 다섯 번째 스크립트 (sync.py)
-
-**기술 스택 항목이 README 표와 노션 토글에서 같은지 본다.** 한쪽만 고치면 걸린다.
-
-```python
-# 기술 스택 항목이 README 표와 노션 토글에서 같은지 본다.
-# 항목의 원본은 README 다. 한쪽만 고치면 여기서 걸린다.
-import re, sys
-sys.stdout.reconfigure(encoding='utf-8')
-
-readme, notion = sys.argv[1], sys.argv[2]
-
-body = open(readme, encoding='utf-8').read()
-table = re.search(r'## 기술 스택\n\n(\|.*?)\n\n', body, re.S)
-tech = []
-for row in table.group(1).split('\n'):
-    cells = [c.strip() for c in row.strip('|').split('|')]
-    if len(cells) != 2 or cells[0] in ('분류', '---'):
-        continue
-    tech += [x.strip() for x in cells[1].split(',')]
-
-page = open(notion, encoding='utf-8').read()
-tog = re.search(r'<b>표의 항목을 어디서 볼 수 있나</b>\n(.*?)</toggle>', page, re.S)
-names = re.findall(r'^- <b>([^<]+)</b>', tog.group(1), re.M)
-
-print('README 표 %d 항목 / 노션 토글 %d 줄' % (len(tech), len(names)))
-gap = 0
-for t in tech:
-    if t not in names:
-        print('  노션 토글에 없음   ' + t); gap += 1
-for t in names:
-    if t not in tech:
-        print('  README 표에 없음   ' + t); gap += 1
-if gap == 0:
-    print('  순서까지 같음' if tech == names else '  항목은 같고 순서가 다름')
-```
-
-**도구 다섯을 쓰는 순서.**
-
-```
-절을 하나 쓸 때마다   check.py
-절을 다 쓴 뒤        blocks.py    제목이 불릿을 요약하지 않는지
-여섯 절을 다 쓴 뒤     check.py all + topics.py
-통독을 닫기 전       절 제목 대조 + leaveout.py
-노션이나 README 를 고친 뒤   sync.py
-```
-
-
-**두 가지를 조심한다.** 정규식에 역슬래시를 쓰지 않으려고 문자 클래스를 `[^가-힣...]` 로
-짰고(4번의 `니다\.` 만 예외다), `sys.stdout.reconfigure` 를 코드 안에 두었다.
-**셸에서 `PYTHONIOENCODING` 을 줘도 리디렉션에는 적용되지 않아 한글이 깨진다.**
-실제로 한 번 깨져서 다시 돌렸다.
+**뒤의 셋은 뽑아만 주고 사람이 가른다.** 주제어의 자연스러운 되풀이가 섞이고,
+**'이 줄을 빼면 제목이 여전히 받쳐지는가' 는 판단이라 기계가 답할 수 없다.**
 
 ## 다시 쓰기로 정한 이유 (2026-11-01)
 
@@ -1878,7 +1548,7 @@ Logic 에는 ... 것만 둡니다
 - [ ] 노션 링크가 **로그인 없이 열리는지** 다른 브라우저에서 확인한다
       게임잡의 인재 서칭 담당자가 '링크에 비번 걸지 마세요' 를 지적했다
 
-## 메모
+## 만들며 알게 된 것
 
 ### 계단 1
 

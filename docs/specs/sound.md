@@ -161,7 +161,7 @@ related: [hit-feedback.md, cc0-assets.md, ../decisions/polish-scope.md, ../decis
 - [x] 루트 README 출처 표에 음원 세 줄이 올라갔다
 - [x] 설계 판단이 있었다면 `docs/decisions/`에 기록
 
-## 메모
+## 만들며 알게 된 것
 
 **착수 전에 코드와 에셋에서 확인한 것.**
 
@@ -179,8 +179,9 @@ BGM 은 ppeak(Preston Peak)의 `Chiptune Adventure Music Pack [FREE]`(CC BY 4.0,
 
 **처음에는 `Ninja Adventure Asset Pack` 에서 둘을 함께 가져오려 했고 두 번 바뀌었다.**
 첫째로 **그 팩은 이미 버린 것이었다.** 그림이 원하는 것이 아니어서 폐기하고 파일도 지웠다.
-`cc0-assets.md` 메모가 'Ninja 로 갈아탔다' 에서 멈춰 있어 거기까지만 읽고 현재 상태로 착각했다.
-**실제로 쓰는 스프라이트는 o_lobster 의 `TOP_DOWN Adventure Pack` 이다.** 그 메모는 고쳐야 한다.
+`cc0-assets.md` 의 '만들며 알게 된 것' 이 'Ninja 로 갈아탔다' 에서 멈춰 있어 거기까지만 읽고 현재 상태로 착각했다.
+**실제로 쓰는 스프라이트는 o_lobster 의 `TOP_DOWN Adventure Pack` 이다.**
+그 문서의 본문과 README 출처 표는 처음부터 맞게 적혀 있었다. 중간 기록을 끝으로 읽은 것이 잘못이었다.
 둘째로 대신 고른 OpenGameArt 의 두 묶음이 **서버에서 HTTP 500 을 뱉었다**(내 쪽에서도 같았다).
 받을 수 있는 곳으로 바꾼 것이 지금의 둘이다.
 
