@@ -96,5 +96,6 @@ Attack → Chase   : distance >  _attackExitRange (1.6)
   잘못 넣으면 색이 깜빡여 바로 보이므로 검증을 넣지 않았다.
   Phase 3에서 적 데이터를 ScriptableObject로 빼고 적이 4종이 되면
   `OnValidate` 로 막는 것을 다시 검토한다.
+  **닫혔다 (2026-11-03).** `MeleeEnemyData` 와 `RangedEnemyData` 의 `OnValidate` 가 대소 관계를 경고한다. 고쳐 주지는 않는다.
 - 여유 값 `0.4`(1.2 대 1.6)는 근거 없이 정한 값이다. 적이 4종이 되면
   종류마다 적절한 폭이 다를 수 있다.

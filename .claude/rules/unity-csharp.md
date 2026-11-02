@@ -126,7 +126,7 @@
 무엇이 진짜 데이터인지 흐려진다.
 
 인스펙터 값이 대여섯 개를 넘어가면 `[System.Serializable]` 클래스로 묶는 것을 고려한다.
-Phase 3부터는 ScriptableObject로 빼는 쪽이 우선이다.
+수치는 ScriptableObject로 빼는 쪽이 우선이다.
 
 ## 어셈블리 (asmdef)
 

@@ -90,6 +90,7 @@ related: [../specs/enemy-split.md, enemy-fsm-structure.md, projectile-pool-in-sc
 
 - **`SetTarget` 은 `Start` 전에 불러야 한다.** 그 뒤에 대상을 바꾸면 피해 받을 곳이 옛 대상에 남는다. 대상을 바꾸는 기능이 없어 주석으로만 지킨다.
 - **원거리 적의 투사체 풀은 아직 넣어 주는 길이 없다.** 갈라져 나오는 것이 근접 적뿐이라서다. 원거리 적을 런타임에 만드는 웨이브에서 같은 방식으로 연다.
+  **닫혔다 (2026-11-03).** `RoomCombat` 이 `IProjectileShooter` 를 보고 `SetProjectilePool` 로 넣어 준다.
 - **`health.OnDied` 는 해제하지 않는다.** 구독 목록은 `Health` 가 들고 있어 적이 파괴되면 목록째 치워진다.
   해제하지 않아 쌓이는 것은 이벤트를 가진 쪽이 오래 살 때이고, 그래서 `static` 인 `Spawned` 는 `OnDisable` 에서 해제한다.
   규칙('구독은 해제와 짝')에서 벗어난 자리라 주석을 달았다. **적을 풀링하면 `Health` 가 살아남아 두 번 구독되고 한 적이 두 번 빠진다.**
