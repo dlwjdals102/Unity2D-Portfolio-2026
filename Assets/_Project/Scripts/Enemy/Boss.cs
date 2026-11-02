@@ -301,7 +301,6 @@ namespace JM2D.Enemy
             }
         }
 
-        /// 막혔으면 반대쪽, 그것도 막혔으면 보스 자리에 놓는다.
         /// 벽에 붙어 있다는 것은 반대쪽이 비었다는 뜻이라 한 번 뒤집으면 거의 해결되고,
         /// 보스가 선 칸은 지나갈 수 있는 칸이라 마지막 자리로 안전하다.
         private Vector2 SummonSpot(Vector2 offset)

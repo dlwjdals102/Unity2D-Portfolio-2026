@@ -89,7 +89,6 @@ namespace JM2D.Data
 
         /// 공격력과 최대 체력은 Stat.IntValue 로 읽고 기본값이 1과 3이라, +10% 는
         /// 어떤 반올림 방식으로도 사라진다. 퍼센트는 이동 속도와 연사에만 쓴다.
-        /// 어기면 경고 없이 효과가 사라져서 글로만 둔 규칙을 여기로 옮겼다.
         private void WarnIfPercentOnIntegerStat(ItemModifier modifier, string where)
         {
             if (modifier.Type == ModifierType.Flat) return;
