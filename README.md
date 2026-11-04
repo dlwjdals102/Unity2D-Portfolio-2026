@@ -6,7 +6,7 @@ Unity 6.3 LTS (6000.3.9f1) · C# · 1인 · 약 2개월 (2026.08 ~ 11)
 
 > **(GIF 자리)** 가방에 아이템을 끼우고 스탯이 바뀌는 장면
 
-**[브라우저에서 플레이](https://play.unity.com/ko/games/a6484628-c957-42ee-aaa5-a6d5591c3d69/unity2d-portfolio-2026)** · **[플레이 영상](#)** · **[상세 포트폴리오 (노션)](https://cookie-lock-dbc.notion.site/2D-JM2D-40a87bfb396080b69841de8e34b2b6cf)**
+**[브라우저에서 플레이](https://play.unity.com/ko/games/a6484628-c957-42ee-aaa5-a6d5591c3d69/unity2d-portfolio-2026)** · **[플레이 영상](https://youtu.be/oUueBOvnjfE)** · **[상세 포트폴리오 (노션)](https://cookie-lock-dbc.notion.site/2D-JM2D-40a87bfb396080b69841de8e34b2b6cf)**
 
 ## 기술 스택
 
